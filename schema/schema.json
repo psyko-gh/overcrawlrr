@@ -1,0 +1,235 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "required": ["overseerr", "discovery", "rulesets"],
+      "properties": {
+        "overseerr": { "$ref": "#/definitions/overseer" },
+        "plex": { "$ref": "#/definitions/plex" },
+        "discovery": { "$ref": "#/definitions/discovery"},
+        "smartRecommendations": { "$ref": "#/definitions/smartRecommendations"},
+        "rulesets": { "$ref": "#/definitions/rulesets"}
+      }
+    }
+  },
+  "definitions": {
+
+    "overseer": {
+      "$id": "#/definitions/overseer",
+      "type": "object",
+      "required": ["apiUrl", "user", "password"],
+      "properties": {
+        "apiUrl": { "type": "string" },
+        "user": { "type": "string" },
+        "password": { "type": "string" },
+        "dryRunUrl": { "type": "boolean" }
+      }
+    },
+
+    "plex": {
+      "$id": "#/definitions/plex",
+      "type": "object",
+      "required": ["apiUrl", "plexToken"],
+      "properties": {
+        "apiUrl": { "type": "string" },
+        "plexToken": { "type": "string" }
+      }
+    },
+
+    "discovery": {
+      "$id": "#/definitions/discovery",
+      "type": "object",
+      "required": ["cron", "streams", "ruleset"],
+      "properties": {
+        "cron": { "type": "string" },
+        "ruleset": { "type": "string" },
+        "streams": { "type": "array", "items": { "type": "string" }}
+      }
+    },
+
+    "smartRecommendations": {
+      "$id": "#/definitions/smartRecommendations",
+      "type": "object",
+      "required": ["cron", "plexLibrary", "ruleset", "minimumRating"],
+      "properties": {
+        "cron": { "type": "string" },
+        "plexLibrary": { "type": "string" },
+        "ruleset": { "type": "string" },
+        "minimumRating": { "type": "number"}
+      }
+    },
+
+    "rulesets": {
+      "$id": "#/definitions/rulesets",
+      "type": "array",
+      "items": { "$ref": "#/definitions/ruleset" }
+    },
+
+    "ruleset": {
+      "$id": "#/definitions/ruleset",
+      "type": "object",
+      "required": ["name", "rules"],
+      "properties": {
+        "name": { "type": "string" },
+        "extends": { "type": "string" },
+        "rules": { "type": "array",  "items": { "$ref": "#/definitions/rule" }}
+      }
+    },
+
+    "rule": {
+      "$id": "#/definitions/rule",
+      "type": "object",
+      "required": ["name", "whenMatch", "action"],
+      "properties": {
+        "name": { "type": "string" },
+        "whenMatch": { "type": "array", "items": { "$ref": "#/definitions/predicate" }},
+        "action": { "type": "string", "enum": ["accept", "reject", "skip"]}
+      }
+    },
+
+    "predicate": {
+      "$id": "#/definitions/predicate",
+      "type": "object",
+      "oneOf": [
+        { "$ref": "#/definitions/orPredicate" },
+        { "$ref": "#/definitions/andPredicate" },
+        { "$ref": "#/definitions/notPredicate" },
+        { "$ref": "#/definitions/agePredicate" },
+        { "$ref": "#/definitions/scorePredicate" },
+        { "$ref": "#/definitions/genrePredicate" },
+        { "$ref": "#/definitions/watchProviderPredicate" },
+        { "$ref": "#/definitions/voteCountPredicate" },
+        { "$ref": "#/definitions/castPredicate" },
+        { "$ref": "#/definitions/crewPredicate" },
+        { "$ref": "#/definitions/releasedPredicate" },
+        { "$ref": "#/definitions/productionCompanyPredicate" }
+      ]
+    },
+
+    "orPredicate": {
+      "$id": "#/definitions/orPredicate",
+      "type": "object",
+      "required": ["or"],
+      "properties": {
+        "or": { "type": "array", "items": { "$ref": "#/definitions/predicate" }}
+      }
+    },
+
+    "andPredicate": {
+      "$id": "#/definitions/andPredicate",
+      "type": "object",
+      "required": ["and"],
+      "properties": {
+        "and": { "type": "array", "items": { "$ref": "#/definitions/predicate" }}
+      }
+    },
+
+    "notPredicate": {
+      "$id": "#/definitions/notPredicate",
+      "type": "object",
+      "required": ["not"],
+      "properties": {
+        "not": { "type": "array", "items": { "$ref": "#/definitions/predicate" }}
+      }
+    },
+
+    "agePredicate": {
+      "$id": "#/definitions/agePredicate",
+      "type": "object",
+      "required": ["age"],
+      "properties": {
+        "age": { "type": "string" }
+      }
+    },
+
+    "releasedPredicate": {
+      "$id": "#/definitions/releasedPredicate",
+      "type": "object",
+      "required": ["released"],
+      "properties": {
+        "released": { "type": "string", "enum": ["yes", "no"]}
+      }
+    },
+
+    "scorePredicate": {
+      "$id": "#/definitions/scorePredicate",
+      "type": "object",
+      "required": ["score"],
+      "properties": {
+        "score": { "type": "string" }
+      }
+    },
+
+    "voteCountPredicate": {
+      "$id": "#/definitions/voteCountPredicate",
+      "type": "object",
+      "required": ["voteCount"],
+      "properties": {
+        "voteCount": { "type": "string" }
+      }
+    },
+
+    "genrePredicate": {
+      "$id": "#/definitions/genrePredicate",
+      "type": "object",
+      "required": ["genres"],
+      "properties": {
+        "genres": { "type": "array", "items": { "type": "string" }}
+      }
+    },
+
+    "watchProviderPredicate": {
+      "$id": "#/definitions/watchProviderPredicate",
+      "type": "object",
+      "required": ["watchProviders"],
+      "properties": {
+        "watchProviders": {
+          "type": "object",
+          "properties": {
+            "region": { "type": "string"},
+            "names": { "type": "array", "items": { "type": "string" }}
+          }
+        }
+      }
+    },
+
+    "castPredicate": {
+      "$id": "#/definitions/castPredicate",
+      "type": "object",
+      "required": ["cast"],
+      "properties": {
+        "cast": { "type": "array", "items": {"type": "string" }}
+      }
+    },
+
+    "crewPredicate": {
+      "$id": "#/definitions/crewPredicate",
+      "type": "object",
+      "required": ["crew"],
+      "properties": {
+        "crew": {
+          "oneOf": [
+            { "type": "array", "items": { "type": "string" }},
+            {
+              "type": "object",
+              "properties": {
+                "job": { "type": "string"},
+                "names": { "type": "array", "items": {"type": "string" }}
+              }
+            }
+          ]
+        }
+      }
+    },
+
+    "productionCompanyPredicate": {
+      "$id": "#/definitions/productionCompanyPredicate",
+      "type": "object",
+      "required": ["productionCompany"],
+      "properties": {
+        "productionCompany": { "type": "array", "items": {"type": "string" }}
+      }
+    }
+  }
+}

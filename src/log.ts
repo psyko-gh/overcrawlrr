@@ -1,8 +1,8 @@
-import {createLogger, format, transports} from 'winston';
+import { createLogger, format, transports } from 'winston';
 
 const logFormat = format.printf(({ timestamp, level, message }) => {
     return `[ ${timestamp.replace(/[TZ]/gm, ' ')}] ${level}: ${message}`;
-})
+});
 
 const logger = createLogger({
     level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
@@ -18,4 +18,4 @@ const logger = createLogger({
     exceptionHandlers: [new transports.Console()],
 });
 
-export default logger
+export default logger;

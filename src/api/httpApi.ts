@@ -1,7 +1,7 @@
-import type {AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig} from "axios";
-import axios from "axios";
-import NodeCache from "node-cache";
-import logger from "@core/log";
+import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
+import NodeCache from 'node-cache';
+import logger from '@core/log';
 import cookie from 'cookie';
 
 const DEFAULT_TTL = 100;
@@ -9,12 +9,12 @@ const COOKIE_NAME = 'connect.sid';
 
 interface HttpApiOptions {
     cache?: NodeCache;
-    headers?:  Record<string, unknown>;
+    headers?: Record<string, unknown>;
 }
 
 class HttpApi {
     protected axios: AxiosInstance;
-    private cookie:string;
+    private cookie: string;
     private baseUrl: string;
     private cache?: NodeCache;
 
@@ -34,9 +34,9 @@ class HttpApi {
             params,
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                ...options.headers
-            }
+                Accept: 'application/json',
+                ...options.headers,
+            },
         });
         this.activateCookieInterceptor();
         if (debug) {
@@ -44,15 +44,11 @@ class HttpApi {
         }
     }
 
-    protected async get<T>(
-        endpoint: string,
-        config?: AxiosRequestConfig,
-        ttl?: number
-    ): Promise<T> {
+    protected async get<T>(endpoint: string, config?: AxiosRequestConfig, ttl?: number): Promise<T> {
         const cacheKey = this.getCacheKey(endpoint, config?.params);
         const cachedResult = this.cache?.get<T>(cacheKey);
         if (cachedResult) {
-            logger.debug('Served from cache ' + cacheKey)
+            logger.debug('Served from cache ' + cacheKey);
             return cachedResult;
         }
 
@@ -86,10 +82,7 @@ class HttpApi {
         return response.data;
     }
 
-    private getCacheKey(
-        endpoint: string,
-        params: Record<string, unknown>
-    ): string {
+    private getCacheKey(endpoint: string, params: Record<string, unknown>): string {
         if (!params) {
             return `${this.baseUrl}${endpoint}`;
         }
@@ -106,7 +99,7 @@ class HttpApi {
 
         this.axios.interceptors.response.use((res) => {
             if (res.headers['set-cookie']) {
-                const cookies = res.headers['set-cookie']as string[];
+                const cookies = res.headers['set-cookie'] as string[];
                 const c = cookie.parse(cookies.shift() ?? '');
                 this.cookie = c[COOKIE_NAME];
             }
@@ -115,25 +108,27 @@ class HttpApi {
     }
 
     private enableDebug() {
-        this.axios.interceptors.request.use((x: InternalAxiosRequestConfig)  => {
+        this.axios.interceptors.request.use((x: InternalAxiosRequestConfig) => {
             const method = x.method ?? '';
             const headers = {
-                ... x.headers.common,
-                ... x.headers[method],
-                ... x.headers
-            }
+                ...x.headers.common,
+                ...x.headers[method],
+                ...x.headers,
+            };
 
             // remove irrelevant headers
             const removed = ['common', 'get', 'post', 'head', 'put', 'patch', 'delete'];
-            removed.forEach(h => delete headers[h]);
+            removed.forEach((h) => delete headers[h]);
 
-            const printable = `Request: ${method.toUpperCase()} ${x.baseURL} | ${x.url} | ${Object.keys(x.params).map(k => `${k}: ${x.params[k]}`).join(', ')} | ${JSON.stringify(x.data)} | ${JSON.stringify(x.headers)}`
+            const printable = `Request: ${method.toUpperCase()} ${x.baseURL} | ${x.url} | ${Object.keys(x.params)
+                .map((k) => `${k}: ${x.params[k]}`)
+                .join(', ')} | ${JSON.stringify(x.data)} | ${JSON.stringify(x.headers)}`;
             logger.debug(printable);
 
             return x;
         });
 
-        this.axios.interceptors.response.use(x => {
+        this.axios.interceptors.response.use((x) => {
             logger.debug(`Response: ${x.status} | ${JSON.stringify(x.data)} | ${JSON.stringify(x.headers)}`);
             return x;
         });

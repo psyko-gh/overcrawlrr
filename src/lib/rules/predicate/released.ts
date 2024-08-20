@@ -1,13 +1,12 @@
-import {PredicateBuilder} from "@core/lib/rules";
-import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {BooleanPredicate} from "@core/lib/rules/predicate/boolean";
-import {ReleasedOptions} from "@core/lib/rules/interfaces";
+import { PredicateBuilder } from '@core/lib/rules';
+import { MovieDetails } from '@core/api/overseerr/interfaces';
+import { BooleanPredicate } from '@core/lib/rules/predicate/boolean';
+import { ReleasedOptions } from '@core/lib/rules/interfaces';
 
 export class ReleasedPredicate extends BooleanPredicate {
-
     constructor(options: ReleasedOptions) {
         super({
-            value: options.released
+            value: options.released,
         });
     }
 
@@ -24,7 +23,7 @@ export class ReleasedPredicate extends BooleanPredicate {
     }
 }
 
-export const ReleasedPredicateBuilder:PredicateBuilder = {
+export const ReleasedPredicateBuilder: PredicateBuilder = {
     key: 'released',
-    build: (data: ReleasedOptions) => new ReleasedPredicate(data)
-}
+    build: (data: ReleasedOptions) => new ReleasedPredicate(data),
+};

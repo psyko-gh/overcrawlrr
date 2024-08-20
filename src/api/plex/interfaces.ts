@@ -1,5 +1,5 @@
 export interface PlexMediaContainer<T> {
-    MediaContainer: T
+    MediaContainer: T;
 }
 
 export interface PlexSectionsResponse {
@@ -33,8 +33,8 @@ export interface PlexVideosResponse {
 }
 
 export interface PlexVideo {
-    ratingKey: string,
-    Guid?: PlexGuid[],
+    ratingKey: string;
+    Guid?: PlexGuid[];
     title: string;
     originalTitle: string;
 }

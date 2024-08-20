@@ -1,6 +1,7 @@
-import {MovieResult} from "@core/api/overseerr/interfaces";
+import { MovieResult } from '@core/api/overseerr/interfaces';
 
-export const isFulfilled = <T extends object>(v: PromiseSettledResult<T>): v is PromiseFulfilledResult<T> => v.status === 'fulfilled';
+export const isFulfilled = <T extends object>(v: PromiseSettledResult<T>): v is PromiseFulfilledResult<T> =>
+    v.status === 'fulfilled';
 
 export const isMovie = (m: MovieResult) => m.mediaType === 'movie';
 
@@ -9,7 +10,7 @@ export const distinctMovies = (acc: MovieResult[], movie: MovieResult) => {
         acc.push(movie);
     }
     return acc;
-}
+};
 
 enum EscapeCode {
     FG_BLACK = '\x1b[30m',
@@ -20,11 +21,11 @@ enum EscapeCode {
     FG_MAGENTA = '\x1b[35m',
     FG_CYAN = '\x1b[36m',
     FG_WHITE = '\x1b[37m',
-    RESET = '\x1b[0m'
+    RESET = '\x1b[0m',
 }
 
 export enum Icon {
-    CHECK = '\u2714'
+    CHECK = '\u2714',
 }
 
 const colorize = (color: EscapeCode, str: string): string => color + str + EscapeCode.RESET;
@@ -38,11 +39,11 @@ export const color = {
     magenta: (str: string): string => colorize(EscapeCode.FG_MAGENTA, str),
     cyan: (str: string): string => colorize(EscapeCode.FG_CYAN, str),
     white: (str: string): string => colorize(EscapeCode.FG_WHITE, str),
-}
+};
 
 type ErrorWithMessage = {
-    message: string
-}
+    message: string;
+};
 
 function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
     return (
@@ -50,22 +51,21 @@ function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
         error !== null &&
         'message' in error &&
         typeof (error as Record<string, unknown>).message === 'string'
-    )
+    );
 }
 
-
 function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
-    if (isErrorWithMessage(maybeError)) return maybeError
+    if (isErrorWithMessage(maybeError)) return maybeError;
 
     try {
-        return new Error(JSON.stringify(maybeError))
+        return new Error(JSON.stringify(maybeError));
     } catch {
         // fallback in case there's an error stringifying the maybeError
         // like with circular references for example.
-        return new Error(String(maybeError))
+        return new Error(String(maybeError));
     }
 }
 
 export function getErrorMessage(error: unknown) {
-    return toErrorWithMessage(error).message
+    return toErrorWithMessage(error).message;
 }

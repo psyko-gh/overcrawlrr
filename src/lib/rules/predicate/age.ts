@@ -1,7 +1,7 @@
-import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {PredicateBuilder} from "@core/lib/rules";
-import {fromHumanReadableDuration, TimePredicate} from "@core/lib/rules/predicate/time";
-import {AgeOptions} from "@core/lib/rules/interfaces";
+import { MovieDetails } from '@core/api/overseerr/interfaces';
+import { PredicateBuilder } from '@core/lib/rules';
+import { fromHumanReadableDuration, TimePredicate } from '@core/lib/rules/predicate/time';
+import { AgeOptions } from '@core/lib/rules/interfaces';
 
 export class AgePredicate extends TimePredicate {
     constructor(options: AgeOptions) {
@@ -14,9 +14,9 @@ const ageMetric = (movie: MovieDetails): number => {
         return 0;
     }
     return (Date.now() - Date.parse(movie.releaseDate)) / 1000;
-}
+};
 
-export const AgePredicateBuilder:PredicateBuilder = {
+export const AgePredicateBuilder: PredicateBuilder = {
     key: 'age',
-    build: (data: AgeOptions) => new AgePredicate(data)
-}
+    build: (data: AgeOptions) => new AgePredicate(data),
+};

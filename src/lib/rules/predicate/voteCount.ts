@@ -1,7 +1,7 @@
-import {fromHumanReadableNumber, NumberPredicate} from "@core/lib/rules/predicate/number";
-import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {PredicateBuilder} from "@core/lib/rules";
-import {VoteCountOptions} from "@core/lib/rules/interfaces";
+import { fromHumanReadableNumber, NumberPredicate } from '@core/lib/rules/predicate/number';
+import { MovieDetails } from '@core/api/overseerr/interfaces';
+import { PredicateBuilder } from '@core/lib/rules';
+import { VoteCountOptions } from '@core/lib/rules/interfaces';
 
 export class VoteCountPredicate extends NumberPredicate {
     constructor(options: VoteCountOptions) {
@@ -9,7 +9,7 @@ export class VoteCountPredicate extends NumberPredicate {
     }
 }
 
-export const VoteCountPredicateBuilder:PredicateBuilder = {
+export const VoteCountPredicateBuilder: PredicateBuilder = {
     key: 'voteCount',
-    build: (data: VoteCountOptions) => new VoteCountPredicate(data)
-}
+    build: (data: VoteCountOptions) => new VoteCountPredicate(data),
+};

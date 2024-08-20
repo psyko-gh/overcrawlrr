@@ -1,8 +1,8 @@
-import {NumberPredicate} from "@core/lib/rules/predicate/number";
-import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {PredicateBuilder} from "@core/lib/rules";
-import logger from "@core/log";
-import {ScoreOptions} from "@core/lib/rules/interfaces";
+import { NumberPredicate } from '@core/lib/rules/predicate/number';
+import { MovieDetails } from '@core/api/overseerr/interfaces';
+import { PredicateBuilder } from '@core/lib/rules';
+import logger from '@core/log';
+import { ScoreOptions } from '@core/lib/rules/interfaces';
 
 export class ScorePredicate extends NumberPredicate {
     constructor(options: ScoreOptions) {
@@ -10,10 +10,10 @@ export class ScorePredicate extends NumberPredicate {
     }
 }
 
-export const fromHumanReadableScore = (str: string): {threshold: number, operator: 'lt' | 'gt' } => {
+export const fromHumanReadableScore = (str: string): { threshold: number; operator: 'lt' | 'gt' } => {
     const regex = /(below|under|less than|above|greater than) ((?:\d+(\.\d+)|\d+\/\d+)?)/gm;
-    const ratioRegex = /\d+\/\d+/gm
-    const groups = [...str.matchAll(regex)][0]
+    const ratioRegex = /\d+\/\d+/gm;
+    const groups = [...str.matchAll(regex)][0];
     if (!groups) {
         throw new Error(`Unparsable score string '${str}' !`);
     }
@@ -21,25 +21,27 @@ export const fromHumanReadableScore = (str: string): {threshold: number, operato
     const thresholdString = groups[2];
     let threshold = 0;
 
-    const ratioGroups = [...thresholdString.matchAll(ratioRegex)][0]
+    const ratioGroups = [...thresholdString.matchAll(ratioRegex)][0];
     if (ratioGroups) {
         const numerator = Number(ratioGroups[1]);
         const denominator = Number(ratioGroups[2]);
         if (denominator === 0) {
-            logger.warning(`In score expression, denominator should not be 0. Using numerator value ${numerator} as threshold`)
+            logger.warning(
+                `In score expression, denominator should not be 0. Using numerator value ${numerator} as threshold`
+            );
             threshold = numerator;
         } else {
             // Bring the value back in the range of 0..10 with 2 decimals
-            threshold = Math.floor(numerator / denominator * 1000) / 100;
+            threshold = Math.floor((numerator / denominator) * 1000) / 100;
         }
     }
     return {
         operator: ['below', 'under', 'less than'].includes(operator) ? 'lt' : 'gt',
-        threshold: threshold
-    }
-}
+        threshold: threshold,
+    };
+};
 
-export const ScorePredicateBuilder:PredicateBuilder = {
+export const ScorePredicateBuilder: PredicateBuilder = {
     key: 'score',
-    build: (data: ScoreOptions) => new ScorePredicate(data)
-}
+    build: (data: ScoreOptions) => new ScorePredicate(data),
+};

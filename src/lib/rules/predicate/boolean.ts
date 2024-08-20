@@ -1,4 +1,4 @@
-import {Predicate} from "@core/lib/rules";
+import { Predicate } from '@core/lib/rules';
 
 export interface BooleanPredicateOptions {
     value: string;
@@ -14,10 +14,6 @@ export abstract class BooleanPredicate extends Predicate {
 }
 
 const fromHumanReadableBoolean = (str: string): boolean => {
-    const acceptableTrueBoolean = [
-        'yes',
-        'true',
-        '1'
-    ]
+    const acceptableTrueBoolean = ['yes', 'true', '1'];
     return acceptableTrueBoolean.includes(str);
-}
+};

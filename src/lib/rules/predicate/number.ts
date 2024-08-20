@@ -1,10 +1,10 @@
-import {Predicate} from "@core/lib/rules";
-import {MovieDetails} from "@core/api/overseerr/interfaces";
+import { Predicate } from '@core/lib/rules';
+import { MovieDetails } from '@core/api/overseerr/interfaces';
 
 export type NumberPredicateOptions = {
     threshold: number;
     operator: 'lt' | 'gt';
-}
+};
 
 export interface MetricsExtractor {
     (movie: MovieDetails): number;
@@ -35,9 +35,9 @@ export class NumberPredicate extends Predicate {
     }
 }
 
-export const fromHumanReadableNumber = (str: string): {threshold: number, operator: 'lt' | 'gt' } => {
+export const fromHumanReadableNumber = (str: string): { threshold: number; operator: 'lt' | 'gt' } => {
     const regex = /(below|under|less than|above|greater than) (\d+(\.\d+)?)/gm;
-    const groups = [...str.matchAll(regex)][0]
+    const groups = [...str.matchAll(regex)][0];
     if (!groups) {
         throw new Error(`Unparsable number string '${str}' !`);
     }
@@ -45,6 +45,6 @@ export const fromHumanReadableNumber = (str: string): {threshold: number, operat
     const threshold = Number(groups[2]);
     return {
         operator: ['below', 'under', 'less than'].includes(operator) ? 'lt' : 'gt',
-        threshold: threshold
-    }
-}
+        threshold: threshold,
+    };
+};

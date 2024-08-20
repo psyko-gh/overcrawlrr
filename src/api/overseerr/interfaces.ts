@@ -131,7 +131,7 @@ export interface TmdbKeyword {
 export enum RequestStatus {
     PENDING = 1,
     APPROVED,
-    DECLINED
+    DECLINED,
 }
 
 export interface MediaRequest {
@@ -154,25 +154,25 @@ export interface OverseerrRequestsResult {
 }
 
 export interface CreditCast {
-    id:	number;
-    castId:	number;
+    id: number;
+    castId: number;
     character: string;
     creditId: string;
-    gender:	number;
+    gender: number;
     name: string;
     order: number;
 }
 
 export interface CreditCrew {
-    id:	number;
-    gender:	number;
+    id: number;
+    gender: number;
     name: string;
     job: string;
     department: string;
 }
 
 export interface ProductionCompany {
-    id:	number;
+    id: number;
     logoPath: string;
     originCountry: string;
     name: string;

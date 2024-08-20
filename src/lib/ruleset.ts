@@ -1,9 +1,9 @@
-import logger from "../log";
-import {Rule, RuleEvaluation} from "@core/lib/rules";
-import {RulesetOptions} from "@core/lib/rules/interfaces";
-import {MovieDetails} from "@core/api/overseerr/interfaces";
-import Settings from "@core/lib/settings";
-import {PredicateFactory} from "@core/lib/rules/factory";
+import logger from '../log';
+import { Rule, RuleEvaluation } from '@core/lib/rules';
+import { RulesetOptions } from '@core/lib/rules/interfaces';
+import { MovieDetails } from '@core/api/overseerr/interfaces';
+import Settings from '@core/lib/settings';
+import { PredicateFactory } from '@core/lib/rules/factory';
 
 class Ruleset {
     private _rulesetOptions: RulesetOptions;
@@ -22,11 +22,11 @@ class Ruleset {
         }
         try {
             if (process.env.NODE_ENV !== 'production') {
-                console.log(this._rulesetOptions)
+                console.log(this._rulesetOptions);
             }
             this.buildRules();
             this.initialized = true;
-            logger.info(`Successfully loaded ruleset '${this.name}' with ${this._rules.length} rules`)
+            logger.info(`Successfully loaded ruleset '${this.name}' with ${this._rules.length} rules`);
         } catch (e) {
             logger.error(e);
         }
@@ -42,7 +42,9 @@ class Ruleset {
     }
 
     private buildRules(): void {
-        this._rules = this._rulesetOptions.rules.map(o => new Rule(o.name, PredicateFactory.buildPredicates(o.whenMatch), o.action))
+        this._rules = this._rulesetOptions.rules.map(
+            (o) => new Rule(o.name, PredicateFactory.buildPredicates(o.whenMatch), o.action)
+        );
     }
 
     public evaluateRules(movie: MovieDetails): RuleEvaluation {
@@ -60,7 +62,7 @@ class Ruleset {
                 return evaluation;
             }
         }
-        return { movie, result: 'skip'};
+        return { movie, result: 'skip' };
     }
 
     get rules(): Rule[] {
@@ -76,23 +78,23 @@ export const loadRulesets = (settings: Settings): void => {
         const configuration = settings.load().rulesets;
         for (const options of configuration) {
             if (rulesets.has(options.name)) {
-                throw new Error(`Ruleset '${options.name}' already defined`)
+                throw new Error(`Ruleset '${options.name}' already defined`);
             }
 
             const ruleset = new Ruleset(options);
-            ruleset.load()
+            ruleset.load();
             rulesets.set(ruleset.name, ruleset);
         }
-    } catch(e: unknown) {
+    } catch (e: unknown) {
         console.log(e);
     }
-}
+};
 
 export const getRuleset = (name: string): Ruleset => {
     if (!rulesets.has(name)) {
-        throw new Error(`Ruleset '${name}' does not exist`)
+        throw new Error(`Ruleset '${name}' does not exist`);
     }
     return <Ruleset>rulesets.get(name);
-}
+};
 
 export default Ruleset;

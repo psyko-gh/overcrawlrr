@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import logger from "@core/log";
-import {RulesetOptions} from "@core/lib/rules/interfaces";
-import Ajv from "ajv";
+import logger from '@core/log';
+import { RulesetOptions } from '@core/lib/rules/interfaces';
+import Ajv from 'ajv';
 
 const SCHEMA_PATH = './schema/schema.json';
 
@@ -12,7 +12,7 @@ const SETTINGS_PATH = process.env.CONFIG_DIRECTORY
     : path.join(__dirname, '../../config/settings.yaml');
 
 export interface YamlSettings {
-    config: CrawlrrSettings
+    config: CrawlrrSettings;
 }
 
 export interface CrawlrrSettings {
@@ -20,7 +20,7 @@ export interface CrawlrrSettings {
     plex?: PlexSettings;
     discovery?: DiscoverySettings;
     smartRecommendations?: SmartRecommendationsSettings;
-    rulesets: RulesetOptions[]
+    rulesets: RulesetOptions[];
 }
 
 export interface RulesetConsumer {
@@ -39,12 +39,12 @@ export interface PlexSettings {
     plexToken: string;
 }
 
-export interface DiscoverySettings extends RulesetConsumer{
+export interface DiscoverySettings extends RulesetConsumer {
     cron?: string;
     streams?: string[];
 }
 
-export interface SmartRecommendationsSettings extends RulesetConsumer{
+export interface SmartRecommendationsSettings extends RulesetConsumer {
     cron: string;
     plexLibrary: string;
     minimumRating: number;
@@ -63,9 +63,9 @@ class Settings {
         this.initialized = false;
         this._data = {
             overseerr: {
-                apiUrl: ''
+                apiUrl: '',
             },
-            rulesets: []
+            rulesets: [],
         };
     }
 
@@ -91,7 +91,7 @@ class Settings {
 
             this._data = yamlSettings.config as CrawlrrSettings;
             if (process.env.NODE_ENV !== 'production') {
-                console.log(this._data)
+                console.log(this._data);
             }
             this.initialized = true;
             logger.info(`Settings loaded successfully from ${SETTINGS_PATH}`);
@@ -108,7 +108,7 @@ class Settings {
         logger.info(`Configuration file changed. Reloading...`);
         this.initialized = false;
         this.load();
-    }
+    };
 
     public watch(callback: OnSettingLoadedCallback) {
         fs.watchFile(SETTINGS_PATH, this.reload);
@@ -129,10 +129,12 @@ class Settings {
     }
 
     get discovery(): DiscoverySettings {
-        return this._data.discovery ?? {
-            cron: '? ? ? * * *',
-            streams: ['upcoming']
-        };
+        return (
+            this._data.discovery ?? {
+                cron: '? ? ? * * *',
+                streams: ['upcoming'],
+            }
+        );
     }
 
     get smartRecommendations(): SmartRecommendationsSettings | null {
@@ -147,6 +149,6 @@ export const getSettings = (): Settings => {
         settings = new Settings();
     }
     return settings;
-}
+};
 
 export default Settings;

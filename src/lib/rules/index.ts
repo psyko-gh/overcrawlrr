@@ -1,6 +1,6 @@
-import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {PredicateOption, RuleAction} from "@core/lib/rules/interfaces";
-import {PredicateFactoryClass} from "@core/lib/rules/factory";
+import { MovieDetails } from '@core/api/overseerr/interfaces';
+import { PredicateOption, RuleAction } from '@core/lib/rules/interfaces';
+import { PredicateFactoryClass } from '@core/lib/rules/factory';
 
 export abstract class Predicate {
     abstract matches(_movie: MovieDetails): boolean;
@@ -12,16 +12,13 @@ export interface PredicateBuilder {
     build(_data: PredicateOption, _factory: PredicateFactoryClass): Predicate;
 }
 
-export type RuleResult =
-    | 'accept'
-    | 'reject'
-    | 'skip'
+export type RuleResult = 'accept' | 'reject' | 'skip';
 
 export type RuleEvaluation = {
     rule?: Rule;
-    movie: MovieDetails,
-    result: RuleResult
-}
+    movie: MovieDetails;
+    result: RuleResult;
+};
 
 export class Rule {
     public name: string;
@@ -35,7 +32,7 @@ export class Rule {
     }
 
     public matches(movie: MovieDetails): boolean {
-        return this.filter.every(p => p.matches(movie));
+        return this.filter.every((p) => p.matches(movie));
     }
 
     public apply(movie: MovieDetails): RuleEvaluation {
@@ -43,7 +40,7 @@ export class Rule {
         return {
             rule: this,
             movie: movie,
-            result: match ? this.action : 'skip'
-        }
+            result: match ? this.action : 'skip',
+        };
     }
 }

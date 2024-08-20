@@ -1,15 +1,14 @@
 import {MovieDetails} from "@core/api/overseerr/interfaces";
-import TagsPredicate, {TagsPredicateOptions} from "@core/lib/rules/predicate/tag";
+import TagsPredicate from "@core/lib/rules/predicate/tag";
 import {PredicateBuilder} from "@core/lib/rules";
-
-export type CastOptions = {
-
-} & TagsPredicateOptions;
+import {CastOptions} from "@core/lib/rules/interfaces";
 
 export class CastPredicate extends TagsPredicate {
 
     constructor(options: CastOptions) {
-        super(options);
+        super({
+            terms: options.cast
+        });
     }
 
     getTags(movie: MovieDetails): string[] {
@@ -27,10 +26,5 @@ export class CastPredicate extends TagsPredicate {
 
 export const CastPredicateBuilder:PredicateBuilder = {
     key: 'cast',
-    build: (data:string[]) => {
-        if (!Array.isArray(data)) {
-            throw new Error('Error while building Cast filter. Expecting a list of name...')
-        }
-        return new CastPredicate({ terms: data })
-    }
+    build: (data: CastOptions) => new CastPredicate(data)
 }

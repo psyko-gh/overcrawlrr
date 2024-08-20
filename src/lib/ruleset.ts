@@ -1,6 +1,6 @@
 import logger from "../log";
 import {Rule, RuleEvaluation} from "@core/lib/rules";
-import {RuleAction, RulesetOptions} from "@core/lib/rules/interfaces";
+import {RulesetOptions} from "@core/lib/rules/interfaces";
 import {MovieDetails} from "@core/api/overseerr/interfaces";
 import Settings from "@core/lib/settings";
 import {PredicateFactory} from "@core/lib/rules/factory";
@@ -74,7 +74,7 @@ export const loadRulesets = (settings: Settings): void => {
     try {
         rulesets = new Map<string, Ruleset>();
         const configuration = settings.load().rulesets;
-        for (let options of configuration) {
+        for (const options of configuration) {
             if (rulesets.has(options.name)) {
                 throw new Error(`Ruleset '${options.name}' already defined`)
             }
@@ -83,7 +83,7 @@ export const loadRulesets = (settings: Settings): void => {
             ruleset.load()
             rulesets.set(ruleset.name, ruleset);
         }
-    } catch(e: any) {
+    } catch(e: unknown) {
         console.log(e);
     }
 }

@@ -1,6 +1,9 @@
 import {Predicate, PredicateBuilder, PredicateKey} from "@core/lib/rules/index";
 import {PredicateOption} from "@core/lib/rules/interfaces";
-import {AgePredicateBuilder, ScorePredicateBuilder, VoteCountPredicateBuilder} from "@core/lib/rules/predicate";
+import logger from "@core/log";
+import {AgePredicateBuilder} from "@core/lib/rules/predicate/age";
+import {ScorePredicateBuilder} from "@core/lib/rules/predicate/score";
+import {VoteCountPredicateBuilder} from "@core/lib/rules/predicate/voteCount";
 import {WatchProvidersPredicateBuilder} from "@core/lib/rules/predicate/watchproviders";
 import {GenresPredicateBuilder} from "@core/lib/rules/predicate/genres";
 import {CastPredicateBuilder} from "@core/lib/rules/predicate/cast";
@@ -11,20 +14,18 @@ import {KeywordPredicateBuilder} from "@core/lib/rules/predicate/keywords";
 import {OrPredicateBuilder} from "@core/lib/rules/predicate/or";
 import {AndPredicateBuilder} from "@core/lib/rules/predicate/and";
 import {NotPredicateBuilder} from "@core/lib/rules/predicate/not";
-import logger from "@core/log";
 
-class PredicateFactoryClass {
+export class PredicateFactoryClass {
     private builders: Map<PredicateKey, PredicateBuilder>;
 
     constructor() {
         this.builders = new Map<PredicateKey, PredicateBuilder>();
     }
 
-    public buildPredicates(predicates: PredicateOption[]): Predicate[] {
-        return predicates.map(p => {
+    public buildPredicates(predicateOptions: PredicateOption[]): Predicate[] {
+        return predicateOptions.map((p: PredicateOption) => {
             const key = Object.keys(p)[0];
-            const data = (p as any)[key];
-            return this.getBuilder(key).build(data);
+            return this.getBuilder(key).build(p, this);
         });
     }
 
@@ -49,8 +50,8 @@ class PredicateFactoryClass {
 
 export const PredicateFactory = new PredicateFactoryClass();
 const builders = [
-    AndPredicateBuilder,
     OrPredicateBuilder,
+    AndPredicateBuilder,
     NotPredicateBuilder,
     AgePredicateBuilder,
     ScorePredicateBuilder,

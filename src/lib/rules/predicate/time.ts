@@ -1,11 +1,16 @@
 import {NumberPredicate, NumberPredicateOptions} from "@core/lib/rules/predicate/number";
+import {MovieDetails} from "@core/api/overseerr/interfaces";
 
 export type TimePredicateOptions = NumberPredicateOptions;
 
-export abstract class TimePredicate extends NumberPredicate {
+export interface TimeMetricsExtractor {
+    (movie: MovieDetails): number;
+}
 
-    protected constructor(options: TimePredicateOptions) {
-        super(options);
+export class TimePredicate extends NumberPredicate {
+
+    protected constructor(options: TimePredicateOptions, metrics: TimeMetricsExtractor) {
+        super(options, metrics);
     }
 }
 

@@ -1,15 +1,12 @@
 import {MovieDetails} from "@core/api/overseerr/interfaces";
 import {PredicateBuilder} from "@core/lib/rules";
-import TagsPredicate, {TagsPredicateOptions} from "@core/lib/rules/predicate/tag";
-
-export type KeywordOptions = {
-
-} & TagsPredicateOptions;
+import TagsPredicate from "@core/lib/rules/predicate/tag";
+import {KeywordOptions} from "@core/lib/rules/interfaces";
 
 export class KeywordPredicate extends TagsPredicate {
 
     constructor(options: KeywordOptions) {
-        super(options);
+        super({terms: Array.isArray(options.keyword) ? options.keyword : [options.keyword]});
     }
 
     getTags(movie: MovieDetails): string[] {
@@ -27,10 +24,5 @@ export class KeywordPredicate extends TagsPredicate {
 
 export const KeywordPredicateBuilder:PredicateBuilder = {
     key: 'keyword',
-    build: (data:string[]) => {
-        if (!Array.isArray(data)) {
-            throw new Error('Error while building Keyword filter. Expecting a list of keyword...')
-        }
-        return new KeywordPredicate({ terms: data })
-    }
+    build: (data: KeywordOptions) =>  new KeywordPredicate(data)
 }

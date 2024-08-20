@@ -1,14 +1,15 @@
 import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {RuleAction} from "@core/lib/rules/interfaces";
+import {PredicateOption, RuleAction} from "@core/lib/rules/interfaces";
+import {PredicateFactoryClass} from "@core/lib/rules/factory";
 
 export abstract class Predicate {
-    abstract matches(movie: MovieDetails): boolean;
+    abstract matches(_movie: MovieDetails): boolean;
 }
 export type PredicateKey = string;
 
 export interface PredicateBuilder {
     key: PredicateKey;
-    build(data: any): Predicate;
+    build(_data: PredicateOption, _factory: PredicateFactoryClass): Predicate;
 }
 
 export type RuleResult =

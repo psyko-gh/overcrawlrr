@@ -1,6 +1,6 @@
 import {MovieResult} from "@core/api/overseerr/interfaces";
 
-export const isFulfilled = <T extends {}>(v: PromiseSettledResult<T>): v is PromiseFulfilledResult<T> => v.status === 'fulfilled';
+export const isFulfilled = <T extends object>(v: PromiseSettledResult<T>): v is PromiseFulfilledResult<T> => v.status === 'fulfilled';
 
 export const isMovie = (m: MovieResult) => m.mediaType === 'movie';
 

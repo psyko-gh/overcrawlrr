@@ -173,9 +173,14 @@
     "genrePredicate": {
       "$id": "#/definitions/genrePredicate",
       "type": "object",
-      "required": ["genres"],
+      "required": ["genre"],
       "properties": {
-        "genres": { "type": "array", "items": { "type": "string" }}
+        "genre": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" }}
+          ]
+        }
       }
     },
 

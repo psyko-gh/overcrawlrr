@@ -175,6 +175,7 @@ Filters based on the available Streaming/VOD platforms. Will match when one or m
 ```yaml
     # This predicate will match when the movie is available in Germany on Netflix or Amazon Prime 
     - watchProviders:
+          # ISO 3166-1 alpha-2 format of the region (de, au, us, fr...)
         - region: de
         - names:
             - Netflix

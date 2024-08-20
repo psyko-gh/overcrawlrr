@@ -12,24 +12,78 @@ export interface RuleOptions {
     action: RuleAction;
 }
 
+
+
 export type PredicateOption =
     | AndFilterOptions
     | OrFilterOptions
     | NotFilterOptions
-    | FilterOptions
+    | AgeOptions
+    | CastOptions
+    | CrewOptions
+    | GenreOptions
+    | KeywordOptions
+    | ProductionCompanyOptions
+    | ReleasedOptions
+    | ScoreOptions
+    | VoteCountOptions
+    | WatchProvidersOptions
 
-export interface FilterOptions {
-    [key: string]: string|string[];
-}
 
 export interface AndFilterOptions {
-    and: FilterOptions[]
+    and: PredicateOption[]
 }
 
 export interface OrFilterOptions {
-    or: FilterOptions[]
+    or: PredicateOption[]
 }
 
 export interface NotFilterOptions {
-    not: FilterOptions[]
+    not: PredicateOption[]
+}
+
+export type AgeOptions = {
+    age: string
+}
+
+export type CastOptions = {
+    cast: string[]
+}
+
+export type GenreOptions = {
+    genre: string | string[]
+}
+
+export type VoteCountOptions = {
+    voteCount: string;
+}
+
+export type KeywordOptions = {
+    keyword: string | string[]
+}
+
+export type ProductionCompanyOptions = {
+    productionCompany: string | string[]
+}
+
+export type ReleasedOptions = {
+    released: string
+}
+
+export type ScoreOptions = {
+    score: string;
+}
+
+export type WatchProvidersOptions = {
+    region: string;
+    names: string[];
+}
+
+export interface CrewOptions {
+    crew: string[] | CrewJobNamesOptions
+}
+
+export type CrewJobNamesOptions = {
+    job: string;
+    names: string[]
 }

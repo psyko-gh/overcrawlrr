@@ -1,15 +1,18 @@
-import {MovieDetails} from "@core/api/overseerr/interfaces";
 import {Rule} from "@core/lib/rules";
-import {PredicateFactory} from "@core/lib/rules/factory";
-import {FalsePredicate, TruePredicate, VoteCountPredicate} from "@core/lib/rules/predicate";
+import {FalsePredicate, TruePredicate} from "@core/lib/rules/predicate";
 import {GenresPredicate} from "@core/lib/rules/predicate/genres";
 import {CastPredicate} from "@core/lib/rules/predicate/cast";
 import {CrewPredicate} from "@core/lib/rules/predicate/crew";
 import {KeywordPredicate} from "@core/lib/rules/predicate/keywords";
 import {AndPredicate} from "@core/lib/rules/predicate/and";
 import {OrPredicate} from "@core/lib/rules/predicate/or";
+import fs from "fs";
+import {VoteCountPredicate} from "@core/lib/rules/predicate/voteCount";
+import {AgePredicate} from "@core/lib/rules/predicate/age";
+import path from "path";
+import {PredicateFactory} from "@core/lib/rules/factory";
 
-const movie = require('./movie.json') as MovieDetails;
+const movie = JSON.parse(fs.readFileSync(path.join(__dirname, './movie.json'), 'utf8'));
 
 PredicateFactory.init()
 
@@ -127,7 +130,7 @@ describe('orPredicate', () => {
         {
             const rule = new Rule(
                 'simple',
-                [new VoteCountPredicate({threshold: 8554, operator: 'lt'})],
+                [new VoteCountPredicate({voteCount: 'less than 8554'})],
                 'accept')
             const response = rule.matches(movie);
             expect(response).toEqual(false)
@@ -135,7 +138,7 @@ describe('orPredicate', () => {
         {
             const rule = new Rule(
                 'simple',
-                [new VoteCountPredicate({threshold: 8556, operator: 'gt'})],
+                [new VoteCountPredicate({voteCount: 'above 8556'})],
                 'accept')
             const response = rule.matches(movie);
             expect(response).toEqual(false)
@@ -146,7 +149,7 @@ describe('orPredicate', () => {
         {
             const rule = new Rule(
                 'simple',
-                [new VoteCountPredicate({threshold: 8554, operator: 'gt'})],
+                [new VoteCountPredicate({voteCount: 'above 8554'})],
                 'accept')
             const response = rule.matches(movie);
             expect(response).toEqual(true)
@@ -154,18 +157,18 @@ describe('orPredicate', () => {
         {
             const rule = new Rule(
                 'simple',
-                [new VoteCountPredicate({threshold: 8556, operator: 'lt'})],
+                [new VoteCountPredicate({voteCount: 'less than 8556'})],
                 'accept')
             const response = rule.matches(movie);
             expect(response).toEqual(true)
         }
     })
 
-    it('should match genders', async () => {
+    it('should match genres', async () => {
         {
             const rule = new Rule(
                 'simple',
-                [new GenresPredicate({terms: ['science-fiction']})],
+                [new GenresPredicate({genre: 'science-fiction'})],
                 'accept')
             const response = rule.matches(movie);
             expect(response).toEqual(true)
@@ -173,7 +176,15 @@ describe('orPredicate', () => {
         {
             const rule = new Rule(
                 'simple',
-                [new GenresPredicate({terms: ['comédie']})],
+                [new GenresPredicate({genre: ['science-fiction', 'comédie']})],
+                'accept')
+            const response = rule.matches(movie);
+            expect(response).toEqual(true)
+        }
+        {
+            const rule = new Rule(
+                'simple',
+                [new GenresPredicate({genre: 'comédie'})],
                 'accept')
             const response = rule.matches(movie);
             expect(response).toEqual(false)
@@ -181,11 +192,22 @@ describe('orPredicate', () => {
     })
 })
 
+describe('agePredicate', () => {
+    it('should match', async () => {
+        const rule = new Rule(
+            'simple',
+            [new AgePredicate({age: 'more than 1 year'})],
+            'accept')
+
+        const response = rule.matches(movie);
+        expect(response).toEqual(true)
+    })
+})
 describe('castPredicate', () => {
     it('should match', async () => {
         const rule = new Rule(
             'simple',
-            [new CastPredicate({terms: ['Sigourney Weaver']})],
+            [new CastPredicate({cast: ['Sigourney Weaver']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -195,7 +217,7 @@ describe('castPredicate', () => {
     it('should match despite different case', async () => {
         const rule = new Rule(
             'simple',
-            [new CastPredicate({terms: ['SiGoUrnEy weAVEr']})],
+            [new CastPredicate({cast: ['SiGoUrnEy weAVEr']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -205,7 +227,7 @@ describe('castPredicate', () => {
     it('should match if at least one cast match', async () => {
         const rule = new Rule(
             'simple',
-            [new CastPredicate({terms: ['Sigourney Weaver', 'Jessica Alba']})],
+            [new CastPredicate({cast: ['Sigourney Weaver', 'Jessica Alba']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -215,7 +237,7 @@ describe('castPredicate', () => {
     it('should not match', async () => {
         const rule = new Rule(
             'simple',
-            [new CastPredicate({terms: ['Jessica Alba']})],
+            [new CastPredicate({cast: ['Jessica Alba']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -228,7 +250,7 @@ describe('crewPredicate', () => {
     it('should match', async () => {
         const rule = new Rule(
             'simple',
-            [new CrewPredicate({terms: ['James Cameron']})],
+            [new CrewPredicate({crew: ['James Cameron']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -238,7 +260,7 @@ describe('crewPredicate', () => {
     it('should match with a job', async () => {
         const rule = new Rule(
             'simple',
-            [new CrewPredicate({job: 'director', terms: ['James Cameron']})],
+            [new CrewPredicate({crew: {job: 'director', names: ['James Cameron']}})],
             'accept')
 
         const response = rule.matches(movie);
@@ -248,7 +270,7 @@ describe('crewPredicate', () => {
     it('should match despite different case', async () => {
         const rule = new Rule(
             'simple',
-            [new CrewPredicate({terms: ['JaMEs CamerOn']})],
+            [new CrewPredicate({crew: ['JaMEs CamerOn']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -258,7 +280,7 @@ describe('crewPredicate', () => {
     it('should match if at least one cast match', async () => {
         const rule = new Rule(
             'simple',
-            [new CrewPredicate({job: 'Art Direction', terms: ['Bert Davey', 'Ken Court']})],
+            [new CrewPredicate({crew: {job: 'Art Direction', names: ['Bert Davey', 'Ken Court']}})],
             'accept')
 
         const response = rule.matches(movie);
@@ -268,7 +290,7 @@ describe('crewPredicate', () => {
     it('should not match', async () => {
         const rule = new Rule(
             'simple',
-            [new CrewPredicate({terms: ['Jessica Alba']})],
+            [new CrewPredicate({crew: ['Jessica Alba']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -278,7 +300,7 @@ describe('crewPredicate', () => {
     it('should not match when person found in another job', async () => {
         const rule = new Rule(
             'simple',
-            [new CrewPredicate({job: 'director', terms: ['Peter Lamont']})],
+            [new CrewPredicate({crew: {job: 'director', names: ['Peter Lamont']}})],
             'accept')
 
         const response = rule.matches(movie);
@@ -287,10 +309,20 @@ describe('crewPredicate', () => {
 })
 
 describe('keywordPredicate', () => {
-    it('should match', async () => {
+    it('should match string', async () => {
         const rule = new Rule(
             'simple',
-            [new KeywordPredicate({terms: ['space travel']})],
+            [new KeywordPredicate({keyword: 'space travel'})],
+            'accept')
+
+        const response = rule.matches(movie);
+        expect(response).toEqual(true)
+    })
+
+    it('should match array', async () => {
+        const rule = new Rule(
+            'simple',
+            [new KeywordPredicate({keyword: ['space travel']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -300,7 +332,7 @@ describe('keywordPredicate', () => {
     it('should match despite different case', async () => {
         const rule = new Rule(
             'simple',
-            [new KeywordPredicate({terms: ['SpAcE TraVel']})],
+            [new KeywordPredicate({keyword: ['SpAcE TraVel']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -310,7 +342,7 @@ describe('keywordPredicate', () => {
     it('should match if at least one cast match', async () => {
         const rule = new Rule(
             'simple',
-            [new KeywordPredicate({terms: ['space travel', 'unknown keyword']})],
+            [new KeywordPredicate({keyword: ['space travel', 'unknown keyword']})],
             'accept')
 
         const response = rule.matches(movie);
@@ -320,7 +352,7 @@ describe('keywordPredicate', () => {
     it('should not match', async () => {
         const rule = new Rule(
             'simple',
-            [new KeywordPredicate({terms: ['unknown keyword']})],
+            [new KeywordPredicate({keyword: ['unknown keyword']})],
             'accept')
 
         const response = rule.matches(movie);

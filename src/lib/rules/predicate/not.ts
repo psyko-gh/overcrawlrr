@@ -1,8 +1,8 @@
 import {Predicate, PredicateBuilder} from "@core/lib/rules";
-import {PredicateFactory} from "@core/lib/rules/factory";
 import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {PredicateOption} from "@core/lib/rules/interfaces";
 import {GroupPredicate} from "@core/lib/rules/predicate/group";
+import {NotFilterOptions} from "@core/lib/rules/interfaces";
+import type {PredicateFactoryClass} from "@core/lib/rules/factory";
 
 export class NotPredicate extends GroupPredicate {
     constructor(children: Predicate[]) {
@@ -16,5 +16,5 @@ export class NotPredicate extends GroupPredicate {
 
 export const NotPredicateBuilder: PredicateBuilder = {
     key: 'not',
-    build: (data: any) => new NotPredicate(PredicateFactory.buildPredicates(data as PredicateOption[]))
+    build: (data: NotFilterOptions, factory: PredicateFactoryClass) => new NotPredicate(factory.buildPredicates(data.not))
 };

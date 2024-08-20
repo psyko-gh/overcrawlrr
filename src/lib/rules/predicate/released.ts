@@ -1,16 +1,14 @@
 import {PredicateBuilder} from "@core/lib/rules";
 import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {BooleanPredicate, BooleanPredicateOptions} from "@core/lib/rules/predicate/boolean";
-import {TagsPredicateOptions} from "@core/lib/rules/predicate/tag";
-
-export type ReleasedOptions = {
-
-} & BooleanPredicateOptions;
+import {BooleanPredicate} from "@core/lib/rules/predicate/boolean";
+import {ReleasedOptions} from "@core/lib/rules/interfaces";
 
 export class ReleasedPredicate extends BooleanPredicate {
 
     constructor(options: ReleasedOptions) {
-        super(options);
+        super({
+            value: options.released
+        });
     }
 
     matches(movie: MovieDetails): boolean {
@@ -28,5 +26,5 @@ export class ReleasedPredicate extends BooleanPredicate {
 
 export const ReleasedPredicateBuilder:PredicateBuilder = {
     key: 'released',
-    build: (data: string) => new ReleasedPredicate({ value: data })
+    build: (data: ReleasedOptions) => new ReleasedPredicate(data)
 }

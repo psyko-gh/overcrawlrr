@@ -1,11 +1,12 @@
 import {MovieDetails} from "@core/api/overseerr/interfaces";
 import {PredicateBuilder} from "@core/lib/rules";
-import TagsPredicate, {TagsPredicateOptions} from "@core/lib/rules/predicate/tag";
+import TagsPredicate from "@core/lib/rules/predicate/tag";
+import {GenreOptions} from "@core/lib/rules/interfaces";
 
 export class GenresPredicate extends TagsPredicate {
 
-    constructor(options: TagsPredicateOptions) {
-        super(options);
+    constructor(options: GenreOptions) {
+        super({terms: Array.isArray(options.genre) ? options.genre : [options.genre]});
     }
 
     getTags(movie: MovieDetails): string[] {
@@ -19,6 +20,6 @@ export class GenresPredicate extends TagsPredicate {
 }
 
 export const GenresPredicateBuilder:PredicateBuilder = {
-    key: 'genres',
-    build: (genres: string[]) => new GenresPredicate({terms: genres})
+    key: 'genre',
+    build: (data: GenreOptions) => new GenresPredicate(data)
 }

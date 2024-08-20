@@ -1,10 +1,11 @@
 import {Predicate, PredicateBuilder} from "@core/lib/rules";
-import {PredicateFactory} from "@core/lib/rules/factory";
 import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {PredicateOption} from "@core/lib/rules/interfaces";
 import {GroupPredicate} from "@core/lib/rules/predicate/group";
+import {OrFilterOptions} from "@core/lib/rules/interfaces";
+import type {PredicateFactoryClass} from "@core/lib/rules/factory";
 
 export class OrPredicate extends GroupPredicate {
+
     constructor(children: Predicate[]) {
         super(children);
     }
@@ -16,5 +17,5 @@ export class OrPredicate extends GroupPredicate {
 
 export const OrPredicateBuilder: PredicateBuilder = {
     key: 'or',
-    build: (data: any) => new OrPredicate(PredicateFactory.buildPredicates(data as PredicateOption[])),
+    build: (data: OrFilterOptions, factory: PredicateFactoryClass) => new OrPredicate(factory.buildPredicates(data.or)),
 };

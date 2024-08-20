@@ -1,7 +1,7 @@
 import {Cron, CronOptions} from "croner";
 import {discover, smartRecommendations} from "@core/service";
 import logger from "@core/log";
-import Settings, {getSettings} from "@core/lib/settings";
+import Settings from "@core/lib/settings";
 
 interface EnabledFunction {
     (): boolean;

@@ -1,8 +1,8 @@
 import {Predicate, PredicateBuilder} from "@core/lib/rules";
 import {MovieDetails} from "@core/api/overseerr/interfaces";
-import {PredicateOption} from "@core/lib/rules/interfaces";
 import {GroupPredicate} from "@core/lib/rules/predicate/group";
-import {PredicateFactory} from "@core/lib/rules/factory";
+import {AndFilterOptions} from "@core/lib/rules/interfaces";
+import type {PredicateFactoryClass} from "@core/lib/rules/factory";
 
 export class AndPredicate extends GroupPredicate {
 
@@ -17,5 +17,5 @@ export class AndPredicate extends GroupPredicate {
 
 export const AndPredicateBuilder: PredicateBuilder = {
     key: 'and',
-    build: (data: any) => new AndPredicate(PredicateFactory.buildPredicates(data as PredicateOption[])),
+    build: (data: AndFilterOptions, factory: PredicateFactoryClass) => new AndPredicate(factory.buildPredicates(data.and))
 };

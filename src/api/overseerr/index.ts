@@ -2,7 +2,8 @@ import HttpApi from "@core/api/httpApi";
 import {getSettings} from "@core/lib/settings";
 import logger from "@core/log";
 import {
-    AuthResponse, MediaRequest,
+    AuthResponse,
+    MediaRequest,
     MovieDetails,
     MovieResult,
     OverseerrRequestsResult,

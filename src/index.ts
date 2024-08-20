@@ -9,7 +9,6 @@ import {loadRulesets} from "@core/lib/ruleset";
 import {registerCrons} from "@core/lib/cron";
 import OverseerrApi from "@core/api/overseerr";
 import PlexApi from "@core/api/plex";
-import fs from "fs";
 
 dotenv.config()
 

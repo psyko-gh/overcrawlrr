@@ -1,16 +1,13 @@
 import {MovieDetails} from "@core/api/overseerr/interfaces";
 import {PredicateBuilder} from "@core/lib/rules";
-import TagsPredicate, {TagsPredicateOptions} from "@core/lib/rules/predicate/tag";
-
-export type WatchprovidersOptions = {
-    region: string;
-} & TagsPredicateOptions;
+import TagsPredicate from "@core/lib/rules/predicate/tag";
+import {WatchProvidersOptions} from "@core/lib/rules/interfaces";
 
 export class WatchprovidersPredicate extends TagsPredicate {
     private region: string;
 
-    constructor(options: WatchprovidersOptions) {
-        super(options);
+    constructor(options: WatchProvidersOptions) {
+        super({terms: options.names});
         this.region = options.region.toLowerCase();
     }
 
@@ -33,5 +30,5 @@ export class WatchprovidersPredicate extends TagsPredicate {
 
 export const WatchProvidersPredicateBuilder:PredicateBuilder = {
     key: 'watchProviders',
-    build: (data: {region: string, names: string[]}) => new WatchprovidersPredicate({ region: data.region, terms: data.names})
+    build: (data: WatchProvidersOptions) => new WatchprovidersPredicate(data)
 }

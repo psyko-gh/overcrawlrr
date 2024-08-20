@@ -7,7 +7,7 @@ export interface AuthResponse {
     requestCount: number;
     displayName: string;
 }
-
+/* exported MediaStatus */
 export enum MediaStatus {
     UNKNOWN = 1,
     PENDING,

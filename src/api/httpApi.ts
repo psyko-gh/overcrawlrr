@@ -22,7 +22,7 @@ class HttpApi {
         baseUrl: string,
         params: Record<string, unknown>,
         options: HttpApiOptions = {},
-        debug: Boolean = false
+        debug: boolean = false
     ) {
         this.cookie = '';
         this.baseUrl = baseUrl;
@@ -68,20 +68,20 @@ class HttpApi {
     protected async post<T>(
         endpoint: string,
         data: Record<string, unknown>,
-        config?: AxiosRequestConfig<any>,
+        config?: AxiosRequestConfig,
         ttl?: number
     ): Promise<T> {
         const cacheKey = this.getCacheKey(endpoint, config?.params);
-        // const cachedResult = this.cache?.get<T>(cacheKey);
-        // if (cachedResult) {
-        //     return cachedResult;
-        // }
+        const cachedResult = this.cache?.get<T>(cacheKey);
+        if (cachedResult) {
+            return cachedResult;
+        }
 
         const response = await this.axios.post<T>(endpoint, data, config);
 
-        // if (this.cache) {
-        //     this.cache.set<T>(cacheKey, response.data, ttl ?? DEFAULT_TTL);
-        // }
+        if (this.cache) {
+            this.cache.set<T>(cacheKey, response.data, ttl ?? DEFAULT_TTL);
+        }
 
         return response.data;
     }

@@ -6,14 +6,14 @@ import { CrewPredicate } from '@core/lib/rules/predicate/crew';
 import { KeywordPredicate } from '@core/lib/rules/predicate/keywords';
 import { AndPredicate } from '@core/lib/rules/predicate/and';
 import { OrPredicate } from '@core/lib/rules/predicate/or';
-import fs from 'fs';
 import { VoteCountPredicate } from '@core/lib/rules/predicate/voteCount';
 import { AgePredicate } from '@core/lib/rules/predicate/age';
-import path from 'path';
 import { PredicateFactory } from '@core/lib/rules/factory';
+import * as movieJson from './movie.json';
+import { MovieDetails } from '@core/api/overseerr/interfaces';
 
 console.log(__dirname);
-const movie = JSON.parse(fs.readFileSync(path.join(__dirname, './movie.json'), 'utf8'));
+const movie = movieJson as MovieDetails;
 
 PredicateFactory.init();
 

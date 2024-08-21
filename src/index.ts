@@ -7,7 +7,7 @@ import apiRouter from '@core/routes';
 import { loadRulesets } from '@core/lib/ruleset';
 import { registerCrons } from '@core/lib/cron';
 import OverseerrApi from '@core/api/overseerr';
-import PlexApiErr from '@core/api/plex';
+import PlexApi from '@core/api/plex';
 import minimist from 'minimist';
 import * as process from 'process';
 import path from 'path';
@@ -30,7 +30,7 @@ const onLoad: OnSettingLoadedCallback = async (settings: Settings) => {
     await overseerr.test();
 
     if (settings.plex) {
-        const plex = new PlexApiErr();
+        const plex = new PlexApi();
         await plex.test();
     }
 };

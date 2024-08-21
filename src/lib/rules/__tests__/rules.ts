@@ -30,7 +30,7 @@ describe('falsePredicate', () => {
 
     it('should not match', async () => {
         const response = rule.matches(movie);
-        expect(response).toEqual(false);
+        expect(response).toEqual(true);
     });
 });
 

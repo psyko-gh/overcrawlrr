@@ -1,0 +1,24 @@
+name: Pull requests check
+
+on:
+  - pull_request
+
+jobs:
+  build:
+    name: Lint & Test build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install
+        env:
+          HUSKY: 0
+        run: npm ci
+      - name: Lint
+        run: npm run lint:check
+      - name: Format
+        run: npm run format:check
+      - name: Build
+        run: npm run build
+      - name: Tests
+        run: npm run test

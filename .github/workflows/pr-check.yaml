@@ -8,6 +8,7 @@ jobs:
     name: Lint & Test build
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       statuses: write
     steps:
       - name: Checkout

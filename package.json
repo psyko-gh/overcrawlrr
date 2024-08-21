@@ -13,11 +13,14 @@
     "format": "prettier ./src --write --cache",
     "format:check": "prettier ./src --check --cache",
     "start": "tsx src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky"
   },
   "author": "psyko-gh",
   "license": "MIT",
   "devDependencies": {
+    "@commitlint/cli": "^19.4.0",
+    "@commitlint/config-conventional": "^19.2.2",
     "@eslint/js": "^9.9.0",
     "@types/cookie": "^0.5.1",
     "@types/cors": "^2.8.13",
@@ -28,6 +31,7 @@
     "@types/xml2js": "^0.4.14",
     "copyfiles": "^2.4.1",
     "eslint": "^9.9.0",
+    "husky": "^9.1.5",
     "jest": "^29.6.1",
     "prettier": "3.3.3",
     "ts-jest": "^29.1.1",

@@ -9,8 +9,9 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "postbuild": "cp -r ./schema/ ./build/",
-    "lint": "eslint \"./**/*.ts\"",
-    "prettier": "prettier ./src --write",
+    "lint:check": "eslint \"./**/*.ts\"",
+    "format": "prettier ./src --write --cache",
+    "format:check": "prettier ./src --check --cache",
     "start": "tsx src/index.ts",
     "start:watch": "tsx watch src/index.ts",
     "test:unit": "jest"

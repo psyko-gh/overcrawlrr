@@ -12,7 +12,7 @@ import { AgePredicate } from '@core/lib/rules/predicate/age';
 import path from 'path';
 import { PredicateFactory } from '@core/lib/rules/factory';
 
-const movie = JSON.parse(fs.readFileSync(path.join(__dirname, './movie.json'), 'utf8'));
+const movie = JSON.parse(fs.readFileSync('./movie.json', 'utf8'));
 
 PredicateFactory.init();
 

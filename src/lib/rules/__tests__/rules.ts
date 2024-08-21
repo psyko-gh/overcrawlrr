@@ -205,7 +205,7 @@ describe('crewPredicate', () => {
         expect(response).toEqual(true);
     });
 
-    it('should match if at least one cast match', async () => {
+    it('should match if at least one crew match', async () => {
         const rule = new Rule(
             'simple',
             [

@@ -4,7 +4,7 @@ import logger from '@core/log';
 import { Parser } from 'xml2js';
 import type { AxiosRequestConfig } from 'axios';
 import { PlexSectionDirectory, PlexSectionsResponse, PlexVideo, PlexVideosResponse } from '@core/api/plex/interfaces';
-import { color, Icon, isFulfilled } from '@core/lib/utils';
+import { isFulfilled, success } from '@core/lib/utils';
 
 class PlexApi extends HttpApi {
     xmlParser;
@@ -46,7 +46,7 @@ class PlexApi extends HttpApi {
         try {
             logger.info('Testing Plex connection...');
             await this.get('/');
-            logger.info(color.green(Icon.CHECK) + ' Plex connection successful');
+            logger.info(success(' Plex connection successful'));
         } catch (e) {
             logger.error('Error while testing Plex connection. Verify URL and credentials: ', e);
         }
@@ -84,9 +84,7 @@ class PlexApi extends HttpApi {
                 'userRating>': score,
             },
         });
-        const moviesResults: Array<PromiseSettledResult<PlexVideosResponse>> = await Promise.allSettled(
-            favorites.Video.map((v) => this.getMovie(v.ratingKey))
-        );
+        const moviesResults: Array<PromiseSettledResult<PlexVideosResponse>> = await Promise.allSettled(favorites.Video.map((v) => this.getMovie(v.ratingKey)));
         return moviesResults.filter(isFulfilled).flatMap((r) => r.value.Video);
     };
 }

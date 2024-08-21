@@ -18,12 +18,7 @@ class HttpApi {
     private baseUrl: string;
     private cache?: NodeCache;
 
-    constructor(
-        baseUrl: string,
-        params: Record<string, unknown>,
-        options: HttpApiOptions = {},
-        debug: boolean = false
-    ) {
+    constructor(baseUrl: string, params: Record<string, unknown>, options: HttpApiOptions = {}, debug: boolean = false) {
         this.cookie = '';
         this.baseUrl = baseUrl;
         this.cache = options.cache;
@@ -61,12 +56,7 @@ class HttpApi {
         return response.data;
     }
 
-    protected async post<T>(
-        endpoint: string,
-        data: Record<string, unknown>,
-        config?: AxiosRequestConfig,
-        ttl?: number
-    ): Promise<T> {
+    protected async post<T>(endpoint: string, data: Record<string, unknown>, config?: AxiosRequestConfig, ttl?: number): Promise<T> {
         const cacheKey = this.getCacheKey(endpoint, config?.params);
         const cachedResult = this.cache?.get<T>(cacheKey);
         if (cachedResult) {

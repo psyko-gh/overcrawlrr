@@ -21,14 +21,14 @@ interface JobDefinition {
 const jobDefinitionsGetter = (settings: Settings) => [
     {
         name: 'Discover job',
-        cronExpression: settings.load().discovery.cron ?? '',
-        isEnabled: () => !!settings.load().discovery.cron,
+        cronExpression: settings.discovery.cron ?? '',
+        isEnabled: () => !!settings.discovery.cron,
         process: async () => discover(),
     },
     {
         name: 'Smart recommendations job',
-        cronExpression: settings.load().smartRecommendations?.cron ?? '',
-        isEnabled: () => !!settings.load().smartRecommendations,
+        cronExpression: settings.smartRecommendations?.cron ?? '',
+        isEnabled: () => !!settings.smartRecommendations,
         process: async () => smartRecommendations(),
     },
 ];

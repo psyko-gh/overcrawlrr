@@ -16,6 +16,5 @@ export class NotPredicate extends GroupPredicate {
 
 export const NotPredicateBuilder: PredicateBuilder = {
     key: 'not',
-    build: (data: NotFilterOptions, factory: PredicateFactoryClass) =>
-        new NotPredicate(factory.buildPredicates(data.not)),
+    build: (data: NotFilterOptions, factory: PredicateFactoryClass) => new NotPredicate(factory.buildPredicates(data.not)),
 };

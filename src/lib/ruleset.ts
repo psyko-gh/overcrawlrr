@@ -21,9 +21,6 @@ class Ruleset {
             return this;
         }
         try {
-            if (process.env.NODE_ENV !== 'production') {
-                console.log(this._rulesetOptions);
-            }
             this.buildRules();
             this.initialized = true;
             logger.info(`Successfully loaded ruleset '${this.name}' with ${this._rules.length} rules`);
@@ -42,9 +39,7 @@ class Ruleset {
     }
 
     private buildRules(): void {
-        this._rules = this._rulesetOptions.rules.map(
-            (o) => new Rule(o.name, PredicateFactory.buildPredicates(o.whenMatch), o.action)
-        );
+        this._rules = this._rulesetOptions.rules.map((o) => new Rule(o.name, PredicateFactory.buildPredicates(o.whenMatch), o.action));
     }
 
     public evaluateRules(movie: MovieDetails): RuleEvaluation {
@@ -75,7 +70,7 @@ let rulesets: Map<string, Ruleset>;
 export const loadRulesets = (settings: Settings): void => {
     try {
         rulesets = new Map<string, Ruleset>();
-        const configuration = settings.load().rulesets;
+        const configuration = settings.rulesets;
         for (const options of configuration) {
             if (rulesets.has(options.name)) {
                 throw new Error(`Ruleset '${options.name}' already defined`);

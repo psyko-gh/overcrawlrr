@@ -1,15 +1,10 @@
 import fs from 'fs';
-import path from 'path';
 import yaml from 'js-yaml';
 import logger from '@core/log';
 import { RulesetOptions } from '@core/lib/rules/interfaces';
 import Ajv from 'ajv';
 
 const SCHEMA_PATH = './schema/schema.json';
-
-const SETTINGS_PATH = process.env.CONFIG_DIRECTORY
-    ? `${process.env.CONFIG_DIRECTORY}/settings.yaml`
-    : path.join(__dirname, '../../config/settings.yaml');
 
 export interface YamlSettings {
     config: CrawlrrSettings;
@@ -55,12 +50,14 @@ export interface OnSettingLoadedCallback {
 }
 
 class Settings {
+    private path: string;
     private _data: CrawlrrSettings;
     private initialized: boolean;
     private callback: OnSettingLoadedCallback | undefined;
 
     constructor() {
         this.initialized = false;
+        this.path = '/config/settings.yaml';
         this._data = {
             overseerr: {
                 apiUrl: '',
@@ -69,18 +66,18 @@ class Settings {
         };
     }
 
-    public load(): Settings {
+    private load(): Settings {
         if (this.initialized) {
             return this;
         }
         logger.info('Loading settings...');
 
-        if (!fs.existsSync(SETTINGS_PATH)) {
-            throw new Error(`Could not find configuration file '${SETTINGS_PATH}' !`);
+        if (!fs.existsSync(this.path)) {
+            throw new Error(`File does not exist: '${this.path}' !`);
         }
 
         try {
-            const yamlSettings = yaml.load(fs.readFileSync(SETTINGS_PATH, 'utf8')) as YamlSettings;
+            const yamlSettings = yaml.load(fs.readFileSync(this.path, 'utf8')) as YamlSettings;
             const schema = JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
             const validator = new Ajv();
             const isValid = validator.validate(schema, yamlSettings);
@@ -90,11 +87,8 @@ class Settings {
             }
 
             this._data = yamlSettings.config as CrawlrrSettings;
-            if (process.env.NODE_ENV !== 'production') {
-                console.log(this._data);
-            }
             this.initialized = true;
-            logger.info(`Settings loaded successfully from ${SETTINGS_PATH}`);
+            logger.info(`Settings loaded successfully from ${this.path}`);
             if (this.callback) {
                 this.callback(this);
             }
@@ -110,9 +104,11 @@ class Settings {
         this.load();
     };
 
-    public watch(callback: OnSettingLoadedCallback) {
-        fs.watchFile(SETTINGS_PATH, this.reload);
+    public watch(path: string, callback: OnSettingLoadedCallback) {
+        this.path = path;
+        fs.watchFile(this.path, this.reload);
         this.callback = callback;
+        this.load();
         return this;
     }
 

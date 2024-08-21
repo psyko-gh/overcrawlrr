@@ -1,7 +1,6 @@
 import { MovieResult } from '@core/api/overseerr/interfaces';
 
-export const isFulfilled = <T extends object>(v: PromiseSettledResult<T>): v is PromiseFulfilledResult<T> =>
-    v.status === 'fulfilled';
+export const isFulfilled = <T extends object>(v: PromiseSettledResult<T>): v is PromiseFulfilledResult<T> => v.status === 'fulfilled';
 
 export const isMovie = (m: MovieResult) => m.mediaType === 'movie';
 
@@ -46,12 +45,7 @@ type ErrorWithMessage = {
 };
 
 function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
-    return (
-        typeof error === 'object' &&
-        error !== null &&
-        'message' in error &&
-        typeof (error as Record<string, unknown>).message === 'string'
-    );
+    return typeof error === 'object' && error !== null && 'message' in error && typeof (error as Record<string, unknown>).message === 'string';
 }
 
 function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
@@ -68,4 +62,8 @@ function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
 
 export function getErrorMessage(error: unknown) {
     return toErrorWithMessage(error).message;
+}
+
+export function success(msg: string): string {
+    return `${color.green(Icon.CHECK)} ${msg}`;
 }

@@ -26,9 +26,7 @@ export const fromHumanReadableScore = (str: string): { threshold: number; operat
         const numerator = Number(ratioGroups[1]);
         const denominator = Number(ratioGroups[2]);
         if (denominator === 0) {
-            logger.warning(
-                `In score expression, denominator should not be 0. Using numerator value ${numerator} as threshold`
-            );
+            logger.warning(`In score expression, denominator should not be 0. Using numerator value ${numerator} as threshold`);
             threshold = numerator;
         } else {
             // Bring the value back in the range of 0..10 with 2 decimals

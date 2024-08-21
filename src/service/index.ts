@@ -3,15 +3,10 @@ import { getSettings } from '@core/lib/settings';
 import OverseerrApi from '@core/api/overseerr';
 import { MediaStatus, MovieResult } from '@core/api/overseerr/interfaces';
 import Ruleset, { getRuleset } from '@core/lib/ruleset';
-import { color, distinctMovies, Icon, isFulfilled, isMovie } from '@core/lib/utils';
+import { color, distinctMovies, isFulfilled, isMovie, success } from '@core/lib/utils';
 import PlexApi from '@core/api/plex';
 
-const processMovieResult = async (
-    movies: MovieResult[],
-    overseerr: OverseerrApi,
-    ruleset: Ruleset,
-    dryRun: boolean
-) => {
+const processMovieResult = async (movies: MovieResult[], overseerr: OverseerrApi, ruleset: Ruleset, dryRun: boolean) => {
     for (const movie of movies) {
         if (movie.mediaInfo && movie.mediaInfo.status !== MediaStatus.UNKNOWN) {
             logger.info(`  Skipping  - "${movie.title}" because it has already been processed`);
@@ -26,20 +21,16 @@ const processMovieResult = async (
             const ruleResult = ruleset.evaluateRules(movieDetails);
 
             if (ruleResult.result === 'accept') {
-                logger.info(
-                    `${color.green(Icon.CHECK + ' Adding')} - "${movieDetails.title}" because it matches rule "${color.green(ruleResult.rule?.name ?? '')}" `
-                );
+                logger.info(success(` Adding - "${ruleResult.movie.title}" because it matches rule "${color.green(ruleResult.rule?.name ?? '')}"`));
                 if (dryRun) {
-                    logger.info(`Requesting movie ${movie.title} - Dry run`);
+                    logger.info(`Dry run - A request would have been sent to Overseerr to request movie ${movie.title}`);
                 } else {
                     await overseerr.requestMovie(movie.id);
                 }
             } else if (ruleResult.result === 'reject') {
-                logger.info(
-                    `${color.red('  Rejecting')} - "${movieDetails.title}" because it of rule "${color.blue(ruleResult.rule?.name ?? '')}" `
-                );
+                logger.info(`${color.red('  Rejecting')} - "${ruleResult.movie.title}" because it of rule "${color.blue(ruleResult.rule?.name ?? '')}"`);
             } else {
-                logger.info(`  Skipping  - "${movieDetails.title}" doesn't match any rule`);
+                logger.info(`  Skipping  - "${ruleResult.movie.title}" doesn't match any rule`);
             }
         } catch (e) {
             logger.error(`Error while analyzing movie ${movie.id} - ${movie.title}`, e);
@@ -51,7 +42,7 @@ export const discover = async () => {
     const overseerr = new OverseerrApi();
     await overseerr.auth();
 
-    const settings = getSettings().load().discovery;
+    const settings = getSettings().discovery;
     const streams = settings.streams ?? ['upcoming', 'popular'];
     if (!settings.ruleset) {
         throw new Error(`No ruleset defined in Discovery section`);
@@ -90,7 +81,7 @@ export const smartRecommendations = async () => {
     await overseerr.auth();
     const plex = new PlexApi();
 
-    const settings = getSettings().load().smartRecommendations;
+    const settings = getSettings().smartRecommendations;
     if (!settings) {
         logger.info(`Missing configuration. Stopping...`);
         return;
@@ -117,9 +108,7 @@ export const smartRecommendations = async () => {
         });
     const dryRun = getSettings().overseerr.dryRun ?? false;
 
-    const recommendationsResults = await Promise.allSettled(
-        Array.from(moviesGuids).map((guid: string) => overseerr.getRecommendationsByMovie(guid))
-    );
+    const recommendationsResults = await Promise.allSettled(Array.from(moviesGuids).map((guid: string) => overseerr.getRecommendationsByMovie(guid)));
     const recommendations = recommendationsResults.filter(isFulfilled).flatMap((r) => r.value);
 
     // Remove duplicates

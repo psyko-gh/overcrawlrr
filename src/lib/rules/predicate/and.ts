@@ -16,6 +16,5 @@ export class AndPredicate extends GroupPredicate {
 
 export const AndPredicateBuilder: PredicateBuilder = {
     key: 'and',
-    build: (data: AndFilterOptions, factory: PredicateFactoryClass) =>
-        new AndPredicate(factory.buildPredicates(data.and)),
+    build: (data: AndFilterOptions, factory: PredicateFactoryClass) => new AndPredicate(factory.buildPredicates(data.and)),
 };

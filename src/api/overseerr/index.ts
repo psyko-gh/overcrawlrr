@@ -1,15 +1,8 @@
 import HttpApi from '@core/api/httpApi';
 import { getSettings } from '@core/lib/settings';
 import logger from '@core/log';
-import {
-    AuthResponse,
-    MediaRequest,
-    MovieDetails,
-    MovieResult,
-    OverseerrRequestsResult,
-    OverseerrResult,
-} from '@core/api/overseerr/interfaces';
-import { color, Icon } from '@core/lib/utils';
+import { AuthResponse, MediaRequest, MovieDetails, MovieResult, OverseerrRequestsResult, OverseerrResult } from '@core/api/overseerr/interfaces';
+import { success } from '@core/lib/utils';
 
 class OverseerrApi extends HttpApi {
     constructor() {
@@ -20,14 +13,14 @@ class OverseerrApi extends HttpApi {
         try {
             logger.info('Testing overseerr connection...');
             await this.auth();
-            logger.info(color.green(Icon.CHECK) + ' Overseerr connection successful');
+            logger.info(success(' Overseerr connection successful'));
         } catch (e) {
             logger.error('Error while testing Overseerr connection. Verify URL and credentials: ', e);
         }
     };
 
     public auth = async () => {
-        const settings = getSettings().load().overseerr;
+        const settings = getSettings().overseerr;
         return await this.post<AuthResponse>(`/auth/local`, {
             email: settings.user,
             password: settings.password,

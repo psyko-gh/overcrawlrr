@@ -1,7 +1,4 @@
-export default function envVar(
-    name: string,
-    defaultValue?: string | number | boolean | undefined
-): string | number | boolean {
+export default function envVar(name: string, defaultValue?: string | number | boolean | undefined): string | number | boolean {
     const val = process.env[name];
     if (typeof val === 'undefined') {
         if (defaultValue !== undefined) return defaultValue;

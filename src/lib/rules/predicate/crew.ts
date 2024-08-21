@@ -19,7 +19,7 @@ export class CrewPredicate extends TagsPredicate {
         }
         const tags: string[] = [];
         for (const crew of movie.credits.crew) {
-            if (!this.job || this.job === crew.job.toLowerCase()) {
+            if (!this.job || this.job.toLowerCase() === crew.job.toLowerCase()) {
                 tags.push(crew.name);
             }
         }

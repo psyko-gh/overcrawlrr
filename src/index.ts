@@ -29,12 +29,10 @@ const onLoad: OnSettingLoadedCallback = async (settings: Settings) => {
     const overseerr = new OverseerrApi();
     await overseerr.test();
 
-    if (settings.plex) {
+    if (settings.plex)
+    {
         const plex = new PlexApi();
         await plex.test();
-    }
-
-    if (true) {
     }
 };
 

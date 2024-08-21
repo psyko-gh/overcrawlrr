@@ -33,6 +33,9 @@ const onLoad: OnSettingLoadedCallback = async (settings: Settings) => {
         const plex = new PlexApi();
         await plex.test();
     }
+
+    if (true) {
+    }
 };
 
 getSettings().watch(configPath, onLoad);

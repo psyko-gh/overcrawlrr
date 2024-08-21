@@ -9,7 +9,7 @@ import { OrPredicate } from '@core/lib/rules/predicate/or';
 import { VoteCountPredicate } from '@core/lib/rules/predicate/voteCount';
 import { AgePredicate } from '@core/lib/rules/predicate/age';
 import { PredicateFactory } from '@core/lib/rules/factory';
-import * as movieJson from './movie.json' ;
+import * as movieJson from './movie.json';
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 
 const movie = movieJson as MovieDetails;

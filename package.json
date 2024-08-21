@@ -7,7 +7,7 @@
     ".build/**/*"
   ],
   "scripts": {
-    "build": "tsc && tsc-alias && npm run ",
+    "build": "tsc && tsc-alias",
     "postbuild": "copypfiles schema/schema.json build/schema.json",
     "lint:check": "eslint \"./**/*.ts\"",
     "format": "prettier ./src --write --cache",

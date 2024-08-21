@@ -9,9 +9,11 @@ import { OrPredicate } from '@core/lib/rules/predicate/or';
 import fs from 'fs';
 import { VoteCountPredicate } from '@core/lib/rules/predicate/voteCount';
 import { AgePredicate } from '@core/lib/rules/predicate/age';
+import path from 'path';
 import { PredicateFactory } from '@core/lib/rules/factory';
 
-const movie = JSON.parse(fs.readFileSync('./movie.json', 'utf8'));
+console.log(__dirname);
+const movie = JSON.parse(fs.readFileSync(path.join(__dirname, './movie.json'), 'utf8'));
 
 PredicateFactory.init();
 

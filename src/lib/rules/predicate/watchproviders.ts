@@ -7,8 +7,8 @@ export class WatchprovidersPredicate extends TagsPredicate {
     private region: string;
 
     constructor(options: WatchProvidersOptions) {
-        super({ terms: options.names });
-        this.region = options.region.toLowerCase();
+        super({ terms: options.watchProviders.names });
+        this.region = options.watchProviders.region.toLowerCase();
     }
 
     getTags(movie: MovieDetails): string[] {

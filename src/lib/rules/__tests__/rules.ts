@@ -1,6 +1,6 @@
 import { Rule } from '@core/lib/rules';
 import { FalsePredicate, TruePredicate } from '@core/lib/rules/predicate';
-import { GenresPredicate } from '@core/lib/rules/predicate/genres';
+import { GenrePredicate } from '@core/lib/rules/predicate/genre';
 import { CastPredicate } from '@core/lib/rules/predicate/cast';
 import { CrewPredicate } from '@core/lib/rules/predicate/crew';
 import { KeywordPredicate } from '@core/lib/rules/predicate/keywords';
@@ -112,7 +112,7 @@ describe('orPredicate', () => {
 
     it('should match genres', async () => {
         {
-            const rule = new Rule('simple', [new GenresPredicate({ genre: 'science-fiction' })], 'accept');
+            const rule = new Rule('simple', [new GenrePredicate({ genre: 'science-fiction' })], 'accept');
             const response = rule.matches(movie);
             expect(response).toEqual(true);
         }
@@ -120,7 +120,7 @@ describe('orPredicate', () => {
             const rule = new Rule(
                 'simple',
                 [
-                    new GenresPredicate({
+                    new GenrePredicate({
                         genre: ['science-fiction', 'comédie'],
                     }),
                 ],
@@ -130,7 +130,7 @@ describe('orPredicate', () => {
             expect(response).toEqual(true);
         }
         {
-            const rule = new Rule('simple', [new GenresPredicate({ genre: 'comédie' })], 'accept');
+            const rule = new Rule('simple', [new GenrePredicate({ genre: 'comédie' })], 'accept');
             const response = rule.matches(movie);
             expect(response).toEqual(false);
         }

@@ -72,6 +72,10 @@ export type ScoreOptions = {
 };
 
 export type WatchProvidersOptions = {
+    watchProviders: WatchProvidersSubOptions;
+};
+
+export type WatchProvidersSubOptions = {
     region: string;
     names: string[];
 };

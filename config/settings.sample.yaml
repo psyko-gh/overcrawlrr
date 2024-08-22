@@ -1,0 +1,113 @@
+config:
+  overseerr:
+    apiUrl: xxx
+    user: xxx
+    password: xxx
+    dryRun: true
+  plex:
+    apiUrl: xxx
+    plexToken: xxx
+  discovery:
+    cron: '? 30 3 * * *'
+    streams:
+      - upcoming
+      - popular
+      - trending
+    ruleset: Default ruleset
+  smartRecommendations:
+    cron: '? 1 14 * * *'
+    plexLibrary: Films
+    minimumRating: 6.9
+    ruleset: Default ruleset
+  rulesets:
+    - name: Default ruleset
+      rules:
+        - name: Reject old movies
+          whenMatch:
+            - age: more than 2 years
+          action: reject
+        - name: Reject less wanted genres
+          whenMatch:
+            - genre:
+                - animation
+                - romance
+          action: reject
+        - name: Reject any subscribed streaming platform
+          whenMatch:
+            - watchProviders:
+                region: fr
+                names:
+                  - Netflix
+                  - Amazon Prime
+          action: reject
+        - name: Favorites studios
+          whenMatch:
+            - released: no
+            - productionCompany:
+                - 20th Century Fox
+                - Warner Bros. Pictures
+                - Twisted Pictures
+          action: accept
+        - name: Accept favorites director
+          whenMatch:
+            - crew:
+              - James Cameron
+              - Steven Spielberg
+              - Quentin Tarantino
+              - Denis Villeneuve
+              - Christopher Nolan
+          action: accept
+        - name: Accept favorites compositors
+          whenMatch:
+            - crew:
+                job: musician
+                names:
+                  - James Horner
+          action: accept
+        - name: Accept favorites actors
+          whenMatch:
+            - cast:
+              - Jenna Ortega
+              - Michael Keaton
+              - Denzel Washington
+              - Keanu Reeves
+              - Jessica Alba
+              - Halle Berry
+              - Sydney Sweeney
+              - Tom Hanks
+              - Samuel L. Jackson
+              - Morgan Freeman
+              - Anthony Hopkins
+              - Gal Gadot
+              - Tom Cruise
+              - Brad Pitt
+              - Matt Damon
+          action: accept
+        - name: Reject declining actors
+          whenMatch:
+            - cast:
+              - Bruce Willis
+          action: reject
+        - name: Vote count is too low
+          whenMatch:
+            - released: yes
+            - voteCount: below 100
+          action: reject
+        - name: New great movies
+          whenMatch:
+            - age: less than 1 years
+            - score: above 7
+          action: accept
+        - name: Acceptable horror movie
+          whenMatch:
+            - age: less than 1 years
+            - genre:
+                - horreur
+            - score: above 6
+          action: accept
+        - name: Acceptable sci-fi movie
+          whenMatch:
+            - genre:
+                - science-fiction
+            - score: above 5
+          action: accept

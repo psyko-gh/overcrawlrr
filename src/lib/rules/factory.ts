@@ -5,7 +5,7 @@ import { AgePredicateBuilder } from '@core/lib/rules/predicate/age';
 import { ScorePredicateBuilder } from '@core/lib/rules/predicate/score';
 import { VoteCountPredicateBuilder } from '@core/lib/rules/predicate/voteCount';
 import { WatchProvidersPredicateBuilder } from '@core/lib/rules/predicate/watchproviders';
-import { GenresPredicateBuilder } from '@core/lib/rules/predicate/genres';
+import { GenrePredicateBuilder } from '@core/lib/rules/predicate/genre';
 import { CastPredicateBuilder } from '@core/lib/rules/predicate/cast';
 import { CrewPredicateBuilder } from '@core/lib/rules/predicate/crew';
 import { ProductionCompanyPredicateBuilder } from '@core/lib/rules/predicate/productionCompany';
@@ -57,7 +57,7 @@ const builders = [
     ScorePredicateBuilder,
     VoteCountPredicateBuilder,
     WatchProvidersPredicateBuilder,
-    GenresPredicateBuilder,
+    GenrePredicateBuilder,
     CastPredicateBuilder,
     CrewPredicateBuilder,
     ProductionCompanyPredicateBuilder,

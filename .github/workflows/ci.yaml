@@ -1,0 +1,61 @@
+name: CI Overcrawlrr
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - develop
+
+jobs:
+  check:
+    name: Lint & Test build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install
+        env:
+          HUSKY: 0
+        run: npm ci
+      - name: Lint
+        run: npm run lint:check
+      - name: Format
+        run: npm run format:check
+      - name: Build
+        run: npm run build
+      - name: Tests
+        run: npm run test
+      - name: Set commit status
+        uses: myrotvorets/set-commit-status-action@master
+        # Always run this even if previous steps fail
+        if: always()
+        with:
+          status: ${{ job.status }}
+          token:
+          sha: ${{ github.sha }}
+
+  build_and_push:
+    name: Build & publish Docker image
+    if: github.ref == 'refs/heads/develop' && !contains(github.event.head_commit.message, '[skip ci]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner  }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: psyko/overcrawlrr:develop

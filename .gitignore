@@ -43,5 +43,5 @@ node_modules/
 .env.production.local
 .env.local
 
-config/
+config/*
 !config/settings.sample.yaml

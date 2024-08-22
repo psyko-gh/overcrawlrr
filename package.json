@@ -2,19 +2,21 @@
   "name": "overcrawlrr",
   "version": "0.0.1",
   "description": "",
+  "private": true,
   "main": "./build/index.js",
+  "npmPublish": false,
   "files": [
     ".build/**/*"
   ],
   "scripts": {
+    "prepare": "node .husky/install.mjs",
     "build": "tsc && tsc-alias",
     "postbuild": "copyfiles schema/schema.json build/schema.json",
     "lint:check": "eslint \"./**/*.ts\"",
     "format": "prettier ./src --write --cache",
     "format:check": "prettier ./src --check --cache",
     "start": "tsx src/index.ts",
-    "test": "jest",
-    "prepare": "husky"
+    "test": "jest"
   },
   "author": "psyko-gh",
   "license": "MIT",

@@ -49,6 +49,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/api', apiRouter);
 
-const server = app.listen(port, () => {
+app.listen(port, () => {
     return logger.info(`Server is listening at http://localhost:${port}`);
 });

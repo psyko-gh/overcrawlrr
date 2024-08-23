@@ -36,6 +36,9 @@ services:
     restart: unless-stopped
     ports:
       - 5056:5056
+    environment:
+      - OVERSEERR_USER=
+      - OVERSEERR_PASSWORD=
     volumes:
       - /path/to/config:/config
 
@@ -47,6 +50,8 @@ services:
 docker run -d \
   --name=overcralwrr \
   --restart=unless-stopped \
+  - OVERSEERR_USER= \
+  - OVERSEERR_PASSWORD= \
   -v /path/to/config:/config \
   ghcr.io/psyko-gh/overcrawlrr:latest
 ```
@@ -64,8 +69,10 @@ You'll need to validate the requests in Overseerr, allowing for a double check o
   config:
     overseerr:
       apiUrl: xxx
-      user: xxx
-      password: xxx
+      # Required - either the explicit value or '{{ OVERSEERR_USER }}' to load it from the matching environment variable
+      user: '{{ OVERSEERR_USER }}'
+      # Required - either the explicit value or '{{ OVERSEERR_PASSWORD }}' to load it from the matching environment variable
+      password: '{{ OVERSEERR_PASSWORD }}'
       dryRun: true # Optional - dryRun will not send requests to Overseerr allowing you to test your rules
 ```
 

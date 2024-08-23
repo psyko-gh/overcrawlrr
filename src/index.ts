@@ -11,6 +11,7 @@ import PlexApi from '@core/api/plex';
 import minimist from 'minimist';
 import * as process from 'process';
 import path from 'path';
+import fs from 'fs';
 
 export type CliArguments = {
     config?: string;
@@ -19,7 +20,11 @@ export type CliArguments = {
 
 const argv = minimist(process.argv.slice(2)) as CliArguments;
 
-const configPath = path.resolve(__dirname, argv.config ?? path.resolve(__dirname, envVar('CONFIG', '/config/settings.yaml') as string));
+const cliPath = argv.config;
+const envPath = envVar('CONFIG', '/config/settings.yaml') as string;
+const reifiedPath = path.resolve(__dirname, cliPath ?? envPath);
+const stats = fs.statSync(reifiedPath);
+const configPath = stats.isDirectory() ? path.resolve(reifiedPath, 'settings.yaml') : reifiedPath;
 
 const onLoad: OnSettingLoadedCallback = async (settings: Settings) => {
     loadRulesets(settings);
@@ -48,7 +53,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use('/api', apiRouter);
-
 app.listen(port, () => {
     return logger.info(`Server is listening at http://localhost:${port}`);
 });

@@ -3,6 +3,7 @@ import yaml from 'js-yaml';
 import logger from '@core/log';
 import { RulesetOptions } from '@core/lib/rules/interfaces';
 import Ajv from 'ajv';
+import envVar from '@core/env';
 
 const SCHEMA_PATH = './schema/schema.json';
 
@@ -24,8 +25,8 @@ export interface RulesetConsumer {
 
 export interface OverseerSettings {
     apiUrl: string;
-    user?: string;
-    password?: string;
+    user: string;
+    password: string;
     dryRun?: boolean;
 }
 
@@ -87,8 +88,17 @@ class Settings {
             }
 
             this._data = yamlSettings.config as CrawlrrSettings;
+
+            // Resolve environment variables used in config
+            this._data.overseerr.user = this.resolveEnvironmentVariable(this._data.overseerr.user);
+            this._data.overseerr.password = this.resolveEnvironmentVariable(this._data.overseerr.password);
+            if (this._data.plex) {
+                this._data.plex.plexToken = this.resolveEnvironmentVariable(this._data.plex.plexToken);
+            }
+
             this.initialized = true;
             logger.info(`Settings loaded successfully from ${this.path}`);
+
             if (this.callback) {
                 this.callback(this);
             }
@@ -96,6 +106,16 @@ class Settings {
             logger.error(e);
         }
         return this;
+    }
+
+    private resolveEnvironmentVariable(value: string) {
+        let resolvedValue = value;
+        const envRegex = /{{ +([A-Z_]+) +}}/gm;
+        const match = envRegex.exec(value);
+        if (match !== null) {
+            resolvedValue = envVar(match[1]) as string;
+        }
+        return resolvedValue;
     }
 
     private reload = () => {
@@ -116,8 +136,20 @@ class Settings {
         return this._data.overseerr;
     }
 
+    get overseerrUser(): string {
+        return this._data.overseerr.user ?? '';
+    }
+
+    get overseerrPassword(): string {
+        return this._data.overseerr.password ?? '';
+    }
+
     get plex(): PlexSettings | null {
         return this._data.plex ?? null;
+    }
+
+    get plexToken(): string {
+        return envVar('PLEX_TOKEN', this._data.plex?.plexToken ?? '') as string;
     }
 
     get rulesets(): RulesetOptions[] {

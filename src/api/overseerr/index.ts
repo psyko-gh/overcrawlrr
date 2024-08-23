@@ -5,8 +5,13 @@ import { AuthResponse, MediaRequest, MovieDetails, MovieResult, OverseerrRequest
 import { success } from '@core/lib/utils';
 
 class OverseerrApi extends HttpApi {
+    private overseerrUser?: string;
+    private overseerrPassword?: string;
+
     constructor() {
         super(getSettings().overseerr.apiUrl, {});
+        this.overseerrUser = getSettings().overseerrUser;
+        this.overseerrPassword = getSettings().overseerrPassword;
     }
 
     public test = async () => {
@@ -14,16 +19,28 @@ class OverseerrApi extends HttpApi {
             logger.info('Testing overseerr connection...');
             await this.auth();
             logger.info(success(' Overseerr connection successful'));
-        } catch (e) {
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                logger.error(`${e.message}`);
+                return false;
+            }
             logger.error('Error while testing Overseerr connection. Verify URL and credentials: ', e);
         }
     };
 
     public auth = async () => {
-        const settings = getSettings().overseerr;
+        if (!this.overseerrUser) {
+            throw new Error('Overseerr user is not set. You can define it as environment variable or in your settings.yaml file.');
+        }
+        if (!this.overseerrPassword) {
+            throw new Error('Overseerr password is not set. You can define it as environment variable or in your settings.yaml file.');
+        }
+        if (!this.overseerrUser || !this.overseerrPassword) {
+            throw new Error('Missing Overseer user or password. Please check your configuration.');
+        }
         return await this.post<AuthResponse>(`/auth/local`, {
-            email: settings.user,
-            password: settings.password,
+            email: this.overseerrUser,
+            password: this.overseerrPassword,
         });
     };
 

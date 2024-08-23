@@ -1,7 +1,9 @@
 import { createLogger, format, transports } from 'winston';
 
-const logFormat = format.printf(({ timestamp, level, message }) => {
-    return `[ ${timestamp.replace(/[TZ]/gm, ' ')}] ${level}: ${message}`;
+const logFormat = format.printf(({ timestamp, level, message, stack }) => {
+    const log = `[ ${timestamp.replace(/[TZ]/gm, ' ')}] ${level}: ${message}`;
+
+    return stack ? `${log}\n${stack}` : log;
 });
 
 const logger = createLogger({

@@ -7,6 +7,12 @@ services:
       - 5056:5056
     environment:
       - TZ=Etc/UTC
+      # Optional user & password for Overseerr.
+      # They can be configured in the setting.yaml as well
+      - OVERSEERR_USER=
+      - OVERSEERR_PASSWORD=
+      # Optional - used if connected to Plex using Smart recommendations
+      - PLEX_TOKEN=
       # OPTIONAL: the custom path to your settings file. Default: /config/settings.yaml
       # - CONFIG=/my/custom/config
     volumes:

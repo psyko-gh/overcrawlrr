@@ -7,7 +7,8 @@ import { PlexSectionDirectory, PlexSectionsResponse, PlexVideo, PlexVideosRespon
 import { isFulfilled, success } from '@core/lib/utils';
 
 class PlexApi extends HttpApi {
-    xmlParser;
+    private xmlParser;
+    private plexToken?: string = undefined;
 
     constructor() {
         super(
@@ -24,9 +25,13 @@ class PlexApi extends HttpApi {
             mergeAttrs: true,
             explicitArray: false,
         });
+        this.plexToken = getSettings().plexToken;
     }
 
     protected async get<T>(endpoint: string, config?: AxiosRequestConfig, ttl?: number): Promise<T> {
+        if (!this.plexToken) {
+            throw new Error('Plex token is not set. You can define it as environment variable or in your settings.yaml file.');
+        }
         const result = await super.get(
             endpoint,
             {
@@ -47,7 +52,11 @@ class PlexApi extends HttpApi {
             logger.info('Testing Plex connection...');
             await this.get('/');
             logger.info(success(' Plex connection successful'));
-        } catch (e) {
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                logger.error(`${e.message}`);
+                return false;
+            }
             logger.error('Error while testing Plex connection. Verify URL and credentials: ', e);
         }
     };

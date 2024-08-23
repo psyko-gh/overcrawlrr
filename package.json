@@ -2,12 +2,10 @@
   "name": "overcrawlrr",
   "version": "0.0.1",
   "description": "",
+  "author": "psyko-gh",
+  "license": "MIT",
   "private": true,
-  "main": "./build/index.js",
   "npmPublish": false,
-  "files": [
-    ".build/**/*"
-  ],
   "scripts": {
     "prepare": "node .husky/install.mjs",
     "build": "tsc && tsc-alias",
@@ -18,8 +16,6 @@
     "start": "tsx src/index.ts",
     "test": "jest"
   },
-  "author": "psyko-gh",
-  "license": "MIT",
   "devDependencies": {
     "@commitlint/cli": "^19.4.0",
     "@commitlint/config-conventional": "^19.2.2",

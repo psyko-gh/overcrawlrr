@@ -48,7 +48,7 @@ export function registerCrons(settings: Settings) {
         const cron = Cron(jobDefinition.cronExpression, options, async () => {
             logger.info(`----- Starting : ${jobDefinition.name} ! ----- `);
             await jobDefinition.process?.();
-            logger.info(`----- completeD: ${jobDefinition.name} ! ----- `);
+            logger.info(`----- Completed: ${jobDefinition.name} ! ----- `);
         });
         jobs.push(cron);
         logger.info(`Registered ${jobDefinition.name}. Next run: ` + cron.nextRun());

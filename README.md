@@ -1,5 +1,6 @@
-
 # Overcrawlrr
+
+[![CI Overcrawlrr](https://github.com/psyko-gh/overcrawlrr/actions/workflows/ci.yaml/badge.svg)](https://github.com/psyko-gh/overcrawlrr/actions/workflows/ci.yaml)
 
 CRON based bot that automatically requests movies you may like in Overseer using your own rules.
 
@@ -17,6 +18,7 @@ CRON based bot that automatically requests movies you may like in Overseer using
 Requirement:
 - a running instance of [Overseerr](https://overseerr.dev/)
 - docker
+
 
 # Installation
 

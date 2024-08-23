@@ -23,33 +23,33 @@ Requirement:
 
 ### Configure Overseerr
 
-An Overseerr user must be configured to post requests. 
+An Overseerr user must be configured to post requests.
 
-It is recommended to create a [local user in Overseerr](https://docs.overseerr.dev/using-overseerr/users#creating-local-users) for Overcrawlrr. 
-When testing your rules, you can disable Overseerr automatic validations for this user. 
-You'll need to validate the requests in Overseerr, allowing for a double check on your rules.   
+It is recommended to create a [local user in Overseerr](https://docs.overseerr.dev/using-overseerr/users#creating-local-users) for Overcrawlrr.
+When testing your rules, you can disable Overseerr automatic validations for this user.
+You'll need to validate the requests in Overseerr, allowing for a double check on your rules.
 
-```yaml  
+```yaml
   config:
     overseerr:
       apiUrl: xxx
       user: xxx
-      password: xxx      
+      password: xxx
       dryRun: true # Optional - dryRun will not send requests to Overseerr allowing you to test your rules
 ```
 
 ### Configure the cron
 
-It's time to configure the discovery job. It will fetch movies from Overseerr (from the upcoming/popular/trending sections) and evaluate each of them. 
+It's time to configure the discovery job. It will fetch movies from Overseerr (from the upcoming/popular/trending sections) and evaluate each of them.
 
-```yaml  
+```yaml
 config:
   overseer:
     # ....
   discovery:
     # Required
     cron: '? 30 3 * * *'
-    # Required - the overseer streams to search through 
+    # Required - the overseer streams to search through
     # Possible values: upcoming, popular, trending
     streams:
       - upcoming
@@ -71,7 +71,7 @@ config:
     - name: Ruleset name
       # Optional - the name of another ruleset. This ruleset will apply all the rules in the extended rulese
       #            before applying its own rules
-      extends: Another ruleset 
+      extends: Another ruleset
       # Required - An array defining the rules of the ruleset
       rules:
         - # rule 1
@@ -79,8 +79,8 @@ config:
         - # rule ...
 ```
 
-- The rules are applied in the declared order, 
-- When a rule matches, the rule `action` is applied, and the evaluation of the ruleset stops.  
+- The rules are applied in the declared order,
+- When a rule matches, the rule `action` is applied, and the evaluation of the ruleset stops.
 - If a rule doesn't match, it is ignored, and the next rule is evaluated.
 
 ### Rule definition
@@ -92,11 +92,11 @@ config:
     whenMatch:
       - # predicate 1
       - # predicate 2
-      -  # ...
+      - # ...
       - # predicate n
     # Required - the action to apply when the rule matches
     # Possible values: accept or reject
-    action: accept 
+    action: accept
 ```
 
 The rule will match if **all the predicates** in the `whenMatch` match.
@@ -155,7 +155,7 @@ Filters on the vote count of the movie.
 ---
 #### `genre`
 
-Filters on the genre of the movie. Will match when one or more of the listed genres matches the genre of the movie. 
+Filters on the genre of the movie. Will match when one or more of the listed genres matches the genre of the movie.
 
 **Case insensitive**
 
@@ -173,7 +173,7 @@ Filters based on the available Streaming/VOD platforms. Will match when one or m
 **Case insensitive**
 
 ```yaml
-    # This predicate will match when the movie is available in Germany on Netflix or Amazon Prime 
+    # This predicate will match when the movie is available in Germany on Netflix or Amazon Prime
     - watchProviders:
           # ISO 3166-1 alpha-2 format of the region (de, au, us, fr...)
         - region: de
@@ -189,8 +189,8 @@ Filters based on the cast of the movie. Will match when one or more of the liste
 
 **Case insensitive**
 
-```yaml     
-    - cast:        
+```yaml
+    - cast:
         - Denzel Washington
         - Jessica Alba
 ```
@@ -202,14 +202,14 @@ Filters based on the crew of the movie. Will match when one or more of the liste
 
 **Case insensitive**
 
-```yaml     
+```yaml
     - crew:
         - James Cameron
         - Hans Zimmer
 ```
 
 It is also possible to specify the job
-```yaml     
+```yaml
     - crew:
         job: director
         names:
@@ -223,7 +223,7 @@ Filters based on the production companies of the movie. Will match when one or m
 
 **Case insensitive**
 
-```yaml     
+```yaml
     - productionCompany:
         - 20th Century Fox
         - Warner Bros. Pictures
@@ -235,7 +235,7 @@ Filters based on the production companies of the movie. Will match when one or m
 
 Predicate that will match if any of its predicate matches
 
-```yaml     
+```yaml
     # Will match if the movie is less than 2 years old OR if the movie score is above 8
     - or:
         - age: less than 2 years
@@ -247,7 +247,7 @@ Predicate that will match if any of its predicate matches
 
 Predicate that will match if all of its predicate matches
 
-```yaml     
+```yaml
     # Will match if the movie is less than 2 years old AND if the movie genre is 'animation'
     - and:
         - age: less than 2 years
@@ -263,8 +263,8 @@ Predicate that will match if all of its predicate matches
 Predicate that invert the result of its child predicate
 
 ```yaml
-    - not:        
-        - genres: 
+    - not:
+        - genres:
             - animation
 ```
 

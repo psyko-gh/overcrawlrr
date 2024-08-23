@@ -16,9 +16,38 @@ CRON based bot that automatically requests movies you may like in Overseer using
 
 Requirement:
 - a running instance of [Overseerr](https://overseerr.dev/)
+- docker
 
 ## Installation
 
+To create a container for Overcrawlrr you can either use docker-compose or the docker cli.
+
+**docker-compose (recommended)**
+
+See |docker-compose.yaml](docker-compose.yaml) file for full example
+
+```yaml
+services:
+  overcrawlrr:
+    image: ghcr.io/psyko-gh/overcrawlrr:latest
+    container_name: overcrawlrr
+    restart: unless-stopped
+    ports:
+      - 5056:5056
+    volumes:
+      - /path/to/config:/config
+
+```
+
+**docker cli**
+
+```shell
+docker run -d \
+  --name=overcralwrr \
+  --restart=unless-stopped \
+  -v /path/to/config:/config \
+  ghcr.io/psyko-gh/overcrawlrr:latest
+```
 ## Configuration
 
 ### Configure Overseerr

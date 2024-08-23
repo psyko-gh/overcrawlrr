@@ -6,9 +6,8 @@ services:
     ports:
       - 5056:5056
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TIMEZONE}
-      - CONFIG_DIRECTORY=/app/config
+      - TZ=Etc/UTC
+      # OPTIONAL: the custom path to your settings file. Default: /config/settings.yaml
+      # - CONFIG=/my/custom/config
     volumes:
-      - ${CONFIG}/overcrawlrr/config:/config
+      - /path/to/config:/config

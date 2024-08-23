@@ -12,9 +12,9 @@
     "prepare": "node .husky/install.mjs",
     "build": "tsc && tsc-alias",
     "postbuild": "copyfiles schema/schema.json build/schema.json",
-    "lint:check": "eslint \"./**/*.ts\"",
-    "format": "prettier ./src --write --cache",
-    "format:check": "prettier ./src --check --cache",
+    "lint": "eslint \"./**/*.ts\"",
+    "format:fix": "prettier ./src --write --cache",
+    "format": "prettier ./src --check --cache",
     "start": "tsx src/index.ts",
     "test": "jest"
   },

@@ -1,6 +1,5 @@
 import { Predicate, PredicateBuilder, PredicateKey } from '@core/lib/rules/index';
 import { PredicateOption } from '@core/lib/rules/interfaces';
-import logger from '@core/log';
 import { AgePredicateBuilder } from '@core/lib/rules/predicate/age';
 import { ScorePredicateBuilder } from '@core/lib/rules/predicate/score';
 import { VoteCountPredicateBuilder } from '@core/lib/rules/predicate/voteCount';
@@ -27,10 +26,6 @@ export class PredicateFactoryClass {
             const key = Object.keys(p)[0];
             return this.getBuilder(key).build(p, this);
         });
-    }
-
-    public init() {
-        logger.debug('Initialized PredicateFactory');
     }
 
     private getBuilder(key: string): PredicateBuilder {

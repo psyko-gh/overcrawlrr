@@ -1,5 +1,5 @@
 # Use a build image
-FROM node:lts-alpine as BUILD_IMAGE
+FROM node:lts-alpine AS build_image
 WORKDIR /app/
 COPY . ./
 RUN npm ci
@@ -12,7 +12,7 @@ WORKDIR /app/
 COPY package.json package-lock.json ./
 COPY .husky/install.mjs ./.husky/install.mjs
 COPY schema ./schema/
-COPY --from=BUILD_IMAGE /app/build ./
+COPY --from=build_image /app/build ./
 RUN npm ci --omit=dev
 
 RUN apk add --no-cache dumb-init

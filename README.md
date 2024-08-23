@@ -22,7 +22,7 @@ Requirement:
 
 To create a container for Overcrawlrr you can either use docker-compose or the docker cli.
 
-**docker-compose (recommended)**
+### docker-compose (recommended)
 
 See |docker-compose.yaml](docker-compose.yaml) file for full example
 
@@ -39,7 +39,7 @@ services:
 
 ```
 
-**docker cli**
+### docker cli
 
 ```shell
 docker run -d \

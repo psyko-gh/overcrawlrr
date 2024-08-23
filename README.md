@@ -1,5 +1,5 @@
 
-## Overcrawlrr
+# Overcrawlrr
 
 CRON based bot that automatically requests movies you may like in Overseer using your own rules.
 
@@ -18,11 +18,11 @@ Requirement:
 - a running instance of [Overseerr](https://overseerr.dev/)
 - docker
 
-## Installation
+# Installation
 
 To create a container for Overcrawlrr you can either use docker-compose or the docker cli.
 
-### docker-compose (recommended)
+## docker-compose (recommended)
 
 See |docker-compose.yaml](docker-compose.yaml) file for full example
 
@@ -39,7 +39,7 @@ services:
 
 ```
 
-### docker cli
+## docker cli
 
 ```shell
 docker run -d \
@@ -48,9 +48,9 @@ docker run -d \
   -v /path/to/config:/config \
   ghcr.io/psyko-gh/overcrawlrr:latest
 ```
-## Configuration
+# Configuration
 
-### Configure Overseerr
+## Configure Overseerr
 
 An Overseerr user must be configured to post requests.
 
@@ -67,7 +67,7 @@ You'll need to validate the requests in Overseerr, allowing for a double check o
       dryRun: true # Optional - dryRun will not send requests to Overseerr allowing you to test your rules
 ```
 
-### Configure the cron
+## Configure the cron
 
 It's time to configure the discovery job. It will fetch movies from Overseerr (from the upcoming/popular/trending sections) and evaluate each of them.
 
@@ -88,7 +88,7 @@ config:
     ruleset: Ruleset name
 ```
 
-## Rulesets
+# Rulesets
 
 A ruleset defines a group of rules, used to detect if a movie should be requested or not.
 
@@ -112,7 +112,7 @@ config:
 - When a rule matches, the rule `action` is applied, and the evaluation of the ruleset stops.
 - If a rule doesn't match, it is ignored, and the next rule is evaluated.
 
-### Rule definition
+## Rule definition
 
 ```yaml
     # Required - the name of the rule
@@ -134,10 +134,10 @@ When matching:
 - If `action: accept`, a request is sent to Overseerr to add the movie,
 - If `action: reject`, the movie is ignored, and the evaluation of the ruleset stops.
 
-### Rule predicates
+## Rule predicates
 
 ---
-#### `released`
+### `released`
 
 Filters on the released status of the movie.
 
@@ -148,7 +148,7 @@ Filters on the released status of the movie.
 ```
 
 ---
-#### `age`
+### `age`
 
 Filters on the age of the movie.
 
@@ -159,7 +159,7 @@ Filters on the age of the movie.
 ```
 
 ---
-#### `score`
+### `score`
 
 Filters on the score of the movie.
 
@@ -170,7 +170,7 @@ Filters on the score of the movie.
 ```
 
 ---
-#### `voteCount`
+### `voteCount`
 
 Filters on the vote count of the movie.
 
@@ -182,7 +182,7 @@ Filters on the vote count of the movie.
 ```
 
 ---
-#### `genre`
+### `genre`
 
 Filters on the genre of the movie. Will match when one or more of the listed genres matches the genre of the movie.
 
@@ -195,7 +195,7 @@ Filters on the genre of the movie. Will match when one or more of the listed gen
 ```
 
 ---
-#### `watchProviders`
+### `watchProviders`
 
 Filters based on the available Streaming/VOD platforms. Will match when one or more of the listed provider matches.
 
@@ -212,7 +212,7 @@ Filters based on the available Streaming/VOD platforms. Will match when one or m
 ```
 
 ---
-#### `cast`
+### `cast`
 
 Filters based on the cast of the movie. Will match when one or more of the listed name matches.
 
@@ -225,7 +225,7 @@ Filters based on the cast of the movie. Will match when one or more of the liste
 ```
 
 ---
-#### `crew`
+### `crew`
 
 Filters based on the crew of the movie. Will match when one or more of the listed name matches.
 
@@ -246,7 +246,7 @@ It is also possible to specify the job
           - Steven Spielberg
 ```
 ---
-#### `productionCompany`
+### `productionCompany`
 
 Filters based on the production companies of the movie. Will match when one or more of the listed company matches.
 
@@ -260,7 +260,7 @@ Filters based on the production companies of the movie. Will match when one or m
 ```
 
 ---
-#### `or`
+### `or`
 
 Predicate that will match if any of its predicate matches
 
@@ -272,7 +272,7 @@ Predicate that will match if any of its predicate matches
 ```
 
 ---
-#### `and`
+### `and`
 
 Predicate that will match if all of its predicate matches
 
@@ -285,9 +285,7 @@ Predicate that will match if all of its predicate matches
 ```
 
 ---
-
----
-#### `not`
+### `not`
 
 Predicate that invert the result of its child predicate
 

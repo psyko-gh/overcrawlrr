@@ -24,7 +24,7 @@ To create a container for Overcrawlrr you can either use docker-compose or the d
 
 ## docker-compose (recommended)
 
-See |docker-compose.yaml](docker-compose.yaml) file for full example
+See [docker-compose.yaml](docker-compose.yaml) file for full example
 
 ```yaml
 services:

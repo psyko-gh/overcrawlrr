@@ -1,0 +1,14 @@
+services:
+  overcrawlrr:
+    image: ghcr.io/psyko-gh/overcrawlrr:develop
+    container_name: overcrawlrr
+    restart: unless-stopped
+    ports:
+      - 5056:5056
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TIMEZONE}
+      - CONFIG_DIRECTORY=/app/config
+    volumes:
+      - ${CONFIG}/overcrawlrr/config:/config

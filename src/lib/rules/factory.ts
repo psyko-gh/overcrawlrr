@@ -13,6 +13,10 @@ import { KeywordPredicateBuilder } from '@core/lib/rules/predicate/keywords';
 import { OrPredicateBuilder } from '@core/lib/rules/predicate/or';
 import { AndPredicateBuilder } from '@core/lib/rules/predicate/and';
 import { NotPredicateBuilder } from '@core/lib/rules/predicate/not';
+import { AdultPredicateBuilder } from '@core/lib/rules/predicate/adult';
+import { RuntimePredicateBuilder } from '@core/lib/rules/predicate/runtime';
+import { OriginalLanguagePredicateBuilder } from '@core/lib/rules/predicate/originalLanguage';
+import { StatusPredicateBuilder } from '@core/lib/rules/predicate/status';
 
 export class PredicateFactoryClass {
     private builders: Map<PredicateKey, PredicateBuilder>;
@@ -45,18 +49,22 @@ export class PredicateFactoryClass {
 
 export const PredicateFactory = new PredicateFactoryClass();
 const builders = [
-    OrPredicateBuilder,
-    AndPredicateBuilder,
-    NotPredicateBuilder,
+    AdultPredicateBuilder,
     AgePredicateBuilder,
-    ScorePredicateBuilder,
-    VoteCountPredicateBuilder,
-    WatchProvidersPredicateBuilder,
-    GenrePredicateBuilder,
+    AndPredicateBuilder,
     CastPredicateBuilder,
     CrewPredicateBuilder,
+    GenrePredicateBuilder,
+    KeywordPredicateBuilder,
+    NotPredicateBuilder,
+    OriginalLanguagePredicateBuilder,
+    OrPredicateBuilder,
     ProductionCompanyPredicateBuilder,
     ReleasedPredicateBuilder,
-    KeywordPredicateBuilder,
+    RuntimePredicateBuilder,
+    ScorePredicateBuilder,
+    StatusPredicateBuilder,
+    VoteCountPredicateBuilder,
+    WatchProvidersPredicateBuilder,
 ];
 builders.forEach((b) => PredicateFactory.registerBuilder(b));

@@ -16,14 +16,18 @@ export type PredicateOption =
     | AndFilterOptions
     | OrFilterOptions
     | NotFilterOptions
+    | AdultOptions
     | AgeOptions
     | CastOptions
     | CrewOptions
     | GenreOptions
     | KeywordOptions
+    | OriginalLanguageOptions
     | ProductionCompanyOptions
     | ReleasedOptions
+    | RuntimeOptions
     | ScoreOptions
+    | StatusOptions
     | VoteCountOptions
     | WatchProvidersOptions;
 
@@ -39,6 +43,10 @@ export interface NotFilterOptions {
     not: PredicateOption[];
 }
 
+export type AdultOptions = {
+    adult: string;
+};
+
 export type AgeOptions = {
     age: string;
 };
@@ -49,6 +57,10 @@ export type CastOptions = {
 
 export type GenreOptions = {
     genre: string | string[];
+};
+
+export type OriginalLanguageOptions = {
+    originalLanguage: string | string[];
 };
 
 export type VoteCountOptions = {
@@ -87,4 +99,12 @@ export interface CrewOptions {
 export type CrewJobNamesOptions = {
     job: string;
     names: string[];
+};
+
+export type RuntimeOptions = {
+    runtime: string;
+};
+
+export type StatusOptions = {
+    status: string | string[];
 };

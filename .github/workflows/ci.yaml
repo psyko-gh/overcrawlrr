@@ -44,12 +44,21 @@ jobs:
     name: Build & publish Docker image
     if: github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: develop
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -59,4 +68,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: psyko/overcrawlrr:develop
+          tags: ${{ steps.meta.outputs.tags }}

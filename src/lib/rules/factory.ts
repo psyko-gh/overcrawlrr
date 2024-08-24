@@ -49,22 +49,22 @@ export class PredicateFactoryClass {
 
 export const PredicateFactory = new PredicateFactoryClass();
 const builders = [
-    OrPredicateBuilder,
-    AndPredicateBuilder,
-    NotPredicateBuilder,
+    AdultPredicateBuilder,
     AgePredicateBuilder,
-    ScorePredicateBuilder,
-    VoteCountPredicateBuilder,
-    WatchProvidersPredicateBuilder,
-    GenrePredicateBuilder,
+    AndPredicateBuilder,
     CastPredicateBuilder,
     CrewPredicateBuilder,
-    ProductionCompanyPredicateBuilder,
+    GenrePredicateBuilder,
+    KeywordPredicateBuilder,
+    NotPredicateBuilder,
     OriginalLanguagePredicateBuilder,
+    OrPredicateBuilder,
+    ProductionCompanyPredicateBuilder,
     ReleasedPredicateBuilder,
     RuntimePredicateBuilder,
+    ScorePredicateBuilder,
     StatusPredicateBuilder,
-    KeywordPredicateBuilder,
-    AdultPredicateBuilder,
+    VoteCountPredicateBuilder,
+    WatchProvidersPredicateBuilder,
 ];
 builders.forEach((b) => PredicateFactory.registerBuilder(b));

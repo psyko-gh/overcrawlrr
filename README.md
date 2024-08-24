@@ -10,7 +10,7 @@ CRON based bot that automatically requests movies you may like in Overseer using
   rules:
     - name: Acceptable sci-fi movie
       whenMatch:
-        - genres:
+        - genre:
             - science-fiction
         - score: above 5
       action: accept
@@ -56,6 +56,7 @@ docker run -d \
   -v /path/to/config:/config \
   ghcr.io/psyko-gh/overcrawlrr:latest
 ```
+
 # Configuration
 
 ## Configure Overseerr
@@ -146,21 +147,22 @@ When matching:
 
 ## Rule predicates
 
----
-### `released`
+### `adult`
 
-Filters on the released status of the movie.
+Filters on the adult status of the movie.
 
 ```yaml
-    - released: yes
+    - adult: yes
       # or
-    - released: no
+    - adult: no
 ```
 
 ---
 ### `age`
 
 Filters on the age of the movie.
+
+See [Duration expressions](#duration-expressions) for more details
 
 ```yaml
     - age: less than 2 years
@@ -169,56 +171,16 @@ Filters on the age of the movie.
 ```
 
 ---
-### `score`
+### `and`
 
-Filters on the score of the movie.
-
-```yaml
-    - score: above 6.5
-      # or
-    - score: below 5.5
-```
-
----
-### `voteCount`
-
-Filters on the vote count of the movie.
-
+Predicate that will match if all of its predicate matches
 
 ```yaml
-    - voteCount: above 1000
-      # or
-    - voteCount: below 100
-```
-
----
-### `genre`
-
-Filters on the genre of the movie. Will match when one or more of the listed genres matches the genre of the movie.
-
-**Case insensitive**
-
-```yaml
-    - genres:
-        - animation
-        - romance
-```
-
----
-### `watchProviders`
-
-Filters based on the available Streaming/VOD platforms. Will match when one or more of the listed provider matches.
-
-**Case insensitive**
-
-```yaml
-    # This predicate will match when the movie is available in Germany on Netflix or Amazon Prime
-    - watchProviders:
-          # ISO 3166-1 alpha-2 format of the region (de, au, us, fr...)
-        - region: de
-        - names:
-            - Netflix
-            - Amazon Prime
+    # Will match if the movie is less than 2 years old AND if the movie genre is 'animation'
+    - and:
+        - age: less than 2 years
+        - genre:
+            - animation
 ```
 
 ---
@@ -255,18 +217,47 @@ It is also possible to specify the job
           - James Cameron
           - Steven Spielberg
 ```
----
-### `productionCompany`
 
-Filters based on the production companies of the movie. Will match when one or more of the listed company matches.
+---
+### `genre`
+
+Filters on the genre of the movie. Will match when one or more of the listed genres matches the genre of the movie.
 
 **Case insensitive**
 
 ```yaml
-    - productionCompany:
-        - 20th Century Fox
-        - Warner Bros. Pictures
-        - Twisted Pictures
+    - genre: musical
+    # or with an array of values
+    - genre:
+        - animation
+        - romance
+```
+
+---
+### `not`
+
+Predicate that invert the result of its child predicate
+
+```yaml
+    - not:
+        - genre:
+            - animation
+```
+
+---
+### `originalLanguage`
+
+Filters on the original language of the movie
+
+**Case insensitive**
+
+```yaml
+    # ISO 639-1 format of the language (de, au, us, fr...)
+    - originalLanguage: en
+    # or with an array of values
+    - originalLanguage:
+        - en
+        - fr
 ```
 
 ---
@@ -282,33 +273,107 @@ Predicate that will match if any of its predicate matches
 ```
 
 ---
-### `and`
+### `productionCompany`
 
-Predicate that will match if all of its predicate matches
+Filters based on the production companies of the movie. Will match when one or more of the listed company matches.
+
+**Case insensitive**
 
 ```yaml
-    # Will match if the movie is less than 2 years old AND if the movie genre is 'animation'
-    - and:
-        - age: less than 2 years
-        - genres:
-            - animation
+    - productionCompany:
+        - 20th Century Fox
+        - Warner Bros. Pictures
+        - Twisted Pictures
 ```
 
 ---
-### `not`
+### `released`
 
-Predicate that invert the result of its child predicate
+Filters on the released status of the movie.
 
 ```yaml
-    - not:
-        - genres:
-            - animation
+    - released: yes
+      # or
+    - released: no
+```
+
+---
+### `runtime`
+
+Filters on the runtime _(duration)_ of the movie.
+
+See [Duration expressions](#duration-expressions) for more details
+
+```yaml
+    - runtime: less than 2.5 hours
+      # or
+    - runtime: more than 120 minutes
+```
+
+---
+### `score`
+
+Filters on the score of the movie.
+
+```yaml
+    - score: above 6.5
+      # or
+    - score: below 5.5
+```
+
+---
+### `status`
+
+Filters on the status of the movie.
+
+The possible values are the one provided by [TMDB](https://www.themoviedb.org/): `rumored`, `planned`, `in production`, `post production`, `released`, `canceled`
+
+**Case insensitive**
+
+```yaml
+    - status: released
+    # or with an array of values
+    - status:
+        - released
+        - post production
+        - planned
+```
+
+---
+### `voteCount`
+
+Filters on the vote count of the movie.
+
+
+```yaml
+    - voteCount: above 1000
+      # or
+    - voteCount: below 100
 ```
 
 ---
 
+### `watchProviders`
 
+Filters based on the available Streaming/VOD platforms. Will match when one or more of the listed provider matches.
 
+**Case insensitive**
 
+```yaml
+    # This predicate will match when the movie is available in Germany on Netflix or Amazon Prime
+    - watchProviders:
+          # ISO 3166-1 alpha-2 format of the region (de, au, us, fr...)
+        - region: de
+        - names:
+            - Netflix
+            - Amazon Prime
+```
 
+---
 
+### Duration expressions
+
+Duration expressions, like the one used in the `age` or `runtime` predicate can be expressed in the following way:
+- an **operator**: `less than` or `more than`
+- a integer or decimal **number**: `2` or `2.5`
+- a **unit**: one of the following `year`, `month`, `week`, `day`, `hour`, `minute`. Singular or plural doesn't matter, so `hour` is the same as `hours`

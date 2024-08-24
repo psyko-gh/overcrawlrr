@@ -1,4 +1,4 @@
-import { Rule } from '@core/lib/rules';
+import { Predicate, Rule } from '@core/lib/rules';
 import { FalsePredicate, TruePredicate } from '@core/lib/rules/predicate';
 import { GenrePredicate } from '@core/lib/rules/predicate/genre';
 import { CastPredicate } from '@core/lib/rules/predicate/cast';
@@ -10,108 +10,107 @@ import { VoteCountPredicate } from '@core/lib/rules/predicate/voteCount';
 import { AgePredicate } from '@core/lib/rules/predicate/age';
 import * as movieJson from './movie.json';
 import { MovieDetails } from '@core/api/overseerr/interfaces';
+import { AdultPredicate } from '@core/lib/rules/predicate/adult';
+import { RuntimePredicate } from '@core/lib/rules/predicate/runtime';
+import { OriginalLanguagePredicate } from '@core/lib/rules/predicate/originalLanguage';
+import { StatusPredicate } from '@core/lib/rules/predicate/status';
 
 const movie = movieJson as MovieDetails;
+const testRule = (predicate: Predicate | Predicate[]) => new Rule('test rule', Array.isArray(predicate) ? predicate : [predicate], 'accept');
+
+const assertRuleResult = (rule: Rule, matchExpected: boolean, testMovie: MovieDetails = movie) => {
+    const evaluation = rule.matches(testMovie);
+    expect(evaluation).toEqual(matchExpected);
+};
+
+const assertRuleMatches = (rule: Rule, testMovie: MovieDetails = movie) => {
+    assertRuleResult(rule, true, testMovie);
+};
+
+const assertRuleDoesntMatch = (rule: Rule, testMovie: MovieDetails = movie) => {
+    assertRuleResult(rule, false, testMovie);
+};
 
 describe('truePredicate', () => {
-    const rule = new Rule('simple', [new TruePredicate()], 'accept');
+    const rule = testRule(new TruePredicate());
 
     it('should match', async () => {
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        assertRuleMatches(rule, movie);
     });
 });
 
 describe('falsePredicate', () => {
-    const rule = new Rule('simple', [new FalsePredicate()], 'accept');
+    const rule = testRule(new FalsePredicate());
 
-    it('should not match', async () => {
-        const response = rule.matches(movie);
-        expect(response).toEqual(false);
-    });
+    it('should not match', async () => assertRuleDoesntMatch(rule, movie));
 });
 
 describe('defaultPredicate', () => {
     it('should match when all children match', async () => {
-        const rule = new Rule('simple', [new TruePredicate(), new TruePredicate()], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule([new TruePredicate(), new TruePredicate()]);
+        assertRuleMatches(rule, movie);
     });
 
     it('should not match when any child does not', async () => {
-        const rule = new Rule('simple', [new TruePredicate(), new FalsePredicate()], 'accept');
-        const response = rule.matches(movie);
-        expect(response).toEqual(false);
+        const rule = testRule([new TruePredicate(), new FalsePredicate()]);
+        assertRuleDoesntMatch(rule, movie);
     });
 });
 
 describe('andPredicate', () => {
     it('should match when all children match', async () => {
-        const rule = new Rule('simple', [new AndPredicate([new TruePredicate(), new TruePredicate()])], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule([new AndPredicate([new TruePredicate(), new TruePredicate()])]);
+        assertRuleMatches(rule, movie);
     });
 
     it('should not match when any child does not', async () => {
-        const rule = new Rule('simple', [new AndPredicate([new TruePredicate(), new FalsePredicate()])], 'accept');
-        const response = rule.matches(movie);
-        expect(response).toEqual(false);
+        const rule = testRule([new AndPredicate([new TruePredicate(), new FalsePredicate()])]);
+        assertRuleDoesntMatch(rule, movie);
     });
 });
 
 describe('orPredicate', () => {
     it('should match when all children match', async () => {
-        const rule = new Rule('simple', [new OrPredicate([new TruePredicate(), new TruePredicate()])], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule([new OrPredicate([new TruePredicate(), new TruePredicate()])]);
+        assertRuleMatches(rule, movie);
     });
 
     it('should match when at least one child matches', async () => {
-        const rule = new Rule('simple', [new OrPredicate([new TruePredicate(), new FalsePredicate()])], 'accept');
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule([new OrPredicate([new TruePredicate(), new FalsePredicate()])]);
+        assertRuleMatches(rule, movie);
     });
 
     it('should not match when no child matches', async () => {
-        const rule = new Rule('simple', [new OrPredicate([new FalsePredicate(), new FalsePredicate()])], 'accept');
-        const response = rule.matches(movie);
-        expect(response).toEqual(false);
+        const rule = testRule([new OrPredicate([new FalsePredicate(), new FalsePredicate()])]);
+        assertRuleDoesntMatch(rule, movie);
     });
 
     it('should not match when vote count below 8554 or above 8556', async () => {
         {
-            const rule = new Rule('simple', [new VoteCountPredicate({ voteCount: 'less than 8554' })], 'accept');
-            const response = rule.matches(movie);
-            expect(response).toEqual(false);
+            const rule = testRule(new VoteCountPredicate({ voteCount: 'less than 8554' }));
+            assertRuleDoesntMatch(rule, movie);
         }
         {
-            const rule = new Rule('simple', [new VoteCountPredicate({ voteCount: 'above 8556' })], 'accept');
-            const response = rule.matches(movie);
-            expect(response).toEqual(false);
+            const rule = testRule(new VoteCountPredicate({ voteCount: 'above 8556' }));
+            assertRuleDoesntMatch(rule, movie);
         }
     });
 
     it('should match when vote count above 8555', async () => {
         {
-            const rule = new Rule('simple', [new VoteCountPredicate({ voteCount: 'above 8554' })], 'accept');
-            const response = rule.matches(movie);
-            expect(response).toEqual(true);
+            const rule = testRule(new VoteCountPredicate({ voteCount: 'above 8554' }));
+            assertRuleMatches(rule, movie);
         }
         {
-            const rule = new Rule('simple', [new VoteCountPredicate({ voteCount: 'less than 8556' })], 'accept');
-            const response = rule.matches(movie);
-            expect(response).toEqual(true);
+            const rule = testRule(new VoteCountPredicate({ voteCount: 'less than 8556' }));
+            assertRuleMatches(rule, movie);
         }
     });
 
     it('should match genres', async () => {
         {
-            const rule = new Rule('simple', [new GenrePredicate({ genre: 'science-fiction' })], 'accept');
-            const response = rule.matches(movie);
-            expect(response).toEqual(true);
+            const rule = testRule(new GenrePredicate({ genre: 'science-fiction' }));
+            assertRuleMatches(rule, movie);
         }
         {
             const rule = new Rule(
@@ -123,167 +122,180 @@ describe('orPredicate', () => {
                 ],
                 'accept'
             );
-            const response = rule.matches(movie);
-            expect(response).toEqual(true);
+            assertRuleMatches(rule, movie);
         }
         {
-            const rule = new Rule('simple', [new GenrePredicate({ genre: 'comédie' })], 'accept');
-            const response = rule.matches(movie);
-            expect(response).toEqual(false);
+            const rule = testRule(new GenrePredicate({ genre: 'comédie' }));
+            assertRuleDoesntMatch(rule, movie);
         }
     });
 });
 
 describe('agePredicate', () => {
     it('should match', async () => {
-        const rule = new Rule('simple', [new AgePredicate({ age: 'more than 1 year' })], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule(new AgePredicate({ age: 'more than 1 year' }));
+        assertRuleMatches(rule, movie);
     });
 });
 describe('castPredicate', () => {
     it('should match', async () => {
-        const rule = new Rule('simple', [new CastPredicate({ cast: ['Sigourney Weaver'] })], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule(new CastPredicate({ cast: ['Sigourney Weaver'] }));
+        assertRuleMatches(rule, movie);
     });
 
     it('should match despite different case', async () => {
-        const rule = new Rule('simple', [new CastPredicate({ cast: ['SiGoUrnEy weAVEr'] })], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule(new CastPredicate({ cast: ['SiGoUrnEy weAVEr'] }));
+        assertRuleMatches(rule, movie);
     });
 
     it('should match if at least one cast match', async () => {
-        const rule = new Rule('simple', [new CastPredicate({ cast: ['Sigourney Weaver', 'Jessica Alba'] })], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule([new CastPredicate({ cast: ['Sigourney Weaver', 'Jessica Alba'] })]);
+        assertRuleMatches(rule, movie);
     });
 
     it('should not match', async () => {
-        const rule = new Rule('simple', [new CastPredicate({ cast: ['Jessica Alba'] })], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(false);
+        const rule = testRule(new CastPredicate({ cast: ['Jessica Alba'] }));
+        assertRuleDoesntMatch(rule, movie);
     });
 });
 
 describe('crewPredicate', () => {
     it('should match', async () => {
-        const rule = new Rule('simple', [new CrewPredicate({ crew: ['James Cameron'] })], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        const rule = testRule(new CrewPredicate({ crew: ['James Cameron'] }));
+        assertRuleMatches(rule, movie);
     });
 
     it('should match with a job', async () => {
-        const rule = new Rule(
-            'simple',
-            [
-                new CrewPredicate({
-                    crew: { job: 'director', names: ['James Cameron'] },
-                }),
-            ],
-            'accept'
+        const rule = testRule(
+            new CrewPredicate({
+                crew: { job: 'director', names: ['James Cameron'] },
+            })
         );
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        assertRuleMatches(rule, movie);
     });
 
     it('should match despite different case', async () => {
-        const rule = new Rule('simple', [new CrewPredicate({ crew: ['JaMEs CamerOn'] })], 'accept');
+        const rule = testRule(new CrewPredicate({ crew: ['JaMEs CamerOn'] }));
 
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        assertRuleMatches(rule, movie);
     });
 
     it('should match if at least one crew match', async () => {
-        const rule = new Rule(
-            'simple',
-            [
-                new CrewPredicate({
-                    crew: {
-                        job: 'Art Direction',
-                        names: ['Bert Davey', 'Ken Court'],
-                    },
-                }),
-            ],
-            'accept'
+        const rule = testRule(
+            new CrewPredicate({
+                crew: {
+                    job: 'Art Direction',
+                    names: ['Bert Davey', 'Ken Court'],
+                },
+            })
         );
 
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        assertRuleMatches(rule, movie);
     });
 
     it('should not match', async () => {
-        const rule = new Rule('simple', [new CrewPredicate({ crew: ['Jessica Alba'] })], 'accept');
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(false);
+        const rule = testRule(new CrewPredicate({ crew: ['Jessica Alba'] }));
+        assertRuleDoesntMatch(rule, movie);
     });
 
     it('should not match when person found in another job', async () => {
-        const rule = new Rule(
-            'simple',
-            [
-                new CrewPredicate({
-                    crew: { job: 'director', names: ['Peter Lamont'] },
-                }),
-            ],
-            'accept'
+        const rule = testRule(
+            new CrewPredicate({
+                crew: { job: 'director', names: ['Peter Lamont'] },
+            })
         );
 
-        const response = rule.matches(movie);
-        expect(response).toEqual(false);
+        assertRuleDoesntMatch(rule, movie);
     });
 });
 
 describe('keywordPredicate', () => {
     it('should match string', async () => {
-        const rule = new Rule('simple', [new KeywordPredicate({ keyword: 'space travel' })], 'accept');
+        const rule = testRule(new KeywordPredicate({ keyword: 'space travel' }));
 
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        assertRuleMatches(rule, movie);
     });
 
     it('should match array', async () => {
-        const rule = new Rule('simple', [new KeywordPredicate({ keyword: ['space travel'] })], 'accept');
+        const rule = testRule(new KeywordPredicate({ keyword: ['space travel'] }));
 
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        assertRuleMatches(rule, movie);
     });
 
     it('should match despite different case', async () => {
-        const rule = new Rule('simple', [new KeywordPredicate({ keyword: ['SpAcE TraVel'] })], 'accept');
+        const rule = testRule(new KeywordPredicate({ keyword: ['SpAcE TraVel'] }));
 
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        assertRuleMatches(rule, movie);
     });
 
     it('should match if at least one cast match', async () => {
-        const rule = new Rule(
-            'simple',
-            [
-                new KeywordPredicate({
-                    keyword: ['space travel', 'unknown keyword'],
-                }),
-            ],
-            'accept'
+        const rule = testRule(
+            new KeywordPredicate({
+                keyword: ['space travel', 'unknown keyword'],
+            })
         );
-
-        const response = rule.matches(movie);
-        expect(response).toEqual(true);
+        assertRuleMatches(rule, movie);
     });
 
     it('should not match', async () => {
-        const rule = new Rule('simple', [new KeywordPredicate({ keyword: ['unknown keyword'] })], 'accept');
+        const rule = testRule(new KeywordPredicate({ keyword: ['unknown keyword'] }));
+        assertRuleDoesntMatch(rule, movie);
+    });
+});
 
-        const response = rule.matches(movie);
-        expect(response).toEqual(false);
+describe('adult predicate', () => {
+    it('should match true/false', async () => {
+        const noRule = testRule(new AdultPredicate({ adult: 'false' }));
+        const yesRule = testRule(new AdultPredicate({ adult: 'true' }));
+
+        assertRuleMatches(noRule, movie);
+        assertRuleDoesntMatch(yesRule, movie);
+    });
+
+    it('should match yes/no', async () => {
+        const noRule = testRule(new AdultPredicate({ adult: 'no' }));
+        const yesRule = testRule(new AdultPredicate({ adult: 'yes' }));
+
+        assertRuleMatches(noRule, movie);
+        assertRuleDoesntMatch(yesRule, movie);
+    });
+});
+
+describe('runtime predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new RuntimePredicate({ runtime: 'less than 3 hours' })), movie);
+        assertRuleMatches(testRule(new RuntimePredicate({ runtime: 'less than 2.5 hours' })), movie);
+        assertRuleMatches(testRule(new RuntimePredicate({ runtime: 'more than 2 hour' })), movie);
+        assertRuleMatches(testRule(new RuntimePredicate({ runtime: 'more than 2.25 hours' })), movie);
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'more than 3 hours' })), movie);
+        assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'more than 2.5 weeks' })), movie);
+        assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'less than 2 minutes' })), movie);
+    });
+});
+
+describe('originalLanguage predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new OriginalLanguagePredicate({ originalLanguage: 'en' })), movie);
+        assertRuleMatches(testRule(new OriginalLanguagePredicate({ originalLanguage: ['en', 'fr'] })), movie);
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new OriginalLanguagePredicate({ originalLanguage: 'fr' })), movie);
+        assertRuleDoesntMatch(testRule(new OriginalLanguagePredicate({ originalLanguage: ['fr', 'de'] })), movie);
+    });
+});
+
+describe('status predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new StatusPredicate({ status: 'released' })), movie);
+        assertRuleMatches(testRule(new StatusPredicate({ status: ['released', 'post production'] })), movie);
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new StatusPredicate({ status: 'canceled' })), movie);
+        assertRuleDoesntMatch(testRule(new StatusPredicate({ status: ['canceled', 'post production'] })), movie);
     });
 });

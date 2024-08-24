@@ -20,6 +20,7 @@
     "@commitlint/cli": "^19.4.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@eslint/js": "^9.9.0",
+    "@semantic-release/github": "^10.1.7",
     "@types/cookie": "^0.5.1",
     "@types/cors": "^2.8.13",
     "@types/eslint__js": "^8.42.3",
@@ -63,5 +64,15 @@
         "<rootDir>/src/$1"
       ]
     }
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github"
+    ],
+    "branches": [
+      "release"
+    ]
   }
 }

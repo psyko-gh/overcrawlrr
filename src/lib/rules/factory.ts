@@ -13,6 +13,8 @@ import { KeywordPredicateBuilder } from '@core/lib/rules/predicate/keywords';
 import { OrPredicateBuilder } from '@core/lib/rules/predicate/or';
 import { AndPredicateBuilder } from '@core/lib/rules/predicate/and';
 import { NotPredicateBuilder } from '@core/lib/rules/predicate/not';
+import { AdultPredicateBuilder } from '@core/lib/rules/predicate/adult';
+import { RuntimePredicateBuilder } from '@core/lib/rules/predicate/runtime';
 
 export class PredicateFactoryClass {
     private builders: Map<PredicateKey, PredicateBuilder>;
@@ -57,6 +59,8 @@ const builders = [
     CrewPredicateBuilder,
     ProductionCompanyPredicateBuilder,
     ReleasedPredicateBuilder,
+    RuntimePredicateBuilder,
     KeywordPredicateBuilder,
+    AdultPredicateBuilder,
 ];
 builders.forEach((b) => PredicateFactory.registerBuilder(b));

@@ -11,6 +11,7 @@ import { AgePredicate } from '@core/lib/rules/predicate/age';
 import * as movieJson from './movie.json';
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { AdultPredicate } from '@core/lib/rules/predicate/adult';
+import { RuntimePredicate } from '@core/lib/rules/predicate/runtime';
 
 const movie = movieJson as MovieDetails;
 const testRule = (predicate: Predicate | Predicate[]) => new Rule('test rule', Array.isArray(predicate) ? predicate : [predicate], 'accept');
@@ -255,5 +256,20 @@ describe('adult predicate', () => {
 
         assertRuleMatches(noRule, movie);
         assertRuleDoesntMatch(yesRule, movie);
+    });
+});
+
+describe('runtime predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new RuntimePredicate({ runtime: 'less than 3 hours' })), movie);
+        assertRuleMatches(testRule(new RuntimePredicate({ runtime: 'less than 2.5 hours' })), movie);
+        assertRuleMatches(testRule(new RuntimePredicate({ runtime: 'more than 2 hour' })), movie);
+        assertRuleMatches(testRule(new RuntimePredicate({ runtime: 'more than 2.25 hours' })), movie);
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'more than 3 hours' })), movie);
+        assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'more than 2.5 weeks' })), movie);
+        assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'less than 2 minutes' })), movie);
     });
 });

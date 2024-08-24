@@ -1,7 +1,7 @@
 import { PredicateBuilder } from '@core/lib/rules';
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { BooleanPredicate } from '@core/lib/rules/predicate/boolean';
-import { AdultOptions, ReleasedOptions } from '@core/lib/rules/interfaces';
+import { AdultOptions } from '@core/lib/rules/interfaces';
 
 export class AdultPredicate extends BooleanPredicate {
     constructor(options: AdultOptions) {

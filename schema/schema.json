@@ -104,6 +104,7 @@
         { "$ref": "#/definitions/castPredicate" },
         { "$ref": "#/definitions/crewPredicate" },
         { "$ref": "#/definitions/releasedPredicate" },
+        { "$ref": "#/definitions/runtimePredicate" },
         { "$ref": "#/definitions/productionCompanyPredicate" }
       ]
     },
@@ -245,6 +246,17 @@
       "properties": {
         "productionCompany": { "type": "array", "items": {"type": "string" }}
       }
+    },
+
+    "runtimePredicate": {
+      "$id": "#/definitions/runtimePredicate",
+      "type": "object",
+      "required": ["runtime"],
+      "properties": {
+        "runtime": { "type": "string" }
+      }
     }
   }
+  //  End of definitions
+
 }

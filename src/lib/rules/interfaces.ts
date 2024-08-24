@@ -24,6 +24,7 @@ export type PredicateOption =
     | KeywordOptions
     | ProductionCompanyOptions
     | ReleasedOptions
+    | RuntimeOptions
     | ScoreOptions
     | VoteCountOptions
     | WatchProvidersOptions;
@@ -92,4 +93,8 @@ export interface CrewOptions {
 export type CrewJobNamesOptions = {
     job: string;
     names: string[];
+};
+
+export type RuntimeOptions = {
+    runtime: string;
 };

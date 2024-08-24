@@ -161,6 +161,8 @@ Filters on the released status of the movie.
 
 Filters on the age of the movie.
 
+See [Duration expressions](#duration-expressions) for more details
+
 ```yaml
     - age: less than 2 years
       # or
@@ -176,6 +178,19 @@ Filters on the score of the movie.
     - score: above 6.5
       # or
     - score: below 5.5
+```
+
+---
+### `runtime`
+
+Filters on the runtime _(duration)_ of the movie.
+
+See [Duration expressions](#duration-expressions) for more details
+
+```yaml
+    - runtime: less than 2.5 hours
+      # or
+    - runtime: more than 120 minutes
 ```
 
 ---
@@ -316,3 +331,10 @@ Predicate that invert the result of its child predicate
 ```
 
 ---
+
+### Duration expressions
+
+Duration expressions, like the one used in the `age` or `runtime` predicate can be expressed in the following way:
+- an **operator**: `less than` or `more than`
+- a integer or decimal **number**: `2` or `2.5`
+- a **unit**: one of the following `year`, `month`, `week`, `day`, `hour`, `minute`. Singular or plural doesn't matter, so `hour` is the same as `hours`

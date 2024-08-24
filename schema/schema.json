@@ -105,7 +105,8 @@
         { "$ref": "#/definitions/crewPredicate" },
         { "$ref": "#/definitions/releasedPredicate" },
         { "$ref": "#/definitions/runtimePredicate" },
-        { "$ref": "#/definitions/productionCompanyPredicate" }
+        { "$ref": "#/definitions/productionCompanyPredicate" },
+        { "$ref": "#/definitions/originalLanguagePredicate" }
       ]
     },
 
@@ -255,8 +256,20 @@
       "properties": {
         "runtime": { "type": "string" }
       }
+    },
+
+    "originalLanguagePredicate": {
+      "$id": "#/definitions/originalLanguagePredicate",
+      "type": "object",
+      "required": ["originalLanguage"],
+      "properties": {
+        "originalLanguage": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" }}
+          ]
+        }
+      }
     }
   }
-  //  End of definitions
-
 }

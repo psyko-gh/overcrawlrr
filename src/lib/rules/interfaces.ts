@@ -22,6 +22,7 @@ export type PredicateOption =
     | CrewOptions
     | GenreOptions
     | KeywordOptions
+    | OriginalLanguageOptions
     | ProductionCompanyOptions
     | ReleasedOptions
     | RuntimeOptions
@@ -55,6 +56,10 @@ export type CastOptions = {
 
 export type GenreOptions = {
     genre: string | string[];
+};
+
+export type OriginalLanguageOptions = {
+    originalLanguage: string | string[];
 };
 
 export type VoteCountOptions = {

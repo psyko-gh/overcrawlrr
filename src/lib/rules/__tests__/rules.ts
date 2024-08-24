@@ -12,6 +12,7 @@ import * as movieJson from './movie.json';
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { AdultPredicate } from '@core/lib/rules/predicate/adult';
 import { RuntimePredicate } from '@core/lib/rules/predicate/runtime';
+import { OriginalLanguagePredicate } from '@core/lib/rules/predicate/originalLanguage';
 
 const movie = movieJson as MovieDetails;
 const testRule = (predicate: Predicate | Predicate[]) => new Rule('test rule', Array.isArray(predicate) ? predicate : [predicate], 'accept');
@@ -271,5 +272,17 @@ describe('runtime predicate', () => {
         assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'more than 3 hours' })), movie);
         assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'more than 2.5 weeks' })), movie);
         assertRuleDoesntMatch(testRule(new RuntimePredicate({ runtime: 'less than 2 minutes' })), movie);
+    });
+});
+
+describe('originalLanguage predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new OriginalLanguagePredicate({ originalLanguage: 'en' })), movie);
+        assertRuleMatches(testRule(new OriginalLanguagePredicate({ originalLanguage: ['en', 'fr'] })), movie);
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new OriginalLanguagePredicate({ originalLanguage: 'fr' })), movie);
+        assertRuleDoesntMatch(testRule(new OriginalLanguagePredicate({ originalLanguage: ['fr', 'de'] })), movie);
     });
 });

@@ -15,6 +15,7 @@ import { AndPredicateBuilder } from '@core/lib/rules/predicate/and';
 import { NotPredicateBuilder } from '@core/lib/rules/predicate/not';
 import { AdultPredicateBuilder } from '@core/lib/rules/predicate/adult';
 import { RuntimePredicateBuilder } from '@core/lib/rules/predicate/runtime';
+import { OriginalLanguagePredicateBuilder } from '@core/lib/rules/predicate/originalLanguage';
 
 export class PredicateFactoryClass {
     private builders: Map<PredicateKey, PredicateBuilder>;
@@ -58,6 +59,7 @@ const builders = [
     CastPredicateBuilder,
     CrewPredicateBuilder,
     ProductionCompanyPredicateBuilder,
+    OriginalLanguagePredicateBuilder,
     ReleasedPredicateBuilder,
     RuntimePredicateBuilder,
     KeywordPredicateBuilder,

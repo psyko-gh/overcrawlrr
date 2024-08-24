@@ -9,7 +9,7 @@ CRON based bot that automatically requests movies you may like in Overseer using
   rules:
     - name: Acceptable sci-fi movie
       whenMatch:
-        - genres:
+        - genre:
             - science-fiction
         - score: above 5
       action: accept
@@ -213,7 +213,9 @@ Filters on the genre of the movie. Will match when one or more of the listed gen
 **Case insensitive**
 
 ```yaml
-    - genres:
+    - genre: musical
+    # or with an array of values
+    - genre:
         - animation
         - romance
 ```
@@ -284,6 +286,22 @@ Filters based on the production companies of the movie. Will match when one or m
 ```
 
 ---
+### `originalLanguage`
+
+Filters on the original language of the movie
+
+**Case insensitive**
+
+```yaml
+    # ISO 639-1 format of the language (de, au, us, fr...)
+    - originalLanguage: en
+    # or with an array of values
+    - originalLanguage:
+        - en
+        - fr
+```
+
+---
 ### `adult`
 
 Filters on the adult status of the movie.
@@ -315,7 +333,7 @@ Predicate that will match if all of its predicate matches
     # Will match if the movie is less than 2 years old AND if the movie genre is 'animation'
     - and:
         - age: less than 2 years
-        - genres:
+        - genre:
             - animation
 ```
 
@@ -326,7 +344,7 @@ Predicate that invert the result of its child predicate
 
 ```yaml
     - not:
-        - genres:
+        - genre:
             - animation
 ```
 

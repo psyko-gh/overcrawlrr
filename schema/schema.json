@@ -107,7 +107,7 @@
         { "$ref": "#/definitions/runtimePredicate" },
         { "$ref": "#/definitions/productionCompanyPredicate" },
         { "$ref": "#/definitions/originalLanguagePredicate" },
-        { "$ref": "#/definitions/statusPredicate" },
+        { "$ref": "#/definitions/statusPredicate" }
       ]
     },
 

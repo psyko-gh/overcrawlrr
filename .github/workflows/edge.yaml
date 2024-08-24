@@ -1,9 +1,14 @@
 name: Publish Edge image
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
+    paths:
+      - '**.ts'
+      - 'src/**'
+      - 'schema/**'
 
 jobs:
   build_and_push:

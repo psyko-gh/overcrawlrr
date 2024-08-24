@@ -1,9 +1,7 @@
 name: Overcrawlrr Release
 
 on:
-  push:
-    branches:
-      - release
+  workflow_dispatch:
 
 jobs:
   semantic-release:

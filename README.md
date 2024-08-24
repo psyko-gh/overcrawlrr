@@ -1,6 +1,7 @@
 # Overcrawlrr
 
-[![Overcrawlrr Release](https://github.com/psyko-gh/overcrawlrr/actions/workflows/release.yaml/badge.svg)](https://github.com/psyko-gh/overcrawlrr/actions/workflows/release.yaml)
+[![Release](https://github.com/psyko-gh/overcrawlrr/actions/workflows/release.yaml/badge.svg)](https://github.com/psyko-gh/overcrawlrr/actions/workflows/release.yaml)
+[![Edge](https://github.com/psyko-gh/overcrawlrr/actions/workflows/edge.yaml/badge.svg)](https://github.com/psyko-gh/overcrawlrr/actions/workflows/edge.yaml)
 
 CRON based bot that automatically requests movies you may like in Overseer using your own rules.
 

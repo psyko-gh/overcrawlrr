@@ -62,6 +62,8 @@ class Settings {
         this._data = {
             overseerr: {
                 apiUrl: '',
+                user: '',
+                password: '',
             },
             rulesets: [],
         };

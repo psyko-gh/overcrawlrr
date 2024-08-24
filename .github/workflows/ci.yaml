@@ -11,6 +11,7 @@ on:
 jobs:
   check:
     name: Lint & Test build
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -36,7 +37,7 @@ jobs:
         if: always()
         with:
           status: ${{ job.status }}
-          token:
+          token: ${{ secrets.GITHUB_TOKEN }}
           sha: ${{ github.sha }}
 
   build_and_push:

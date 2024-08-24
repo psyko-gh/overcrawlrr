@@ -1,4 +1,4 @@
-name: Overcrawlrr Release Docker Image
+name: Publish Release image
 
 on:
   push:

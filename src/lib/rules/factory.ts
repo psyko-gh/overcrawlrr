@@ -16,6 +16,7 @@ import { NotPredicateBuilder } from '@core/lib/rules/predicate/not';
 import { AdultPredicateBuilder } from '@core/lib/rules/predicate/adult';
 import { RuntimePredicateBuilder } from '@core/lib/rules/predicate/runtime';
 import { OriginalLanguagePredicateBuilder } from '@core/lib/rules/predicate/originalLanguage';
+import { StatusPredicateBuilder } from '@core/lib/rules/predicate/status';
 
 export class PredicateFactoryClass {
     private builders: Map<PredicateKey, PredicateBuilder>;
@@ -62,6 +63,7 @@ const builders = [
     OriginalLanguagePredicateBuilder,
     ReleasedPredicateBuilder,
     RuntimePredicateBuilder,
+    StatusPredicateBuilder,
     KeywordPredicateBuilder,
     AdultPredicateBuilder,
 ];

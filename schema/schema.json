@@ -106,7 +106,8 @@
         { "$ref": "#/definitions/releasedPredicate" },
         { "$ref": "#/definitions/runtimePredicate" },
         { "$ref": "#/definitions/productionCompanyPredicate" },
-        { "$ref": "#/definitions/originalLanguagePredicate" }
+        { "$ref": "#/definitions/originalLanguagePredicate" },
+        { "$ref": "#/definitions/statusPredicate" },
       ]
     },
 
@@ -264,6 +265,20 @@
       "required": ["originalLanguage"],
       "properties": {
         "originalLanguage": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" }}
+          ]
+        }
+      }
+    },
+
+    "statusPredicate": {
+      "$id": "#/definitions/statusPredicate",
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {
           "oneOf": [
             { "type": "string" },
             { "type": "array", "items": { "type": "string" }}

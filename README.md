@@ -302,6 +302,25 @@ Filters on the original language of the movie
 ```
 
 ---
+### `status`
+
+Filters on the status of the movie.
+
+The possible values are the one provided by [TMDB](https://www.themoviedb.org/): `rumored`, `planned`, `in production`, `post production`, `released`, `canceled`
+
+**Case insensitive**
+
+```yaml
+    - status: released
+    # or with an array of values
+    - status:
+        - released
+        - post production
+        - planned
+```
+
+---
+
 ### `adult`
 
 Filters on the adult status of the movie.

@@ -27,6 +27,7 @@ export type PredicateOption =
     | ReleasedOptions
     | RuntimeOptions
     | ScoreOptions
+    | StatusOptions
     | VoteCountOptions
     | WatchProvidersOptions;
 
@@ -102,4 +103,8 @@ export type CrewJobNamesOptions = {
 
 export type RuntimeOptions = {
     runtime: string;
+};
+
+export type StatusOptions = {
+    status: string | string[];
 };

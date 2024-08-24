@@ -13,6 +13,7 @@ import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { AdultPredicate } from '@core/lib/rules/predicate/adult';
 import { RuntimePredicate } from '@core/lib/rules/predicate/runtime';
 import { OriginalLanguagePredicate } from '@core/lib/rules/predicate/originalLanguage';
+import { StatusPredicate } from '@core/lib/rules/predicate/status';
 
 const movie = movieJson as MovieDetails;
 const testRule = (predicate: Predicate | Predicate[]) => new Rule('test rule', Array.isArray(predicate) ? predicate : [predicate], 'accept');
@@ -284,5 +285,17 @@ describe('originalLanguage predicate', () => {
     it('should not match', async () => {
         assertRuleDoesntMatch(testRule(new OriginalLanguagePredicate({ originalLanguage: 'fr' })), movie);
         assertRuleDoesntMatch(testRule(new OriginalLanguagePredicate({ originalLanguage: ['fr', 'de'] })), movie);
+    });
+});
+
+describe('status predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new StatusPredicate({ status: 'released' })), movie);
+        assertRuleMatches(testRule(new StatusPredicate({ status: ['released', 'post production'] })), movie);
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new StatusPredicate({ status: 'canceled' })), movie);
+        assertRuleDoesntMatch(testRule(new StatusPredicate({ status: ['canceled', 'post production'] })), movie);
     });
 });

@@ -6,7 +6,7 @@ on:
       - '*'
   push:
     branches:
-      - develop
+      - master
 
 jobs:
   check:
@@ -42,7 +42,7 @@ jobs:
 
   build_and_push:
     name: Build & publish Docker image
-    if: github.ref == 'refs/heads/develop' && !contains(github.event.head_commit.message, '[skip ci]')
+    if: github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU

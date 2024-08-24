@@ -16,6 +16,7 @@ export type PredicateOption =
     | AndFilterOptions
     | OrFilterOptions
     | NotFilterOptions
+    | AdultOptions
     | AgeOptions
     | CastOptions
     | CrewOptions
@@ -38,6 +39,10 @@ export interface OrFilterOptions {
 export interface NotFilterOptions {
     not: PredicateOption[];
 }
+
+export type AdultOptions = {
+    adult: string;
+};
 
 export type AgeOptions = {
     age: string;

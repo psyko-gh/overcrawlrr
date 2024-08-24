@@ -239,3 +239,21 @@ describe('keywordPredicate', () => {
         assertRuleDoesntMatch(rule, movie);
     });
 });
+
+describe('adult predicate', () => {
+    it('should match true/false', async () => {
+        const noRule = testRule(new AdultPredicate({ adult: 'false' }));
+        const yesRule = testRule(new AdultPredicate({ adult: 'true' }));
+
+        assertRuleMatches(noRule, movie);
+        assertRuleDoesntMatch(yesRule, movie);
+    });
+
+    it('should match yes/no', async () => {
+        const noRule = testRule(new AdultPredicate({ adult: 'no' }));
+        const yesRule = testRule(new AdultPredicate({ adult: 'yes' }));
+
+        assertRuleMatches(noRule, movie);
+        assertRuleDoesntMatch(yesRule, movie);
+    });
+});

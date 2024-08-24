@@ -95,6 +95,7 @@
         { "$ref": "#/definitions/orPredicate" },
         { "$ref": "#/definitions/andPredicate" },
         { "$ref": "#/definitions/notPredicate" },
+        { "$ref": "#/definitions/adultPredicate" },
         { "$ref": "#/definitions/agePredicate" },
         { "$ref": "#/definitions/scorePredicate" },
         { "$ref": "#/definitions/genrePredicate" },
@@ -131,6 +132,15 @@
       "required": ["not"],
       "properties": {
         "not": { "type": "array", "items": { "$ref": "#/definitions/predicate" }}
+      }
+    },
+
+    "adultPredicate": {
+      "$id": "#/definitions/adultPredicate",
+      "type": "object",
+      "required": ["adult"],
+      "properties": {
+        "adult": { "type": "string", "enum": ["yes", "no"]}
       }
     },
 

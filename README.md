@@ -269,6 +269,17 @@ Filters based on the production companies of the movie. Will match when one or m
 ```
 
 ---
+### `adult`
+
+Filters on the adult status of the movie.
+
+```yaml
+    - adult: yes
+      # or
+    - adult: no
+```
+
+---
 ### `or`
 
 Predicate that will match if any of its predicate matches
@@ -305,9 +316,3 @@ Predicate that invert the result of its child predicate
 ```
 
 ---
-
-
-
-
-
-

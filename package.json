@@ -13,6 +13,8 @@
     "lint": "eslint \"./**/*.ts\"",
     "format:fix": "prettier ./src --write --cache",
     "format": "prettier ./src --check --cache",
+    "format-docs": "prettier ./docs --check --cache",
+    "format-docs:fix": "prettier ./docs --write --cache",
     "start": "tsx src/index.ts",
     "test": "jest"
   },

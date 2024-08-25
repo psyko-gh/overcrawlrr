@@ -5,11 +5,20 @@ on:
       version:
         description: 'The version for which to publish the documentation'
         required: true
+      updateAlias:
+        description: 'Update latest alias'
+        required: true
+        type: boolean
+        default: false
   workflow_call:
     inputs:
       version:
         required: true
         type: string
+      updateAlias:
+        required: true
+        type: boolean
+        default: false
 
 run-name: Publishing docs for ${{ inputs.version }}
 
@@ -41,4 +50,9 @@ jobs:
         run: |
           pip install mkdocs-material
           pip install mike
-      - run: mike deploy --branch gh-pages --push --update-aliases ${{ inputs.version }} latest
+      - run: |
+          if [[ ${inputs.updateAlias} ]]; then
+            mike deploy --branch gh-pages --push --update-aliases ${{ inputs.version }} latest
+          else
+            mike deploy --branch gh-pages --push ${{ inputs.version }}
+          fi

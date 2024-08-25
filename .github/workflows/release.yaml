@@ -74,6 +74,7 @@ jobs:
     uses: ./.github/workflows/docs.yaml
     with:
       version: ${{ needs.semantic-release.outputs.newVersion }}
+      updateAlias: true
 
   discord:
     name: Send Discord Notification

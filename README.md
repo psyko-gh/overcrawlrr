@@ -20,7 +20,7 @@ Requirement:
 - a running instance of [Overseerr](https://overseerr.dev/)
 - docker
 
-Check the [documentation]() for more details
+Check the [documentation](https://psyko-gh.github.io/overcrawlrr/latest/) for more details
 
 # Quick install
 

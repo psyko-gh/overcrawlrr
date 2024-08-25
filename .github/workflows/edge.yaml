@@ -11,6 +11,12 @@ on:
       - 'schema/**'
 
 jobs:
+  example_job:
+    name: Debug
+    runs-on: ubuntu-latest
+    steps:
+      - id: step1
+        run: echo "${{ github.event_name }}"
   build_and_push:
     name: Build & publish Edge Docker image
     if: ${{ github.event_name == 'workflow_dispatch' }} || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]')

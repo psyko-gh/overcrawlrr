@@ -157,6 +157,36 @@ describe('castPredicate', () => {
         const rule = testRule(new CastPredicate({ cast: ['Jessica Alba'] }));
         assertRuleDoesntMatch(rule, movie);
     });
+
+    it('should match with voice field', async () => {
+        const ruleIncludeVoice = testRule(
+            new CastPredicate({
+                cast: {
+                    voice: 'include',
+                    names: ['Bob Sherman'],
+                },
+            })
+        );
+        const ruleExcludeVoice = testRule(
+            new CastPredicate({
+                cast: {
+                    voice: 'exclude',
+                    names: ['Bob Sherman'],
+                },
+            })
+        );
+        const ruleExcludeVoice2 = testRule(
+            new CastPredicate({
+                cast: {
+                    voice: 'exclude',
+                    names: ['Bob Sherman', 'Sigourney Weaver'],
+                },
+            })
+        );
+        assertRuleMatches(ruleIncludeVoice, movie);
+        assertRuleMatches(ruleExcludeVoice2, movie);
+        assertRuleDoesntMatch(ruleExcludeVoice, movie);
+    });
 });
 
 describe('crewPredicate', () => {

@@ -218,7 +218,18 @@
       "type": "object",
       "required": ["cast"],
       "properties": {
-        "cast": { "type": "array", "items": {"type": "string" }}
+        "cast": {
+          "oneOf": [
+            { "type": "array", "items": { "type": "string" }},
+            {
+              "type": "object",
+              "properties": {
+                "voice": { "type": "string", "enum": ["include", "exclude"]},
+                "names": { "type": "array", "items": {"type": "string" }}
+              }
+            }
+          ]
+        }
       }
     },
 

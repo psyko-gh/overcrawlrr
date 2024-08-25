@@ -50,6 +50,14 @@ Filters based on the cast of the movie. Will match when one or more of the liste
         - Jessica Alba
 ```
 
+It is also possible to exclude an cast when it's performing voice only (in animation movies for example)
+```yaml
+    - cast:
+        voice: exclude
+        names:
+          - Scarlett Johansson
+```
+
 ---
 ### `crew`
 

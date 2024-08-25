@@ -28,7 +28,7 @@ jobs:
           semantic_version: 24.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set outpu
+      - name: Set output
         run: |
           echo "newVersionDocs=${{ steps.semver.outputs.new_release_major_version }}.${{ steps.semver.outputs.new_release_minor_version }}" >> $GITHUB_OUTPUT
 

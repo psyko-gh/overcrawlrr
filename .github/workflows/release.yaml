@@ -68,6 +68,8 @@ jobs:
 
   publish-docs:
     name: Publish documentation
+    permissions:
+      contents: write
     needs: [semantic-release, build-and-push]
     uses: ./.github/workflows/docs.yaml
     with:

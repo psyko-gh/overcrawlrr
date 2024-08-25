@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' }} || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]')
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - name: Docker metadata
@@ -45,6 +45,8 @@ jobs:
   publish-docs:
     name: Publish edge documentation
     needs: build_and_push
+    permissions:
+      contents: write
     uses: psyko-gh/overcrawlrr/.github/workflows/docs.yaml@master
     with:
       version: edge

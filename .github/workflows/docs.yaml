@@ -5,6 +5,11 @@ on:
       version:
         description: 'The version for which to publish the documentation'
         required: true
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
 
 run-name: Publishing docs for ${{ inputs.version }}
 

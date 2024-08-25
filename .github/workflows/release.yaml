@@ -10,7 +10,7 @@ jobs:
     outputs:
       didRelease: ${{ steps.semver.outputs.new_release_published }}
       newVersion: ${{ steps.semver.outputs.new_release_version }}
-      newVersionDocs: ${{ steps.semver.outputs.new_version_docs }}
+      newVersionDocs: ${{ steps.generated-semver.outputs.new_version_docs }}
     permissions:
       contents: write
       packages: write
@@ -29,6 +29,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set output
+        id: generated-semver
         run: |
           echo "new_version_docs=${{ steps.semver.outputs.new_release_major_version }}.${{ steps.semver.outputs.new_release_minor_version }}" >> $GITHUB_OUTPUT
 

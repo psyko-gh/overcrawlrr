@@ -10,7 +10,7 @@ jobs:
     outputs:
       didRelease: ${{ steps.semver.outputs.new_release_published }}
       newVersion: ${{ steps.semver.outputs.new_release_version }}
-      newVersionDocs: ${{ steps.semver.outputs.new_release_major_version }}
+      newVersionDocs: ${{ steps.semver.outputs.new_version_docs }}
     permissions:
       contents: write
       packages: write
@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set output
         run: |
-          echo "newVersionDocs=${{ steps.semver.outputs.new_release_major_version }}.${{ steps.semver.outputs.new_release_minor_version }}" >> $GITHUB_OUTPUT
+          echo "new_version_docs=${{ steps.semver.outputs.new_release_major_version }}.${{ steps.semver.outputs.new_release_minor_version }}" >> $GITHUB_OUTPUT
 
   build-and-push:
     name: Publish Docker image
@@ -74,7 +74,7 @@ jobs:
     name: Publish documentation
     permissions:
       contents: write
-    needs: [semantic-release]
+    needs: [semantic-release, build-and-push]
     uses: ./.github/workflows/docs.yaml
     with:
       version: ${{ needs.semantic-release.outputs.newVersionDocs }}

@@ -10,6 +10,7 @@ jobs:
     outputs:
       didRelease: ${{ steps.semver.outputs.new_release_published }}
       newVersion: ${{ steps.semver.outputs.new_release_version }}
+      newVersionDocs: ${{ steps.semver.outputs.new_release_major_version }}.${{ steps.semver.outputs.new_release_minor_version }}
     permissions:
       contents: write
       packages: write
@@ -70,10 +71,10 @@ jobs:
     name: Publish documentation
     permissions:
       contents: write
-    needs: [semantic-release, build-and-push]
+    needs: [semantic-release]
     uses: ./.github/workflows/docs.yaml
     with:
-      version: ${{ needs.semantic-release.outputs.newVersion }}
+      version: ${{ needs.semantic-release.outputs.newVersionDocs }}
       updateAlias: true
 
   discord:

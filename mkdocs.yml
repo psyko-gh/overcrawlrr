@@ -1,0 +1,49 @@
+site_name: Overcrawlrr docs
+site_url: https://psyko-gh.github.io/overcrawlrr
+repo_name: psyko-gh/overcrawlrr
+repo_url: https://github.com/psyko-gh/overcrawlrr
+
+theme:
+  name: material
+  locale: en
+  palette:
+    scheme: slate
+    primary: black
+    accent: blue
+  features:
+    - content.code.copy
+    - content.code.select
+    - content.action.edit
+    - search.suggest
+    - search.share
+    - content.code.copy
+    - content.code.select
+    - navigation.tracking
+    - navigation.expand
+    - navigation.indexes
+nav:
+  - Home: index.md
+  - Getting started:
+      - installation.md
+      - configuration.md
+      - jobs.md
+  - Rules:
+      - rulesets.md
+      - predicates.md
+  - Additional:
+      - additional.md
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+extra:
+  version:
+    provider: mike
+extra_css:
+  - stylesheets/extra.css

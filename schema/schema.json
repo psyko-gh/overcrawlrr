@@ -1,4 +1,5 @@
 {
+  "title": "Overcrawlrr configuration",
   "type": "object",
   "properties": {
     "config": {

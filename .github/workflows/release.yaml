@@ -10,7 +10,7 @@ jobs:
     outputs:
       didRelease: ${{ steps.semver.outputs.new_release_published }}
       newVersion: ${{ steps.semver.outputs.new_release_version }}
-      newVersionDocs: ${{ steps.semver.outputs.new_release_major_version }}.${{ steps.semver.outputs.new_release_minor_version }}
+      newVersionDocs: ${{ steps.semver.outputs.new_release_major_version }}
     permissions:
       contents: write
       packages: write
@@ -28,6 +28,9 @@ jobs:
           semantic_version: 24.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set outpu
+        run: |
+          echo "newVersionDocs=${{ steps.semver.outputs.new_release_major_version }}.${{ steps.semver.outputs.new_release_minor_version }}" >> $GITHUB_OUTPUT
 
   build-and-push:
     name: Publish Docker image

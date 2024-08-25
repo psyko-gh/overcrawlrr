@@ -1,4 +1,3 @@
-
 # Schema
 
 The JSON Schema is available here: https://github.com/psyko-gh/overcrawlrr/blob/master/schema/schema.json

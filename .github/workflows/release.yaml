@@ -75,3 +75,27 @@ jobs:
     with:
       version: ${{ needs.semantic-release.outputs.newVersion }}
 
+  discord:
+    name: Send Discord Notification
+    needs: [build-and-push, publish-docs]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Build Job Status
+        uses: technote-space/workflow-conclusion-action@v3
+      - name: Combine Job Status
+        id: status
+        run: |
+          failures=(neutral, skipped, timed_out, action_required)
+          if [[ ${array[@]} =~ $WORKFLOW_CONCLUSION ]]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+          else
+            echo "status=$WORKFLOW_CONCLUSION" >> $GITHUB_OUTPUT
+          fi
+      - name: Post Status to Discord
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ steps.status.outputs.status }}
+          title: ${{ github.workflow }}
+          nofail: true

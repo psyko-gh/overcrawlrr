@@ -24,6 +24,8 @@ jobs:
         run: npm run lint
       - name: Format
         run: npm run format
+      - name: Docs format
+        run: npm run format-docs
       - name: Build
         run: npm run build
       - name: Tests

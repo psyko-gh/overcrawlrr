@@ -4,10 +4,13 @@ import { PredicateBuilder } from '@core/lib/rules';
 import { CastOptions } from '@core/lib/rules/interfaces';
 
 export class CastPredicate extends TagsPredicate {
+    private excludeVoice: boolean = false;
+
     constructor(options: CastOptions) {
         super({
-            terms: options.cast,
+            terms: Array.isArray(options.cast) ? options.cast : options.cast.names,
         });
+        this.excludeVoice = Array.isArray(options.cast) ? false : options.cast.voice?.toLowerCase() === 'exclude';
     }
 
     getTags(movie: MovieDetails): string[] {
@@ -16,7 +19,9 @@ export class CastPredicate extends TagsPredicate {
         }
         const tags: string[] = [];
         for (const cast of movie.credits.cast) {
-            tags.push(cast.name);
+            if (!this.excludeVoice || !cast.character || !cast.character.toLowerCase().includes('(voice)')) {
+                tags.push(cast.name);
+            }
         }
         return tags;
     }

@@ -4,23 +4,21 @@
 
     Using Overcrawlrr requires you to have a running instance of Overseerr
 
-
 With docker-compose
 
 ```yaml
 services:
-  overcrawlrr:
-    image: ghcr.io/psyko-gh/overcrawlrr:latest
-    container_name: overcrawlrr
-    restart: unless-stopped
-    ports:
-      - 5056:5056
-    environment:
-      - OVERSEERR_USER=
-      - OVERSEERR_PASSWORD=
-    volumes:
-      - /path/to/config:/config
-
+    overcrawlrr:
+        image: ghcr.io/psyko-gh/overcrawlrr:latest
+        container_name: overcrawlrr
+        restart: unless-stopped
+        ports:
+            - 5056:5056
+        environment:
+            - OVERSEERR_USER=
+            - OVERSEERR_PASSWORD=
+        volumes:
+            - /path/to/config:/config
 ```
 
 With docker cli

@@ -67,21 +67,23 @@ config:
         - name: Accept favorites actors
           whenMatch:
             - cast:
-              - Jenna Ortega
-              - Michael Keaton
-              - Denzel Washington
-              - Keanu Reeves
-              - Jessica Alba
-              - Halle Berry
-              - Sydney Sweeney
-              - Tom Hanks
-              - Samuel L. Jackson
-              - Morgan Freeman
-              - Anthony Hopkins
-              - Gal Gadot
-              - Tom Cruise
-              - Brad Pitt
-              - Matt Damon
+                voice: exclude
+                names:
+                - Jenna Ortega
+                - Michael Keaton
+                - Denzel Washington
+                - Keanu Reeves
+                - Jessica Alba
+                - Halle Berry
+                - Sydney Sweeney
+                - Tom Hanks
+                - Samuel L. Jackson
+                - Morgan Freeman
+                - Anthony Hopkins
+                - Gal Gadot
+                - Tom Cruise
+                - Brad Pitt
+                - Matt Damon
           action: accept
         - name: Reject declining actors
           whenMatch:

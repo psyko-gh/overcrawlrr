@@ -52,7 +52,12 @@ export type AgeOptions = {
 };
 
 export type CastOptions = {
-    cast: string[];
+    cast: string[] | CastWithVoiceOptions;
+};
+
+export type CastWithVoiceOptions = {
+    voice: 'include' | 'exclude';
+    names: string[];
 };
 
 export type GenreOptions = {

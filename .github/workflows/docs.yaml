@@ -54,5 +54,5 @@ jobs:
         if: ${{ inputs.updateAlias }}
         run: mike deploy --branch gh-pages --push --update-aliases ${{ inputs.version }} latest
       - name: Deploy only
-        if: !${{ inputs.updateAlias }}
+        if: ${{ !inputs.updateAlias }}
         run: mike deploy --branch gh-pages --push ${{ inputs.version }}

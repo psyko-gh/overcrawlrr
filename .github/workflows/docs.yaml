@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install mkdocs-material
-          pip install mike
+          pip install mkdocs-git-revision-date-localized-plugin mike
       - name: Deploy and update alias
         if: ${{ inputs.updateAlias }}
         run: mike deploy --branch gh-pages --push --update-aliases ${{ inputs.version }} latest

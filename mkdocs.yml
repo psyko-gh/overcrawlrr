@@ -47,3 +47,6 @@ extra:
     provider: mike
 extra_css:
   - stylesheets/extra.css
+plugins:
+  - git-revision-date-localized:
+      enable_creation_date: true

@@ -49,7 +49,26 @@ config:
     ruleset: Ruleset name
 ```
 
-## Checking output
+## Testing jobs
+
+### Evaluating a ruleset
+
+You can also evaluate a ruleset against a specific movie, using the following URL:
+
+```
+http://localhost:5056/api/movies/<id_movie>/evaluate/<ruleset_name>
+```
+
+Simply replace `<id_movie>` and `<rulest_name>` by the values matching your needs.
+
+To find the ID of a movie, navigate to the movie in Overseerr. The ID is the number is the URL.
+
+### Manually triggering jobs
+
+You can manually trigger the job by accessing the following URL (assuming Overcrawlrr is accessible at `http://localhost:5056`):
+
+ - Discover job: `http://localhost:5056/api/discover`
+ - Smart recommendations job: `http://localhost:5056/api/smartRecommendations`
 
 Evaluation of the jobs are displayed in the container log. If you named your service `overcrawlrr`, you can see it with the following command:
 

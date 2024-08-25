@@ -3,7 +3,7 @@
 [![Release](https://github.com/psyko-gh/overcrawlrr/actions/workflows/release.yaml/badge.svg)](https://github.com/psyko-gh/overcrawlrr/actions/workflows/release.yaml)
 [![Edge](https://github.com/psyko-gh/overcrawlrr/actions/workflows/edge.yaml/badge.svg)](https://github.com/psyko-gh/overcrawlrr/actions/workflows/edge.yaml)
 
-CRON based bot that automatically requests movies you may like in Overseer using your own rules.
+CRON based bot that automatically requests movies you may like in Overseer/Jellyseer using your own rules.
 
 ```yaml
   # Accept Sci-fi movie with a global rating above 5
@@ -17,7 +17,7 @@ CRON based bot that automatically requests movies you may like in Overseer using
 ```
 
 Requirement:
-- a running instance of [Overseerr](https://overseerr.dev/)
+- a running instance of [Overseerr](https://overseerr.dev/) or [Jellyseerr](https://github.com/Fallenbagel/jellyseerr)
 - docker
 
 Check the [documentation](https://psyko-gh.github.io/overcrawlrr/latest/) for more details

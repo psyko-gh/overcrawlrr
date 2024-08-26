@@ -91,13 +91,17 @@ It is also possible to specify the job
 
 Filters on the genre of the movie. Will match when one or more of the listed genres matches the genre of the movie.
 
+!!! warning Internationalized values
+
+    The values for this predicates are expressed in the language used by the configured user.
+
 **Case insensitive**
 
 ```yaml
 - genre: musical
 # or with an array of values
 - genre:
-      - animation
+      - animation #
       - romance
 ```
 

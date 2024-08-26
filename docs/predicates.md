@@ -101,8 +101,8 @@ Filters on the genre of the movie. Will match when one or more of the listed gen
 - genre: musical
 # or with an array of values
 - genre:
-    - animation
-    - romance
+      - animation
+      - romance
 ```
 
 ---

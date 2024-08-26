@@ -100,6 +100,7 @@
         { "$ref": "#/definitions/agePredicate" },
         { "$ref": "#/definitions/scorePredicate" },
         { "$ref": "#/definitions/genrePredicate" },
+        { "$ref": "#/definitions/keywordPredicate" },
         { "$ref": "#/definitions/watchProviderPredicate" },
         { "$ref": "#/definitions/voteCountPredicate" },
         { "$ref": "#/definitions/castPredicate" },
@@ -190,6 +191,20 @@
       "required": ["genre"],
       "properties": {
         "genre": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" }}
+          ]
+        }
+      }
+    },
+
+    "keywordPredicate": {
+      "$id": "#/definitions/keywordPredicate",
+      "type": "object",
+      "required": ["keyword"],
+      "properties": {
+        "keyword": {
           "oneOf": [
             { "type": "string" },
             { "type": "array", "items": { "type": "string" }}

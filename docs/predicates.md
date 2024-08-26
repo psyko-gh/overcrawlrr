@@ -101,8 +101,24 @@ Filters on the genre of the movie. Will match when one or more of the listed gen
 - genre: musical
 # or with an array of values
 - genre:
-      - animation #
-      - romance
+    - animation
+    - romance
+```
+
+---
+
+### `keyword`
+
+Filters on the keywords of the movie. Will match when one or more of the listed keywords match the keywords of the movie.
+
+**Case insensitive**
+
+```yaml
+- keyword: musical
+# or with an array of values
+- keyword:
+      - future
+      - robot
 ```
 
 ---

@@ -27,8 +27,8 @@ config:
     overseerr:
         # required
         apiUrl: http://localhost:5056/api/v1
-        user: xxx      # required
-        password: xxx  # required
+        user: xxx # required
+        password: xxx # required
         # Optional - dryRun will not send requests to Overseerr
         #            allowing you to test your rules
         dryRun: true

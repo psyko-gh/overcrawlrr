@@ -1,12 +1,14 @@
 config:
   overseerr:
-    apiUrl: xxx
-    user: xxx
-    password: xxx
+    apiUrl: http://localhost:5056/api/v1
+    # Read these 2 values from environment variables
+    user: '{{ OVERSEERR_USER }}'
+    password: '{{ OVERSEERR_PASSWORD }}'
     dryRun: true
   plex:
-    apiUrl: xxx
-    plexToken: xxx
+    # Only required when using Smart recommendations job
+    apiUrl: http://localhost:32400/
+    plexToken: '{{ PLEX_TOKEN }}'
   discovery:
     cron: '? 30 3 * * *'
     streams:
@@ -14,6 +16,7 @@ config:
       - popular
       - trending
     ruleset: Default ruleset
+  # Smart recommendations is an experimental feature
   smartRecommendations:
     cron: '? 1 14 * * *'
     plexLibrary: Films

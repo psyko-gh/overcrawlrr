@@ -25,12 +25,18 @@ Once the user is created, you can fill these value in Overcrawlrr `settings.yaml
 ```yaml title="settings.yaml"
 config:
     overseerr:
-        apiUrl: xxx # required
+        # required
+        apiUrl: http://localhost:5056/api/v1
         user: xxx # required
         password: xxx # required
-        dryRun: true # Optional - dryRun will not send requests to Overseerr
+        # Optional - dryRun will not send requests to Overseerr
         #            allowing you to test your rules
+        dryRun: true
 ```
+
+!!! note
+
+    The api URL should ends with `/api/v1`. Replace `http://localhost:5056` with your Overseerr URL
 
 ---
 
@@ -46,7 +52,7 @@ To read data from your Plex library, you have to specify your Plex URL and token
 config:
     # Only required when using Smart recommendations job
     plex:
-        apiUrl: xxx
+        apiUrl: http://localhost:32400/
         plexToken: xxx
 ```
 
@@ -59,9 +65,12 @@ You can refer to environment variables using the `{{ key }}` syntax.
 ```yaml title="settings.yaml"
 config:
     overseerr:
-        apiUrl: xxx
+        apiUrl: http://localhost:5056/api/v1
         user: '{{ OVERSEERR_USER }}'
         password: '{{ OVERSEERR_PASSWORD }}'
+    plex:
+        apiUrl: http://localhost:32400/
+        plexToken: '{{ PLEX_TOKEN }}'
 ```
 
 These variables can be defined in the `docker-compose.yaml`
@@ -73,6 +82,7 @@ services:
         environment:
             - OVERSEERR_USER=
             - OVERSEERR_PASSWORD=
+            - PLEX_TOKEN=
 ```
 
 ---

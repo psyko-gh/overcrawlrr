@@ -4,7 +4,7 @@ Overcrawlrr configuration is defined in the `settings.yaml` searched by default 
 
 !!! note "Hot reload"
 
-    The configuration is automattically reloaded when a change is detected
+    The configuration is automatically reloaded when a change is detected
 
 ---
 
@@ -27,7 +27,7 @@ config:
     overseerr:
         # required
         apiUrl: http://localhost:5056/api/v1
-        user: xxx # required
+        user: user@myemail.io # required - the email of the overseerr account
         password: xxx # required
         # Optional - dryRun will not send requests to Overseerr
         #            allowing you to test your rules
@@ -66,7 +66,7 @@ You can refer to environment variables using the `{{ key }}` syntax.
 config:
     overseerr:
         apiUrl: http://localhost:5056/api/v1
-        user: '{{ OVERSEERR_USER }}'
+        user: '{{ OVERSEERR_USER }}' # the email of the overseerr account
         password: '{{ OVERSEERR_PASSWORD }}'
     plex:
         apiUrl: http://localhost:32400/

@@ -4,7 +4,7 @@ import logger from '@core/log';
 import { Parser } from 'xml2js';
 import type { AxiosRequestConfig } from 'axios';
 import { PlexSectionDirectory, PlexSectionsResponse, PlexVideo, PlexVideosResponse } from '@core/api/plex/interfaces';
-import { isFulfilled, success } from '@core/lib/utils';
+import { getErrorMessage, isFulfilled, success } from '@core/lib/utils';
 
 class PlexApi extends HttpApi {
     private xmlParser;
@@ -53,11 +53,7 @@ class PlexApi extends HttpApi {
             await this.get('/');
             logger.info(success(' Plex connection successful'));
         } catch (e: unknown) {
-            if (e instanceof Error) {
-                logger.error(`${e.message}`);
-                return false;
-            }
-            logger.error('Error while testing Plex connection. Verify URL and credentials: ', e);
+            logger.error(`Error while testing Plex connection. Verify URL and credentials: ${getErrorMessage(e.message)}`);
         }
     };
 

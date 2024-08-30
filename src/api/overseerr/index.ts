@@ -2,7 +2,7 @@ import HttpApi from '@core/api/httpApi';
 import { getSettings } from '@core/lib/settings';
 import logger from '@core/log';
 import { AuthResponse, MediaRequest, MovieDetails, MovieResult, OverseerrRequestsResult, OverseerrResult } from '@core/api/overseerr/interfaces';
-import { success } from '@core/lib/utils';
+import { getErrorMessage, success } from '@core/lib/utils';
 
 class OverseerrApi extends HttpApi {
     private overseerrUser?: string;
@@ -16,15 +16,13 @@ class OverseerrApi extends HttpApi {
 
     public test = async () => {
         try {
-            logger.info('Testing overseerr connection...');
+            logger.info('Testing overseerr connection using:');
+            logger.info(`  - url: ${this.baseUrl}`);
+            logger.info(`  - user: ${this.overseerrUser}`);
             await this.auth();
             logger.info(success(' Overseerr connection successful'));
         } catch (e: unknown) {
-            if (e instanceof Error) {
-                logger.error(`${e.message}`);
-                return false;
-            }
-            logger.error('Error while testing Overseerr connection. Verify URL and credentials: ', e);
+            logger.error(`Error while testing Overseerr connection. Verify URL and credentials: ${getErrorMessage(e)}`);
         }
     };
 

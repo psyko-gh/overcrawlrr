@@ -1,19 +1,19 @@
 import { Predicate } from '@core/lib/rules';
 
-export interface BooleanPredicateOptions {
-    value: string;
+export interface BooleanPredicateParameters {
+    value: boolean;
 }
 
 export abstract class BooleanPredicate extends Predicate {
     protected targetValue: boolean;
 
-    protected constructor(options: BooleanPredicateOptions) {
+    protected constructor(options: BooleanPredicateParameters) {
         super();
-        this.targetValue = fromHumanReadableBoolean(options.value);
+        this.targetValue = options.value;
     }
 }
 
-const fromHumanReadableBoolean = (str: string): boolean => {
-    const acceptableTrueBoolean = ['yes', 'true', '1'];
+export const fromHumanReadableBoolean = (str: string): boolean => {
+    const acceptableTrueBoolean = ['yes', 'true'];
     return acceptableTrueBoolean.includes(str);
 };

@@ -1,19 +1,14 @@
-import { NumberPredicate, NumberPredicateOptions } from '@core/lib/rules/predicate/number';
-import { MovieDetails } from '@core/api/overseerr/interfaces';
+import { NumberPredicate, NumberPredicateParameters } from '@core/lib/rules/predicate/number';
 
-export type TimePredicateOptions = NumberPredicateOptions;
+export type TimePredicateParameters = NumberPredicateParameters;
 
-export interface TimeMetricsExtractor {
-    (movie: MovieDetails): number;
-}
-
-export class TimePredicate extends NumberPredicate {
-    protected constructor(options: TimePredicateOptions, metrics: TimeMetricsExtractor) {
-        super(options, metrics);
+export abstract class TimePredicate extends NumberPredicate {
+    protected constructor(options: TimePredicateParameters) {
+        super(options);
     }
 }
 
-export const fromHumanReadableDuration = (str: string): NumberPredicateOptions => {
+export const fromHumanReadableDuration = (str: string): NumberPredicateParameters => {
     const regex = /(less than|more than) (\d+(\.\d+)?) (year|month|week|day|hour|minute)[s]?/gm;
     const groups = [...str.matchAll(regex)][0];
     const operator = groups[1];

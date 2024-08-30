@@ -1,14 +1,18 @@
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { PredicateBuilder } from '@core/lib/rules';
-import TagsPredicate from '@core/lib/rules/predicate/tag';
 import { WatchProvidersOptions } from '@core/lib/rules/interfaces';
+import { TagsPredicate, TagsPredicateParameters } from '@core/lib/rules/predicate/tag';
+
+export type WatchProvidersPredicateParameters = TagsPredicateParameters & {
+    region: string;
+};
 
 export class WatchprovidersPredicate extends TagsPredicate {
     private region: string;
 
-    constructor(options: WatchProvidersOptions) {
-        super({ terms: options.watchProviders.names });
-        this.region = options.watchProviders.region.toLowerCase();
+    constructor(options: WatchProvidersPredicateParameters) {
+        super(options);
+        this.region = options.region;
     }
 
     getTags(movie: MovieDetails): string[] {
@@ -29,5 +33,11 @@ export class WatchprovidersPredicate extends TagsPredicate {
 
 export const WatchProvidersPredicateBuilder: PredicateBuilder = {
     key: 'watchProviders',
-    build: (data: WatchProvidersOptions) => new WatchprovidersPredicate(data),
+    build: (data: WatchProvidersOptions) => {
+        const parameters = {
+            terms: data.watchProviders.names,
+            region: data.watchProviders.region ?? '',
+        };
+        return new WatchprovidersPredicate(parameters);
+    },
 };

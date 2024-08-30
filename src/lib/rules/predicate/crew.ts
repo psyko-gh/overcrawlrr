@@ -1,16 +1,18 @@
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { PredicateBuilder } from '@core/lib/rules';
-import TagsPredicate from '@core/lib/rules/predicate/tag';
+import { TagsPredicate, TagsPredicateParameters } from '@core/lib/rules/predicate/tag';
 import { CrewOptions } from '@core/lib/rules/interfaces';
+
+export type CrewPredicateParameters = TagsPredicateParameters & {
+    job?: string;
+};
 
 export class CrewPredicate extends TagsPredicate {
     private job?: string;
 
-    constructor(options: CrewOptions) {
-        super({
-            terms: Array.isArray(options.crew) ? options.crew : options.crew.names,
-        });
-        this.job = Array.isArray(options.crew) ? undefined : options.crew.job;
+    constructor(parameters: CrewPredicateParameters) {
+        super(parameters);
+        this.job = parameters.job;
     }
 
     getTags(movie: MovieDetails): string[] {
@@ -29,5 +31,11 @@ export class CrewPredicate extends TagsPredicate {
 
 export const CrewPredicateBuilder: PredicateBuilder = {
     key: 'crew',
-    build: (data: CrewOptions) => new CrewPredicate(data),
+    build: (data: CrewOptions) => {
+        const parameters = {
+            terms: Array.isArray(data.crew) ? data.crew : data.crew.names,
+            job: Array.isArray(data.crew) ? undefined : data.crew.job,
+        };
+        return new CrewPredicate(parameters);
+    },
 };

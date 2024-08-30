@@ -1,6 +1,7 @@
 import { fromHumanReadableScore } from '@core/lib/rules/predicate/score';
 import { fromHumanReadableNumber } from '@core/lib/rules/predicate/number';
 import { fromHumanReadableDuration } from '@core/lib/rules/predicate/time';
+import { fromHumanReadableBoolean } from '@core/lib/rules/predicate/boolean';
 
 describe('fromHumanReadableNumber', () => {
     it('should match', async () => {
@@ -81,5 +82,18 @@ describe('fromHumanReadableDuration', () => {
         expect(fromHumanReadableDuration('less than 1 years')).toEqual({ threshold: 60 * 60 * 24 * 365, operator: 'lt' });
         expect(fromHumanReadableDuration('more than 2.5 years')).toEqual({ threshold: 60 * 60 * 24 * (365 * 2.5), operator: 'gt' });
         expect(fromHumanReadableDuration('less than 2.5 year')).toEqual({ threshold: 60 * 60 * 24 * (365 * 2.5), operator: 'lt' });
+    });
+});
+
+describe('fromHumanReadableBoolean', () => {
+    it('should match', async () => {
+        expect(fromHumanReadableBoolean('yes')).toEqual(true);
+        expect(fromHumanReadableBoolean('true')).toEqual(true);
+        expect(fromHumanReadableBoolean('1')).toEqual(true);
+
+        expect(fromHumanReadableBoolean('no')).toEqual(false);
+        expect(fromHumanReadableBoolean('false')).toEqual(false);
+        expect(fromHumanReadableBoolean('0')).toEqual(false);
+        expect(fromHumanReadableBoolean('abc')).toEqual(false);
     });
 });

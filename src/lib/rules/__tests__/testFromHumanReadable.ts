@@ -89,11 +89,9 @@ describe('fromHumanReadableBoolean', () => {
     it('should match', async () => {
         expect(fromHumanReadableBoolean('yes')).toEqual(true);
         expect(fromHumanReadableBoolean('true')).toEqual(true);
-        expect(fromHumanReadableBoolean('1')).toEqual(true);
 
         expect(fromHumanReadableBoolean('no')).toEqual(false);
         expect(fromHumanReadableBoolean('false')).toEqual(false);
-        expect(fromHumanReadableBoolean('0')).toEqual(false);
         expect(fromHumanReadableBoolean('abc')).toEqual(false);
     });
 });

@@ -5,6 +5,8 @@ import { OrFilterOptions } from '@core/lib/rules/interfaces';
 import type { PredicateFactoryClass } from '@core/lib/rules/factory';
 
 export class OrPredicate extends GroupPredicate {
+    private readonly type: string = 'or';
+
     constructor(children: Predicate[]) {
         super(children);
     }

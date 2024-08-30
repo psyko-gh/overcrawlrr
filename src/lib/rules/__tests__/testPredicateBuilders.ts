@@ -15,6 +15,9 @@ import { ScorePredicate } from '@core/lib/rules/predicate/score';
 import { StatusPredicate } from '@core/lib/rules/predicate/status';
 import { VoteCountPredicate } from '@core/lib/rules/predicate/voteCount';
 import { WatchprovidersPredicate } from '@core/lib/rules/predicate/watchproviders';
+import { AndPredicate } from '@core/lib/rules/predicate/and';
+import { NotPredicate } from '@core/lib/rules/predicate/not';
+import { OrPredicate } from '@core/lib/rules/predicate/or';
 
 const from = (data: string) => {
     const options = yaml.load(data) as PredicateOption;
@@ -197,5 +200,79 @@ describe('WatchProvidersPredicateBuilder', () => {
                     - Platform 1
                     - Platform 2
         `).toEqual(new WatchprovidersPredicate({ terms: ['Platform 1', 'Platform 2'], region: 'us' }));
+    });
+});
+
+describe('OrPredicateBuilder', () => {
+    it('should match', async () => {
+        expectPredicate(`
+        or:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).toEqual(new OrPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
+    });
+
+    it('should not match', async () => {
+        expectPredicate(`
+        and:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).not.toEqual(new OrPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
+    });
+
+    it('should not match', async () => {
+        expectPredicate(`
+        not:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).not.toEqual(new OrPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
+    });
+});
+
+describe('AndPredicateBuilder', () => {
+    it('should match', async () => {
+        expectPredicate(`
+        and:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).toEqual(new AndPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
+    });
+    it('should match', async () => {
+        expectPredicate(`
+        not:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).not.toEqual(new AndPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
+    });
+    it('should match', async () => {
+        expectPredicate(`
+        or:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).not.toEqual(new AndPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
+    });
+});
+
+describe('NotPredicateBuilder', () => {
+    it('should match', async () => {
+        expectPredicate(`
+        not:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).toEqual(new NotPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
+    });
+    it('should match', async () => {
+        expectPredicate(`
+        and:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).not.toEqual(new NotPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
+    });
+    it('should match', async () => {
+        expectPredicate(`
+        or:
+            - voteCount: greater than 1000
+            - score: above 7
+        `).not.toEqual(new NotPredicate([new VoteCountPredicate({ operator: 'gt', threshold: 1000 }), new ScorePredicate({ operator: 'gt', threshold: 7 })]));
     });
 });

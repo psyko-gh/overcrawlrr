@@ -14,8 +14,8 @@ You can test it by opening it in a browser. It should display something like:
 
 ```json
 {
-  "api":"Overseerr API",
-  "version":"1.0"
+    "api": "Overseerr API",
+    "version": "1.0"
 }
 ```
 

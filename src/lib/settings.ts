@@ -3,6 +3,7 @@ import yaml from 'js-yaml';
 import logger from '@core/log';
 import { RulesetOptions } from '@core/lib/rules/interfaces';
 import Ajv from 'ajv';
+import betterAjvErrors from 'better-ajv-errors';
 import envVar from '@core/env';
 
 const SCHEMA_PATH = './schema/schema.json';
@@ -82,11 +83,15 @@ class Settings {
         try {
             const yamlSettings = yaml.load(fs.readFileSync(this.path, 'utf8')) as YamlSettings;
             const schema = JSON.parse(fs.readFileSync(SCHEMA_PATH, 'utf8'));
-            const validator = new Ajv();
-            const isValid = validator.validate(schema, yamlSettings);
+            const validate = new Ajv().compile(schema);
+            const isValid = validate(yamlSettings);
 
             if (!isValid) {
-                throw new Error(`Invalid configuration file. ${JSON.stringify(validator.errors)}`);
+                const output = betterAjvErrors(schema, yamlSettings, validate.errors!, {
+                    indent: 2,
+                });
+                logger.error(output);
+                throw new Error(`Invalid configuration file.`);
             }
 
             this._data = yamlSettings.config as CrawlrrSettings;

@@ -46,6 +46,7 @@
     "@types/js-yaml": "^4.0.5",
     "ajv": "^8.17.1",
     "axios": "^1.4.0",
+    "better-ajv-errors": "^1.2.0",
     "cookie": "^0.5.0",
     "cors": "^2.8.5",
     "croner": "^6.0.6",

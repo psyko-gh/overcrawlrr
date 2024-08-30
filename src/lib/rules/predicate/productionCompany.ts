@@ -1,13 +1,13 @@
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { PredicateBuilder } from '@core/lib/rules';
-import TagsPredicate from '@core/lib/rules/predicate/tag';
 import { ProductionCompanyOptions } from '@core/lib/rules/interfaces';
+import { TagsPredicate, TagsPredicateParameters } from '@core/lib/rules/predicate/tag';
+
+export type ProductionCompanyPredicateParameters = TagsPredicateParameters;
 
 export class ProductionCompanyPredicate extends TagsPredicate {
-    constructor(options: ProductionCompanyOptions) {
-        super({
-            terms: Array.isArray(options.productionCompany) ? options.productionCompany : [options.productionCompany],
-        });
+    constructor(options: ProductionCompanyPredicateParameters) {
+        super(options);
     }
 
     getTags(movie: MovieDetails): string[] {
@@ -24,5 +24,10 @@ export class ProductionCompanyPredicate extends TagsPredicate {
 
 export const ProductionCompanyPredicateBuilder: PredicateBuilder = {
     key: 'productionCompany',
-    build: (data: ProductionCompanyOptions) => new ProductionCompanyPredicate(data),
+    build: (data: ProductionCompanyOptions) => {
+        const parameters = {
+            terms: Array.isArray(data.productionCompany) ? data.productionCompany : [data.productionCompany],
+        };
+        return new ProductionCompanyPredicate(parameters);
+    },
 };

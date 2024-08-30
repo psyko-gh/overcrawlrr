@@ -1,37 +1,29 @@
 import { Predicate } from '@core/lib/rules';
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 
-export type NumberPredicateOptions = {
+export type NumberPredicateParameters = {
     threshold: number;
     operator: 'lt' | 'gt';
 };
 
-export interface MetricsExtractor {
-    (movie: MovieDetails): number;
-}
-
-export class NumberPredicate extends Predicate {
+export abstract class NumberPredicate extends Predicate {
     private threshold: number;
     private operator: 'lt' | 'gt';
-    private metrics: MetricsExtractor;
 
-    constructor(options: NumberPredicateOptions, metrics: MetricsExtractor) {
+    constructor(options: NumberPredicateParameters) {
         super();
         this.threshold = options.threshold;
         this.operator = options.operator;
-        this.metrics = metrics;
     }
 
-    private getMetrics(movie: MovieDetails): number {
-        return this.metrics(movie);
-    }
+    protected abstract getMetrics(movie: MovieDetails): number;
 
     matches(movie: MovieDetails): boolean {
-        const measuredSeconds = this.getMetrics(movie);
+        const metric = this.getMetrics(movie);
         if (this.operator === 'lt') {
-            return measuredSeconds < this.threshold;
+            return metric < this.threshold;
         }
-        return measuredSeconds > this.threshold;
+        return metric > this.threshold;
     }
 }
 

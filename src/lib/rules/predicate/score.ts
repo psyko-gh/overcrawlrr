@@ -1,12 +1,18 @@
-import { NumberPredicate } from '@core/lib/rules/predicate/number';
+import { NumberPredicate, NumberPredicateParameters } from '@core/lib/rules/predicate/number';
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { PredicateBuilder } from '@core/lib/rules';
 import logger from '@core/log';
 import { ScoreOptions } from '@core/lib/rules/interfaces';
 
+export type ScorePredicateParameters = NumberPredicateParameters;
+
 export class ScorePredicate extends NumberPredicate {
-    constructor(options: ScoreOptions) {
-        super(fromHumanReadableScore(options.score), (movie: MovieDetails) => movie.voteAverage);
+    constructor(options: ScorePredicateParameters) {
+        super(options);
+    }
+
+    protected getMetrics(movie: MovieDetails): number {
+        return movie.voteAverage;
     }
 }
 
@@ -46,5 +52,5 @@ export const fromHumanReadableScore = (str: string): { threshold: number; operat
 
 export const ScorePredicateBuilder: PredicateBuilder = {
     key: 'score',
-    build: (data: ScoreOptions) => new ScorePredicate(data),
+    build: (data: ScoreOptions) => new ScorePredicate(fromHumanReadableScore(data.score)),
 };

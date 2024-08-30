@@ -1,13 +1,13 @@
 import { MovieDetails } from '@core/api/overseerr/interfaces';
 import { PredicateBuilder } from '@core/lib/rules';
-import TagsPredicate from '@core/lib/rules/predicate/tag';
+import { TagsPredicate, TagsPredicateParameters } from '@core/lib/rules/predicate/tag';
 import { KeywordOptions } from '@core/lib/rules/interfaces';
 
+export type KeywordPredicateParameters = TagsPredicateParameters;
+
 export class KeywordPredicate extends TagsPredicate {
-    constructor(options: KeywordOptions) {
-        super({
-            terms: Array.isArray(options.keyword) ? options.keyword : [options.keyword],
-        });
+    constructor(options: KeywordPredicateParameters) {
+        super(options);
     }
 
     getTags(movie: MovieDetails): string[] {
@@ -24,5 +24,10 @@ export class KeywordPredicate extends TagsPredicate {
 
 export const KeywordPredicateBuilder: PredicateBuilder = {
     key: 'keyword',
-    build: (data: KeywordOptions) => new KeywordPredicate(data),
+    build: (data: KeywordOptions) => {
+        const parameters = {
+            terms: Array.isArray(data.keyword) ? data.keyword : [data.keyword],
+        };
+        return new KeywordPredicate(parameters);
+    },
 };

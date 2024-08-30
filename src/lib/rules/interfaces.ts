@@ -44,7 +44,7 @@ export interface NotFilterOptions {
 }
 
 export type AdultOptions = {
-    adult: string;
+    adult: string | boolean;
 };
 
 export type AgeOptions = {
@@ -81,7 +81,7 @@ export type ProductionCompanyOptions = {
 };
 
 export type ReleasedOptions = {
-    released: string;
+    released: string | boolean;
 };
 
 export type ScoreOptions = {

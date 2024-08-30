@@ -53,7 +53,7 @@ class PlexApi extends HttpApi {
             await this.get('/');
             logger.info(success(' Plex connection successful'));
         } catch (e: unknown) {
-            logger.error(`Error while testing Plex connection. Verify URL and credentials: ${getErrorMessage(e.message)}`);
+            logger.error(`Error while testing Plex connection. Verify URL and credentials: ${getErrorMessage(e)}`);
         }
     };
 

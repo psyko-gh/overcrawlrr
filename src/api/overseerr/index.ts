@@ -20,7 +20,7 @@ class OverseerrApi extends HttpApi {
             await this.auth();
             logger.info(success(' Overseerr connection successful'));
         } catch (e: unknown) {
-            logger.error(`Error while testing Overseerr connection. Verify URL and credentials: ${getErrorMessage(e.message)}`);
+            logger.error(`Error while testing Overseerr connection. Verify URL and credentials: ${getErrorMessage(e)}`);
         }
     };
 

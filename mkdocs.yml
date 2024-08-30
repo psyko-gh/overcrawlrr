@@ -30,6 +30,8 @@ nav:
   - Rules:
       - rulesets.md
       - predicates.md
+  - Troubleshooting:
+      - troubleshooting.md
   - Additional:
       - additional.md
 markdown_extensions:

@@ -28,7 +28,7 @@ const processMovieResult = async (movies: MovieResult[], overseerr: OverseerrApi
                     await overseerr.requestMovie(movie.id);
                 }
             } else if (ruleResult.result === 'reject') {
-                logger.info(`${color.red('  Rejecting')} - "${ruleResult.movie.title}" because it of rule "${color.blue(ruleResult.rule?.name ?? '')}"`);
+                logger.info(`${color.red('  Rejecting')} - "${ruleResult.movie.title}" because of rule "${color.blue(ruleResult.rule?.name ?? '')}"`);
             } else {
                 logger.info(`  Skipping  - "${ruleResult.movie.title}" doesn't match any rule`);
             }

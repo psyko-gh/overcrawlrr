@@ -15,7 +15,7 @@ interface HttpApiOptions {
 class HttpApi {
     protected axios: AxiosInstance;
     private cookie: string;
-    private baseUrl: string;
+    protected baseUrl: string;
     private cache?: NodeCache;
 
     constructor(baseUrl: string, params: Record<string, unknown>, options: HttpApiOptions = {}, debug: boolean = false) {

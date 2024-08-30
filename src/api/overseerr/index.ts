@@ -16,7 +16,9 @@ class OverseerrApi extends HttpApi {
 
     public test = async () => {
         try {
-            logger.info('Testing overseerr connection...');
+            logger.info('Testing overseerr connection using:');
+            logger.info(`  - url: ${this.baseUrl}`);
+            logger.info(`  - user: ${this.overseerrUser}`);
             await this.auth();
             logger.info(success(' Overseerr connection successful'));
         } catch (e: unknown) {

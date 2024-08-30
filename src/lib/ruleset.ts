@@ -69,6 +69,7 @@ let rulesets: Map<string, Ruleset>;
 
 export const loadRulesets = (settings: Settings): void => {
     try {
+        logger.info('Loading rulesets...');
         rulesets = new Map<string, Ruleset>();
         const configuration = settings.rulesets;
         for (const options of configuration) {

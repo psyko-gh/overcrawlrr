@@ -35,6 +35,7 @@ const jobDefinitionsGetter = (settings: Settings) => [
 
 const jobs: Cron[] = [];
 export function registerCrons(settings: Settings) {
+    logger.info('Configuring jobs...');
     jobs.forEach((j) => j.stop());
     jobDefinitionsGetter(settings).forEach((jobDefinition: JobDefinition) => {
         if (!jobDefinition.isEnabled()) {

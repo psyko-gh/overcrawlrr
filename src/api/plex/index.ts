@@ -49,7 +49,8 @@ class PlexApi extends HttpApi {
 
     public test = async () => {
         try {
-            logger.info('Testing Plex connection...');
+            logger.info('Testing Plex connection using:');
+            logger.info(`  - url: ${this.baseUrl}`);
             await this.get('/');
             logger.info(success(' Plex connection successful'));
         } catch (e: unknown) {

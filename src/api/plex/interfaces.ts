@@ -29,6 +29,7 @@ export interface PlexSectionDirectory {
 }
 
 export interface PlexVideosResponse {
+    size: string;
     Video: PlexVideo[];
 }
 

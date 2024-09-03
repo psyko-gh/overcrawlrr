@@ -1,6 +1,6 @@
 # Overcrawlrr
 
-A CRON based job, using the power of Overseerr, to automatically requests movies you may like using your own rules.
+A CRON based job, using the power of Overseerr/Jellyseerr, to automatically requests movies you may like using your own rules.
 
 !!! danger Beta
 

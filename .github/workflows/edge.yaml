@@ -33,6 +33,7 @@ jobs:
 
   build-and-push:
     name: Build & publish Edge Docker image
+    needs: changes
     if: ${{ github.event_name == 'workflow_dispatch' }} || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]') && ${{ needs.changes.outputs.src == 'true' }}
     runs-on: ubuntu-latest
     permissions:

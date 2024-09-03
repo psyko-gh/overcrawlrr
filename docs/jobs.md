@@ -53,7 +53,7 @@ config:
 
 ### Evaluating a ruleset
 
-You can also evaluate a ruleset against a specific movie, using the following URL:
+You can also evaluate a ruleset against a specific movie, using the following URL (for debug, make sure to enable `dryRun`):
 
 ```
 http://localhost:5056/api/movies/<id_movie>/evaluate/<ruleset_name>

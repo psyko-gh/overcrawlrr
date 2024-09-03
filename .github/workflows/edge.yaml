@@ -65,7 +65,7 @@ jobs:
 
   publish-docs:
     name: Publish edge documentation
-    needs: [build-and-push, changes]
+    needs: changes
     if: ${{ needs.changes.outputs.docs == 'true' }}
     permissions:
       contents: write

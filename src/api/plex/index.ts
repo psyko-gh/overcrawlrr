@@ -84,13 +84,20 @@ class PlexApi extends HttpApi {
         return guid.id.substring(prefix.length);
     };
 
-    public getFavoritesRecommendationsByLibrary = async (sectionKey: string, score: number) => {
-        const favorites = await this.get<PlexVideosResponse>(`/library/sections/${sectionKey}/all`, {
+    public getFavoritesRecommendationsByLibrary = async (sectionKey: string, score: number): Promise<PlexVideo[]> => {
+        const result = await this.get<PlexVideosResponse>(`/library/sections/${sectionKey}/all`, {
             params: {
                 'userRating>': score,
             },
         });
-        const moviesResults: Array<PromiseSettledResult<PlexVideosResponse>> = await Promise.allSettled(favorites.Video.map((v) => this.getMovie(v.ratingKey)));
+        const resultSize = Number(result.size);
+        if (resultSize === 0) {
+            logger.info(
+                `Could not find any movie with a rating above ${score}. To use this feature, make sure to rate the movies you watch (using Plex rating system directly).`
+            );
+            return [];
+        }
+        const moviesResults: Array<PromiseSettledResult<PlexVideosResponse>> = await Promise.allSettled(result.Video.map((v) => this.getMovie(v.ratingKey)));
         return moviesResults.filter(isFulfilled).flatMap((r) => r.value.Video);
     };
 }

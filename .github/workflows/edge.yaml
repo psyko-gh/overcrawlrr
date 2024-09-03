@@ -6,11 +6,11 @@ on:
     branches:
       - master
       - action-tuning
-#    paths:
-#      - '**.ts'
-#      - 'src/**'
-#      - 'schema/**'
-#      - 'docs/**'
+    paths:
+      - '**.ts'
+      - 'src/**'
+      - 'schema/**'
+      - 'docs/**'
 
 jobs:
   changes:
@@ -35,19 +35,12 @@ jobs:
   build-and-push:
     name: Build & publish Edge Docker image
     needs: changes
-#    if: ${{ github.event_name == 'workflow_dispatch' }} || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]') && ${{ needs.changes.outputs.src == 'true' }}
-#    if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]') && needs.changes.outputs.src == 'true' }}
-    if: ${{ github.event_name == 'workflow_dispatch' }} || ${{ needs.changes.outputs.src == 'true' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]') && needs.changes.outputs.src == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
       packages: write
     steps:
-      - run: echo "$OUTPUTS"
-        shell: bash
-        env:
-          OUTPUTS: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]') && needs.changes.outputs.src == 'true' }}
-
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v4
@@ -55,21 +48,21 @@ jobs:
           images: ghcr.io/${{ github.repository }}
           tags: |
             type=edge
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v3
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v3
-#      - name: Login to GitHub Container Registry
-#        uses: docker/login-action@v3
-#        with:
-#          registry: ghcr.io
-#          username: ${{ github.repository_owner  }}
-#          password: ${{ secrets.GITHUB_TOKEN }}
-#      - name: Build and push
-#        uses: docker/build-push-action@v6
-#        with:
-#          push: true
-#          tags: ${{ steps.meta.outputs.tags }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner  }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
 
   publish-docs:
     name: Publish edge documentation
@@ -81,27 +74,27 @@ jobs:
     with:
       version: edge
 
-  discord:
-    name: Send Discord Notification
-    needs: [build-and-push, publish-docs]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get Build Job Status
-        uses: technote-space/workflow-conclusion-action@v3
-      - name: Combine Job Status
-        id: status
-        run: |
-          failures=(neutral, skipped, timed_out, action_required)
-          if [[ ${array[@]} =~ $WORKFLOW_CONCLUSION ]]; then
-            echo "status=failure" >> $GITHUB_OUTPUT
-          else
-            echo "status=$WORKFLOW_CONCLUSION" >> $GITHUB_OUTPUT
-          fi
-      - name: Post Status to Discord
-        uses: sarisia/actions-status-discord@v1
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          status: ${{ steps.status.outputs.status }}
-          title: ${{ github.workflow }}
-          nofail: true
+#  discord:
+#    name: Send Discord Notification
+#    needs: [build-and-push, publish-docs]
+#    if: always()
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Get Build Job Status
+#        uses: technote-space/workflow-conclusion-action@v3
+#      - name: Combine Job Status
+#        id: status
+#        run: |
+#          failures=(neutral, skipped, timed_out, action_required)
+#          if [[ ${array[@]} =~ $WORKFLOW_CONCLUSION ]]; then
+#            echo "status=failure" >> $GITHUB_OUTPUT
+#          else
+#            echo "status=$WORKFLOW_CONCLUSION" >> $GITHUB_OUTPUT
+#          fi
+#      - name: Post Status to Discord
+#        uses: sarisia/actions-status-discord@v1
+#        with:
+#          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+#          status: ${{ steps.status.outputs.status }}
+#          title: ${{ github.workflow }}
+#          nofail: true

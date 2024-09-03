@@ -40,6 +40,11 @@ jobs:
       contents: write
       packages: write
     steps:
+      - run: echo "$OUTPUTS"
+        shell: bash
+        env:
+          OUTPUTS: ${{ toJSON(needs.changes.outputs) }}
+
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v4

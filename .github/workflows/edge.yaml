@@ -5,11 +5,11 @@ on:
   push:
     branches:
       - master
-    paths:
-      - '**.ts'
-      - 'src/**'
-      - 'schema/**'
-      - 'docs/**'
+#    paths:
+#      - '**.ts'
+#      - 'src/**'
+#      - 'schema/**'
+#      - 'docs/**'
 
 jobs:
   changes:
@@ -43,7 +43,7 @@ jobs:
       - run: echo "$OUTPUTS"
         shell: bash
         env:
-          OUTPUTS: ${{ toJSON(needs.changes.outputs) }}
+          OUTPUTS: ${{ needs.changes.outputs.src == 'true' }}
 
       - name: Docker metadata
         id: meta

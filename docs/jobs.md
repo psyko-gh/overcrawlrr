@@ -43,7 +43,7 @@ config:
         # Required
         cron: '1 14 * * *'
         # The name of the plex library to use as a seed
-        plexLibrary: Films
+        plexLibrary: Movies
         # Your minimum personal rating to consider
         minimumRating: 6.9
         ruleset: Ruleset name

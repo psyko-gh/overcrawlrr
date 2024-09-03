@@ -4,4 +4,4 @@ The JSON Schema is available here: [https://raw.githubusercontent.com/psyko-gh/o
 
 This is particularly helpful if you are using and editor that support JSON Schema to help you validate your configuration.
 
-test
+test1

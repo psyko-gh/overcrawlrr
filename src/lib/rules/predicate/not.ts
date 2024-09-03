@@ -5,12 +5,14 @@ import { NotFilterOptions } from '@core/lib/rules/interfaces';
 import type { PredicateFactoryClass } from '@core/lib/rules/factory';
 
 export class NotPredicate extends GroupPredicate {
+    private readonly type: string = 'not';
+
     constructor(children: Predicate[]) {
         super(children);
     }
 
     matches(movie: MovieDetails): boolean {
-        return !this.children.every((p) => p.matches(movie));
+        return this.children.every((p) => !p.matches(movie));
     }
 }
 

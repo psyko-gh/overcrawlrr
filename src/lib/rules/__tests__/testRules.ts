@@ -15,6 +15,10 @@ import { RuntimePredicate } from '@core/lib/rules/predicate/runtime';
 import { OriginalLanguagePredicate } from '@core/lib/rules/predicate/originalLanguage';
 import { StatusPredicate } from '@core/lib/rules/predicate/status';
 import { fromHumanReadableDuration } from '@core/lib/rules/predicate/time';
+import { ProductionCompanyPredicate } from '@core/lib/rules/predicate/productionCompany';
+import { NotPredicate } from '@core/lib/rules/predicate/not';
+import { ReleasedPredicate } from '@core/lib/rules/predicate/released';
+import { WatchprovidersPredicate } from '@core/lib/rules/predicate/watchproviders';
 
 const movie = movieJson as MovieDetails;
 const testRule = (predicate: Predicate | Predicate[]) => new Rule('test rule', Array.isArray(predicate) ? predicate : [predicate], 'accept');
@@ -305,5 +309,136 @@ describe('status predicate', () => {
     it('should not match', async () => {
         assertRuleDoesntMatch(testRule(new StatusPredicate({ terms: ['canceled'] })), movie);
         assertRuleDoesntMatch(testRule(new StatusPredicate({ terms: ['canceled', 'post production'] })), movie);
+    });
+});
+
+describe('productionCompany predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new ProductionCompanyPredicate({ terms: ['20th Century Fox'] })), movie);
+        assertRuleMatches(testRule(new ProductionCompanyPredicate({ terms: ['20th Century Fox', 'Bobcat studios'] })), movie);
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new ProductionCompanyPredicate({ terms: ['Bobcat studios'] })), movie);
+        assertRuleDoesntMatch(testRule(new ProductionCompanyPredicate({ terms: ['Bobcat studios', '11th Century Fox'] })), movie);
+    });
+});
+
+describe('not predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new NotPredicate([new RuntimePredicate({ operator: 'gt', threshold: 3 * 60 * 60 })])), movie);
+        assertRuleMatches(testRule(new NotPredicate([new RuntimePredicate({ operator: 'lt', threshold: 2 * 60 * 60 })])), movie);
+        assertRuleMatches(
+            testRule(
+                new NotPredicate([
+                    new RuntimePredicate({ operator: 'lt', threshold: 2 * 60 * 60 }),
+                    new ProductionCompanyPredicate({ terms: ['12th Century Fox'] }),
+                ])
+            ),
+            movie
+        );
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new NotPredicate([new RuntimePredicate({ operator: 'lt', threshold: 3 * 60 * 60 })])), movie);
+        assertRuleDoesntMatch(testRule(new NotPredicate([new RuntimePredicate({ operator: 'gt', threshold: 2 * 60 * 60 })])), movie);
+        assertRuleDoesntMatch(
+            testRule(
+                new NotPredicate([
+                    new RuntimePredicate({ operator: 'lt', threshold: 2 * 60 * 60 }),
+                    new ProductionCompanyPredicate({ terms: ['20th Century Fox'] }),
+                ])
+            ),
+            movie
+        );
+    });
+});
+
+describe('or predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(
+            testRule(
+                new OrPredicate([
+                    new StatusPredicate({ terms: ['released'] }),
+                    new OriginalLanguagePredicate({ terms: ['en'] }),
+                    new CastPredicate({ terms: ['Sigourney Weaver', 'Jessica Alba'], excludeVoice: false }),
+                ])
+            ),
+            movie
+        );
+
+        assertRuleMatches(
+            testRule(
+                new OrPredicate([
+                    new StatusPredicate({ terms: ['canceled'] }),
+                    new OriginalLanguagePredicate({ terms: ['de'] }),
+                    new CastPredicate({ terms: ['Sigourney Weaver', 'Jessica Alba'], excludeVoice: false }),
+                ])
+            ),
+            movie
+        );
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(
+            testRule(
+                new OrPredicate([
+                    new StatusPredicate({ terms: ['canceled'] }),
+                    new OriginalLanguagePredicate({ terms: ['de'] }),
+                    new CastPredicate({ terms: ['Jessica Alba'], excludeVoice: false }),
+                ])
+            ),
+            movie
+        );
+    });
+});
+
+describe('and predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(
+            testRule(
+                new AndPredicate([
+                    new StatusPredicate({ terms: ['released'] }),
+                    new OriginalLanguagePredicate({ terms: ['en'] }),
+                    new CastPredicate({ terms: ['Sigourney Weaver', 'Jessica Alba'], excludeVoice: false }),
+                ])
+            ),
+            movie
+        );
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(
+            testRule(
+                new AndPredicate([
+                    new StatusPredicate({ terms: ['canceled'] }), // Movie is not cancelled
+                    new OriginalLanguagePredicate({ terms: ['en'] }),
+                    new CastPredicate({ terms: ['Sigourney Weaver', 'Jessica Alba'], excludeVoice: false }),
+                ])
+            ),
+            movie
+        );
+    });
+});
+
+describe('released predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new ReleasedPredicate({ value: true })), movie);
+        // assertRuleMatches(testRule(new ReleasedPredicate({ value: true })), { ...movie, status: 'test' });
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new ReleasedPredicate({ value: false })), movie);
+        // assertRuleDoesntMatch(testRule(new ReleasedPredicate({ value: false })), { ...movie, status: 'test' });
+    });
+});
+
+describe('watchProviders predicate', () => {
+    it('should match', async () => {
+        assertRuleMatches(testRule(new WatchprovidersPredicate({ region: 'CA', terms: ['Disney Plus', 'Crave'] })), movie);
+    });
+
+    it('should not match', async () => {
+        assertRuleDoesntMatch(testRule(new WatchprovidersPredicate({ region: 'CA', terms: ['Platform 1', 'Platform 2'] })), movie);
     });
 });

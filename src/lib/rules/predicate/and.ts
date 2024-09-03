@@ -5,6 +5,8 @@ import { AndFilterOptions } from '@core/lib/rules/interfaces';
 import type { PredicateFactoryClass } from '@core/lib/rules/factory';
 
 export class AndPredicate extends GroupPredicate {
+    private readonly type: string = 'and';
+
     constructor(children: Predicate[]) {
         super(children);
     }

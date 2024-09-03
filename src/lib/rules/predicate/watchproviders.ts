@@ -21,7 +21,7 @@ export class WatchprovidersPredicate extends TagsPredicate {
         }
         const tags: string[] = [];
         for (const region of movie.watchProviders) {
-            if (region.iso_3166_1.toLowerCase() === this.region) {
+            if (region.iso_3166_1.toLowerCase() === this.region.toLowerCase()) {
                 if (region.flatrate) {
                     tags.push(...region.flatrate.map((r) => r.name));
                 }

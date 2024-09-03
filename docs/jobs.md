@@ -33,7 +33,7 @@ config:
 
 This job uses your personal ratings in your Plex library to scan movies you may like.
 
-Considering the movie you liked, it will crawl their recommended movies and apply the given ruleset.
+Considering the movies you liked, it will crawl their recommended movies and apply the given ruleset.
 
 ```yaml title="settings.yaml"
 config:

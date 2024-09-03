@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - action-tuning
 #    paths:
 #      - '**.ts'
 #      - 'src/**'
@@ -44,7 +45,7 @@ jobs:
       - run: echo "$OUTPUTS"
         shell: bash
         env:
-          OUTPUTS: ${{ needs.changes.outputs.src == 'true' }}
+          OUTPUTS: ${{ github.event_name }}
 
       - name: Docker metadata
         id: meta

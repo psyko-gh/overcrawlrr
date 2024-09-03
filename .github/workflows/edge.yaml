@@ -11,9 +11,28 @@ on:
       - 'schema/**'
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      src: ${{ steps.detect.outputs.src }}
+      docs: ${{ steps.detect.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: detect
+        with:
+          filters: |
+            docs:
+              - 'docs/**'
+            src:
+              - '**.ts'
+              - 'src/**'
+              - 'schema/**'
+
   build-and-push:
     name: Build & publish Edge Docker image
-    if: ${{ github.event_name == 'workflow_dispatch' }} || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]')
+    if: ${{ github.event_name == 'workflow_dispatch' }} || github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, '[skip ci]') && ${{ needs.changes.output.src == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -44,7 +63,8 @@ jobs:
 
   publish-docs:
     name: Publish edge documentation
-    needs: build-and-push
+    needs: [build-and-push, changes]
+    if: ${{ needs.changes.output.docs == 'true' }}
     permissions:
       contents: write
     uses: psyko-gh/overcrawlrr/.github/workflows/docs.yaml@master

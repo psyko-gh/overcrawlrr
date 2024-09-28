@@ -10,6 +10,7 @@ export interface RuleOptions {
     name: string;
     whenMatch: PredicateOption[];
     action: RuleAction;
+    with?: RuleParameters;
 }
 
 export type PredicateOption =
@@ -112,4 +113,13 @@ export type RuntimeOptions = {
 
 export type StatusOptions = {
     status: string | string[];
+};
+
+export type RuleParameters = {
+    radarr: RuleServiceParameters;
+};
+
+export type RuleServiceParameters = {
+    server?: string;
+    profile?: string;
 };

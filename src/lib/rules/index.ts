@@ -1,5 +1,5 @@
 import { MovieDetails } from '@core/api/overseerr/interfaces';
-import { PredicateOption, RuleAction } from '@core/lib/rules/interfaces';
+import { PredicateOption, RuleAction, RuleParameters } from '@core/lib/rules/interfaces';
 import { PredicateFactoryClass } from '@core/lib/rules/factory';
 
 export abstract class Predicate {
@@ -24,11 +24,13 @@ export class Rule {
     public name: string;
     public filter: Predicate[];
     public action: RuleAction;
+    public with?: RuleParameters;
 
-    constructor(name: string, filter: Predicate[], action: RuleAction) {
+    constructor(name: string, filter: Predicate[], action: RuleAction, options?: RuleParameters) {
         this.name = name;
         this.filter = filter;
         this.action = action;
+        this.with = options;
     }
 
     public matches(movie: MovieDetails): boolean {

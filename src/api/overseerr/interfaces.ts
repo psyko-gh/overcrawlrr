@@ -182,3 +182,26 @@ export interface Genre {
     id: number;
     name: string;
 }
+
+export interface RadarrService {
+    id: number;
+    name: string;
+    is4k: boolean;
+    isDefault: boolean;
+}
+
+export interface RadarrServiceDetails {
+    server: RadarrService;
+    profiles: RadarrProfile[];
+}
+
+export interface RequestOption {
+    server: string;
+    profile: string;
+    is4k: boolean;
+}
+
+export interface RadarrProfile {
+    id: number;
+    name: string;
+}

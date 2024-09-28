@@ -39,7 +39,7 @@ class Ruleset {
     }
 
     private buildRules(): void {
-        this._rules = this._rulesetOptions.rules.map((o) => new Rule(o.name, PredicateFactory.buildPredicates(o.whenMatch), o.action));
+        this._rules = this._rulesetOptions.rules.map((o) => new Rule(o.name, PredicateFactory.buildPredicates(o.whenMatch), o.action, o.with));
     }
 
     public evaluateRules(movie: MovieDetails): RuleEvaluation {

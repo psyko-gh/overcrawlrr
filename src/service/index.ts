@@ -1,7 +1,7 @@
 import logger from '@core/log';
 import { getSettings } from '@core/lib/settings';
 import OverseerrApi from '@core/api/overseerr';
-import { MediaStatus, MovieResult } from '@core/api/overseerr/interfaces';
+import { MediaStatus, MovieResult, RequestOption } from '@core/api/overseerr/interfaces';
 import Ruleset, { getRuleset } from '@core/lib/ruleset';
 import { color, distinctMovies, isFulfilled, isMovie, success } from '@core/lib/utils';
 import PlexApi from '@core/api/plex';
@@ -25,7 +25,11 @@ const processMovieResult = async (movies: MovieResult[], overseerr: OverseerrApi
                 if (dryRun) {
                     logger.info(`Dry run - A request would have been sent to Overseerr to request movie ${movie.title}`);
                 } else {
-                    await overseerr.requestMovie(movie.id);
+                    const options = {
+                        ...(ruleResult.rule?.with?.radarr ?? {}),
+                    } as RequestOption;
+
+                    await overseerr.requestMovie(movie.id, options);
                 }
             } else if (ruleResult.result === 'reject') {
                 logger.info(`${color.red('  Rejecting')} - "${ruleResult.movie.title}" because of rule "${color.blue(ruleResult.rule?.name ?? '')}"`);

@@ -24,7 +24,7 @@
         "apiUrl": { "type": "string" },
         "user": { "type": "string" },
         "password": { "type": "string" },
-        "dryRunUrl": { "type": "boolean" }
+        "dryRun": { "type": "boolean" }
       }
     },
 
@@ -85,8 +85,29 @@
       "properties": {
         "name": { "type": "string" },
         "whenMatch": { "type": "array", "items": { "$ref": "#/definitions/predicate" }},
-        "action": { "type": "string", "enum": ["accept", "reject", "skip"]}
-      }
+        "action": { "type": "string", "enum": ["accept", "reject", "skip"]},
+        "with": { "$ref": "#/definitions/ruleParameters" }
+      },
+      "additionalProperties": false
+    },
+
+    "ruleParameters": {
+      "$id": "#/definitions/ruleParameters",
+      "type": "object",
+      "properties": {
+        "radarr": { "$ref": "#/definitions/ruleServiceParameters"}
+      },
+      "additionalProperties": false
+    },
+
+    "ruleServiceParameters": {
+      "$id": "#/definitions/ruleServiceParameters",
+      "type": "object",
+      "properties": {
+        "server": { "type": "string"},
+        "profile": { "type": "string"}
+      },
+      "additionalProperties": false
     },
 
     "predicate": {

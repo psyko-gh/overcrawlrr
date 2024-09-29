@@ -58,6 +58,23 @@ When matching:
 
 ---
 
+## Rule request options
+
+It is possible to specify additional options when a movie is accepted using the `with` entry.
+
+```yaml title="settings.yaml"
+- name: The rule name
+  whenMatch: ...
+  action: accept
+  # Optional - request parameters. This must only be defined for rules with accept action
+  with:
+      radarr:
+          server: radarr # Optional - Specify the target radarr to use in a multi radarr setup (uses default radarr when omitted)
+          profile: 4K # Optional - Specify the target profile to use (uses default profile when omitted)
+```
+
+---
+
 ## Ruleset extension
 
 Using the `extends` property of a ruleset, you can add rules to an existing ruleset.
@@ -71,10 +88,11 @@ config:
         - name: exclude-netflix
           rules:
               - name: Exclude netflix movies
-                watchProviders:
-                    - region: us
-                    - names:
-                          - Netflix
+                whenMatch:
+                    - watchProviders:
+                          region: us
+                          names:
+                              - Netflix
           action: reject
         - name: filter-movies
           extends: exclude-netflix # movie will be evaluated against exclude-netflix rules first
@@ -85,6 +103,8 @@ config:
                     - score: above 9/10
           action: accept
 ```
+
+---
 
 ## Ruleset example
 

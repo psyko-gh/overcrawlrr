@@ -82,7 +82,6 @@ apiRouter.use('/smartRecommendations', async (req, res) => {
             message: 'Smart recommendations complete !',
         });
     } catch (e: unknown) {
-        console.log(e);
         res.status(500).json({
             success: false,
             message: getErrorMessage(e),

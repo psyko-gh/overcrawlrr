@@ -24,7 +24,6 @@
     "@eslint/js": "^9.11.1",
     "@semantic-release/github": "^11.0.0",
     "@types/cookie": "^0.6.0",
-    "@types/cors": "^2.8.17",
     "@types/eslint__js": "^8.42.3",
     "@types/jest": "^29.5.13",
     "@types/minimist": "^1.2.5",

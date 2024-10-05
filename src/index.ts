@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import envVar from '@core/env';
 import logger from '@core/log';
 import Settings, { getSettings, OnSettingLoadedCallback } from '@core/lib/settings';
@@ -45,13 +44,6 @@ getSettings().watch(configPath, onLoad);
 const app = express();
 const port = argv.port ?? envVar('PORT', 5056);
 
-const corsOptions = {
-    origin: [`http://localhost`, `http://localhost:${port}`, `http://127.0.0.1`, `http://127.0.0.1:${port}`],
-    credentials: true,
-    exposedHeaders: ['set-cookie'],
-};
-
-app.use(cors(corsOptions));
 app.use('/api', apiRouter);
 app.listen(port, () => {
     return logger.info(`Overcrawlrr is listening at http://localhost:${port} `);

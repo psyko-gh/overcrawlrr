@@ -11,7 +11,6 @@
     "build": "tsc && tsc-alias",
     "postbuild": "copyfiles schema/schema.json build/schema.json",
     "lint": "eslint \"./**/*.ts\"",
-    "lint:report": "eslint --output-file eslint_report.json --format json \"./**/*.ts\"",
     "format:fix": "prettier ./src --write --cache",
     "format": "prettier ./src --check --cache",
     "format-docs": "prettier ./docs --check --cache",

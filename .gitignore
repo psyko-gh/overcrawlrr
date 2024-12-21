@@ -45,3 +45,5 @@ node_modules/
 
 config/*
 !config/settings.sample.yaml
+
+eslint_report.json

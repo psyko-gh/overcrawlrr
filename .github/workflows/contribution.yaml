@@ -13,9 +13,6 @@ jobs:
     permissions:
       contents: read
       statuses: write
-      # Need to add these 2 for eslint-annotate-action
-      pull-requests: read
-      checks: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,7 +22,7 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint
-      - name: Save Lint report
+      - name: Lint report
         if: always()
         run: npm run lint:report
       - name: Report Linting

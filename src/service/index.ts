@@ -8,8 +8,10 @@ import PlexApi from '@core/api/plex';
 
 const processMovieResult = async (movies: MovieResult[], overseerr: OverseerrApi, ruleset: Ruleset, dryRun: boolean) => {
     for (const movie of movies) {
+        var test = 0;
         if (movie.mediaInfo && movie.mediaInfo.status !== MediaStatus.UNKNOWN) {
             logger.info(`  Skipping  - "${movie.title}" because it has already been processed`);
+            test += 1;
             continue;
         }
         try {

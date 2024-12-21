@@ -10,8 +10,8 @@ const processMovieResult = async (movies: MovieResult[], overseerr: OverseerrApi
     let numAdded = 0;
 
     if (maxRequests !== undefined) {
-        logger.info(`Max requests: ${maxRequests}`)
-    }    
+        logger.info(`Max requests: ${maxRequests}`);
+    }
     for (const movie of movies) {
         if (movie.mediaInfo && movie.mediaInfo.status !== MediaStatus.UNKNOWN) {
             logger.info(`  Skipping  - "${movie.title}" because it has already been processed`);

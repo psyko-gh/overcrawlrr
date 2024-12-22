@@ -21,6 +21,8 @@ config:
             - upcoming
             - popular
             - trending
+        # Optional - the maximum number of movies accepted in this job
+        maxRequests: 2
         # Required - the name of the ruleset used to evaluate movies
         ruleset: Ruleset name
 ```
@@ -46,6 +48,8 @@ config:
         plexLibrary: Movies
         # Your minimum personal rating to consider
         minimumRating: 6.9
+        # Optional - the maximum number of movies accepted in this job
+        maxRequests: 2
         ruleset: Ruleset name
 ```
 

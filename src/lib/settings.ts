@@ -39,12 +39,14 @@ export interface PlexSettings {
 export interface DiscoverySettings extends RulesetConsumer {
     cron?: string;
     streams?: string[];
+    maxRequests?: number;
 }
 
 export interface SmartRecommendationsSettings extends RulesetConsumer {
     cron: string;
     plexLibrary: string;
     minimumRating: number;
+    maxRequests?: number;
 }
 
 export interface OnSettingLoadedCallback {
